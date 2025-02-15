@@ -2,13 +2,7 @@
 title: "EI_Hurst"
 author: "Lydia Sochan and Alex Weber"
 date: "2025-02-15"
-output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F, error = F, warning = F, message = F)
-```
-
 
 ```{r}
 # First, let's load our packages.
