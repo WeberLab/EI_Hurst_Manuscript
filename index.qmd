@@ -97,7 +97,7 @@ capitalize_first <- function(x) {
 ```
 
 ```{r}
-load("RMarkdown/results.RData")
+load("notebooks/results.RData")
 ```
 
 ## Abstract
@@ -126,14 +126,12 @@ There are a handful of studies suggesting a link between HE and E/I, however the
 
 : Summary of Methods for Existing E/I-Hurst Studies {#tbl-lit}
 
-<!-- test -->
 
 # Methods
 
 ## Study Participants
 
-Ethics approval was granted by the Clinical Research Ethics Board at the University of British Columbia and BC Children's & Women's Hospital (H21-02686). Written informed consent was obtained from all participants. `r capitalize_first(as.character(english(as.numeric(count(orig_subjects)))))` participants were scanned between the ages of `r round(min(orig_subjects$Age),1)` and `r round(max(orig_subjects$Age),1)` (mean ± sd: `r round(mean(orig_subjects$Age),1)` ± `r round(sd(orig_subjects$Age),1)` years; `r sum(orig_subjects$Sex == "M")` males).
-
+Ethics approval was granted by the Clinical Research Ethics Board at the University of British Columbia and BC Children's & Women's Hospital (H21-02686). Written informed consent was obtained from all participants. `r capitalize_first(as.character(english(as.numeric(count(orig_subjects)))))` participants were scanned between the ages of `r round(min(orig_subjects$Age),1)` and `r round(max(orig_subjects$Age),1)`.
 
 After our analysis and performing quality assurance (see below), `r as.character(english(as.numeric(count(orig_subjects) - count(subjects))))` participants were removed for having poor quality data, leaving `r as.character(english(as.numeric(count(subjects))))` final participants, between the ages of `r round(min(subjects$Age),1)` and `r round(max(subjects$Age),1)` (mean ± sd: `r round(mean(subjects$Age),1)` ± `r round(sd(subjects$Age),1)` years; `r sum(subjects$Sex == "M")` males).
 
