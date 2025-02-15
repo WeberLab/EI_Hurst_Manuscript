@@ -1,16 +1,16 @@
 ---
 title: "EI_Hurst"
 author: "Lydia Sochan and Alex Weber"
-date: "2024-03-25"
+date: "2025-02-15"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F, error = F, warning = F, message = F)
 ```
 
 
-```{r,echo=F, echo=F, error=F, warning=F, message=F}
+```{r}
 # First, let's load our packages.
 library(tidyverse)
 library(reshape2)
@@ -32,7 +32,7 @@ library(lmerTest)
 library(lme4)
 ```
 
-```{r,echo=F, echo=F, error=F, warning=F, message=F}
+```{r}
 ### LOAD DATA
 
 # Base directory
@@ -84,7 +84,7 @@ if (tcr == T) {
 }
 ```
 
-```{r,echo=F, echo=F, error=F, warning=F, message=F}
+```{r}
 # Load additional Hurst measures
 # Base directory
 base_dir <- "../Data/participant_measures/add_hurst_data/"
@@ -120,36 +120,48 @@ df_additionalHurst$Subject <- as.numeric(df_additionalHurst$Subject)
 df_RS <- df_additionalHurst %>% select(Subject, Rest_RS, Movie_RS)
 ```
 
-```{r,echo=F, echo=F, error=F, warning=F, message=F}
+```{r}
 df <- full_join(df, df_RS, by = "Subject")
 ## only include selected participants
 df <- df %>% dplyr::filter(Rest_MeanFD <= 0.15, Movie_MeanFD <= 0.15, Rest_FWHM_SLASER <= 10, Rest_FWHM_Osprey <= 10, Movie_FWHM_Osprey <= 10, Movie_FWHM_SLASER <= 10)
 ```
 
-
 # Subject Demographics
 
 We collected age, sex and handedness:
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 # Let's start by compiling our dataframe with subject demographics. We create a function to calculate age at scan from birthday and scan date.
 
 # Subject Info
 subjects <- read.csv("../Data/participant_measures/SubjectInfo.csv")
-age <- function(dob, age.day = today(), units = "years", floor = TRUE) {
-  calc.age <- lubridate::interval(dob, age.day) / lubridate::duration(num = 1, units = units)
-  if (floor) {
-    return(as.integer(floor(calc.age)))
-  }
-  return(calc.age)
-}
+# age <- function(dob, age.day = today(), units = "years", floor = TRUE) {
+#   calc.age <- lubridate::interval(dob, age.day) / lubridate::duration(num = 1, units = units)
+#   if (floor) {
+#     return(as.integer(floor(calc.age)))
+#   }
+#   return(calc.age)
+# }
+# year <- substring(subjects$DOB, 7, 10)
+# month <- substring(subjects$DOB, 4, 5)
+# day <- substring(subjects$DOB, 1, 2)
+orig_subjects <- subjects
+orig_subjects$Age <- as.numeric(interval(dmy(orig_subjects$DOB), dmy(orig_subjects$DOS)) / years(1))
+```
+
+Of the original 26 subjects we scanned:  
+mean age = `r mean(orig_subjects$Age)`  
+age range = `r range(orig_subjects$Age)`  
+number of males = `r sum(orig_subjects$Sex == "M")`
+
+```{r}
 subjects <- subjects[c(1:2, 4, 6:7, 9:13, 15:16, 18:20, 22:24, 26), ]
 num_subjects <- 19
 year <- substring(subjects$DOB, 7, 10)
 month <- substring(subjects$DOB, 4, 5)
 day <- substring(subjects$DOB, 1, 2)
-subjects$DOB <- paste0(year, "-", month, "-", day)
-subjects$Age <- age(subjects$DOB)
+#subjects$DOB <- paste0(year, "-", month, "-", day)
+subjects$Age <- as.numeric(interval(dmy(subjects$DOB), dmy(subjects$DOS)) / years(1))
 subjects$Subject <- c(1:2, 4, 6:7, 9:13, 15:16, 18:20, 22:24, 26)
 subs_clean <- dplyr::select(subjects, Subject, Age, Sex, Handedness)
 
@@ -195,7 +207,7 @@ sub_dem
 
 Here are some summary statistics, grouped by sex, looking at age:
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 sub_dem <- as.data.frame(sub_dem)
 sub_dem <- na.omit(sub_dem)
 sub_dem$Sex <- as.factor(sub_dem$Sex)
@@ -211,7 +223,7 @@ print(mf_byage)
 
 And a look at the distribution:
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 (sub_dem_plot <- ggplot(sub_dem, aes(x = Age, group = Sex, fill = Sex)) +
   geom_histogram(position = "stack", alpha = 0.6, color = "black", boundary = 10) +
   theme_classic(base_size = 15) +
@@ -229,7 +241,7 @@ dev.off()
 
 # Quality Assurance
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 # We are selecting Hurst values calculated from the full frequency range, rather than the bandpass-filtered results:
 fullfreq_hurst <- T
 if (fullfreq_hurst == T) {
@@ -238,10 +250,9 @@ if (fullfreq_hurst == T) {
 }
 ```
 
-
 Before calculating our results, let's look at the quality of our data. Let's start with full-width half-maximum, a quality measure for spectroscopy.
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 ## only include selected participants
 fwhm_df <- dplyr::select(df, grep("FWHM", names(df)))
 fwhm_df <- fwhm_df %>% rename(Rest_FWHM_MEGAPRESS = Rest_FWHM_Osprey, Movie_FWHM_MEGAPRESS = Movie_FWHM_Osprey)
@@ -259,12 +270,13 @@ names(fwhm_annot) <- c("Method", "Annotation")
 
 Summary statistics:
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 knitr::kable(fwhm_df %>% group_by(Condition, Method) %>% summarise(mean = round(mean(FWHM), 2), sd = round(sd(FWHM), 2)))
 ```
 
+Number of subjects lost: `r (count(orig_subjects) - count(subjects))`
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 (fwhm_plot <- ggplot(fwhm_df, aes(x = FWHM, group = Condition, fill = Condition)) +
   geom_histogram(position = "stack", alpha = 0.6, color = "black", boundary = 10) +
   facet_wrap(~ factor(Method, levels = c("SLASER", "MEGAPRESS"))) +
@@ -286,7 +298,7 @@ dev.off()
 
 Who are the subjects, and under which condition, do we have FWHM > 10?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 fwhm_df <- dplyr::select(df, grep("FWHM", names(df)))
 fwhm_df <- fwhm_df %>% rename(Rest_FWHM_MEGAPRESS = Rest_FWHM_Osprey, Movie_FWHM_MEGAPRESS = Movie_FWHM_Osprey)
 fwhm_df$SubjectID <- subjects$SubjectID
@@ -308,7 +320,7 @@ Summary statistics:
 
 
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 meanfd <- dplyr::select(df, Rest_MeanFD, Movie_MeanFD)
 meanfd <- reshape2::melt(meanfd)
 meanfd$Condition <- gsub("_.*", "", meanfd$variable)
@@ -320,11 +332,11 @@ meanfd_annot <- data.frame(c("MeanFD"), c(paste0("n=", meanfd_superp15)))
 names(meanfd_annot) <- c("Measure", "Annotation")
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 knitr::kable(meanfd %>% group_by(Condition) %>% summarise(mean = round(mean(MeanFD), 2), sd = round(sd(MeanFD), 2)))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 (meanfd_plot <- ggplot(meanfd, aes(x = MeanFD, group = Condition, fill = Condition)) +
   geom_histogram(position = "stack", alpha = 0.6, color = "black", center = 10) +
   theme_classic(base_size = 15) +
@@ -342,7 +354,7 @@ dev.off()
 
 Who are the subjects, and under what conditions, do we see meanFD > 0.15?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 meanfd2 <- dplyr::select(df, Rest_MeanFD, Movie_MeanFD)
 meanfd2$SubjectID <- subjects$SubjectID
 meanfd2 <- reshape2::melt(meanfd2)
@@ -354,7 +366,7 @@ names(meanfd2)[2] <- "meanFD"
 knitr::kable(meanfd2 %>% filter(meanFD > .15))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 # Let's create a handy vector containing Hurst values and another containing glutamate values.
 glu <- dplyr::select(df, Rest_Glu, Movie_Glu)
 glu <- reshape2::melt(glu)
@@ -366,7 +378,7 @@ hurst <- hurst[, -1]
 
 Is meanFD correlated with Hurst?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 meanfd_rest <- dplyr::filter(meanfd, Condition == "Rest")
 meanfd_movie <- dplyr::filter(meanfd, Condition == "Movie")
 meanfd_rest.model <- cor.test(meanfd_rest$MeanFD, df$Rest_Hurst)
@@ -381,7 +393,7 @@ fd_hurst_model <- lm(Hurst ~ MeanFD, data = fd_hurst)
 ```
 
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 # pearson_fd_hurst <- cor.test(fd_hurst$MeanFD, fd_hurst$Hurst, method="pearson")
 meanfd$Hurst <- fd_hurst$Hurst
 
@@ -430,7 +442,7 @@ dev.off()
 
 Is Glutamate or GABA correlated with FWHM?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 (glufwhm_cor <- cor.test(df$Rest_Glx, df$Rest_FWHM_SLASER))
 cor.test(df$Movie_Glx, df$Movie_FWHM_SLASER)
 cor.test(df$Rest_GABAplus, df$Rest_FWHM_Osprey)
@@ -441,7 +453,7 @@ cor.test(df$Movie_GABAplus, df$Movie_FWHM_Osprey)
 
 It appears Glutamate values are negatively correlated with their FWHM...
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 (glu_FWHM_plot <- ggplot(data = df, aes(x = Rest_FWHM_SLASER, y = Rest_Glx)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -462,11 +474,11 @@ dev.off()
 
 If we remove the two subjects with FWHM > 10, what happens?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 (glufwhm_nooutliers_cor <- df %>% filter(!Rest_FWHM_SLASER > 10) %>% with(cor.test(Rest_Glx, Rest_FWHM_SLASER)))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 glu_FWHM_nooutliers_plot <- df %>%
   filter(!Rest_FWHM_SLASER > 10) %>%
   ggplot(aes(x = Rest_FWHM_SLASER, y = Rest_Glx)) +
@@ -486,7 +498,7 @@ print(glu_FWHM_nooutliers_plot)
 It seems to go away. We may want to remove these two subjects, or control for FWHM in our modelling.
 
 Are FWHM different between MEGAPRESS and sLASER?
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 t.test(df$Rest_FWHM_SLASER, df$Rest_FWHM_Osprey)
 t.test(df$Movie_FWHM_SLASER, df$Movie_FWHM_Osprey)
 ```
@@ -495,7 +507,7 @@ t.test(df$Movie_FWHM_SLASER, df$Movie_FWHM_Osprey)
 
 Let's move on to results! How does Hurst change with condition?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 hurst_df <- dplyr::select(df, Subject, Rest_Hurst, Movie_Hurst)
 hurst_effect_size <- cohensD(hurst_df$Rest_Hurst, hurst_df$Movie_Hurst)
 (ttest_hurst <- t.test(hurst_df$Rest_Hurst, hurst_df$Movie_Hurst, paired = TRUE))
@@ -521,7 +533,7 @@ t.test(deltaH_m$deltaH, deltaH_f$deltaH)
 cor.test(deltaH_df$deltaH, deltaH_df$Age)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 minmax <- c(min(hurst_df$Hurst), max(hurst_df$Hurst))
 space <- (minmax[2] - minmax[1]) / 10
 (hurst_boxplot <- ggplot(hurst_df, aes(x = Condition, y = Hurst, fill = Condition)) +
@@ -552,7 +564,7 @@ dev.off()
 
 How does glutamate change with condition?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 glu_df <- dplyr::select(df, Subject, Rest_Glx, Movie_Glx)
 glu_effect_size <- cohensD(glu_df$Rest_Glx, glu_df$Movie_Glx)
 (ttest_glu <- t.test(glu_df$Rest_Glx, glu_df$Movie_Glx, paired = TRUE))
@@ -570,7 +582,7 @@ glu_df$Age <- sub_dem$Age
 cor.test(glu_df$Glx, glu_df$Age)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 minmax <- c(min(glu_df$Glx), max(glu_df$Glx))
 space <- (minmax[2] - minmax[1]) / 10
 (glu_boxplot <- ggplot(glu_df, aes(x = Condition, y = Glx, fill = Condition)) +
@@ -602,7 +614,7 @@ t.test(df$Rest_Glx, df$Movie_Glx, paired = T)
 
 How does GABA change with condition?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 gaba_df <- dplyr::select(df, Subject, Rest_GABAplus, Movie_GABAplus)
 gaba_effect_size <- cohensD(gaba_df$Rest_GABAplus, gaba_df$Movie_GABAplus)
 (ttest_gaba <- t.test(gaba_df$Rest_GABAplus, gaba_df$Movie_GABAplus, paired = TRUE))
@@ -621,7 +633,7 @@ gaba_df$Age <- sub_dem$Age
 cor.test(gaba_df$GABAplus, gaba_df$Age)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 minmax <- c(min(gaba_df$GABAplus), max(gaba_df$GABAplus))
 space <- (minmax[2] - minmax[1]) / 10
 (gaba_boxplot <- ggplot(gaba_df, aes(x = Condition, y = GABAplus, fill = Condition)) +
@@ -652,7 +664,7 @@ dev.off()
 
 How does EI change with condition?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 ei_df <- as.data.frame(glu_df$Glx / gaba_df$GABAplus)
 ei_df$Condition <- gaba_df$Condition
 names(ei_df)[1] <- "EI"
@@ -672,7 +684,7 @@ ei_df$Age <- sub_dem$Age
 cor.test(ei_df$EI, ei_df$Age)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 minmax <- c(min(ei_df$EI), max(ei_df$EI))
 space <- (minmax[2] - minmax[1]) / 10
 (ei_boxplot <- ggplot(ei_df, aes(x = Condition, y = EI, fill = Condition)) +
@@ -704,7 +716,7 @@ dev.off()
 
 Is Hurst correlated with glutamate?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 glu <- dplyr::select(df, Rest_Glx, Movie_Glx)
 glu_cond <- glu
 glu <- reshape2::melt(glu)
@@ -730,12 +742,13 @@ gh_movie <- dplyr::filter(gh_df, Condition == "Movie")
 gh_movie_pearson <- cor.test(gh_movie$Hurst, gh_movie$Glx, method = "pearson")
 print(gh_movie_pearson)
 ```
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+
+```{r}
 glu_hurst_model <- lm(Hurst ~ Glx, data = gh_df)
 (glu_hurst_model.summary <- summary(glu_hurst_model))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 dat_text <- data.frame(
   label = c(paste("p = ", round(gh_rest_pearson$p.value, 2)), paste("p = ", round(gh_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
@@ -766,7 +779,7 @@ dev.off()
 
 Is Hurst correlated with GABA?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 gaba <- dplyr::select(df, Rest_GABAplus, Movie_GABAplus)
 gaba <- reshape2::melt(gaba)
 gaba$Condition <- gsub("_.*", "", gaba$variable)
@@ -784,7 +797,7 @@ gabah_movie_pearson <- cor.test(gabah_movie$Hurst, gabah_movie$GABAplus, method 
 print(gabah_movie_pearson)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 dat_text <- data.frame(
   label = c(paste("p = ", round(gabah_rest_pearson$p.value, 2)), paste("p = ", round(gabah_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
@@ -815,7 +828,7 @@ dev.off()
 
 Is EI correlated with Hurst?
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 ei <- as.data.frame(glu / gaba$GABAplus)
 ei$Condition <- gaba$Condition
 names(ei)[1] <- "EI"
@@ -831,7 +844,7 @@ eih_movie_pearson <- cor.test(eih_movie$Hurst, eih_movie$EI, method = "pearson")
 print(eih_movie_pearson)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 dat_text <- data.frame(
   label = c(paste("p = ", round(eih_rest_pearson$p.value, 2)), paste("p = ", round(eih_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
@@ -863,7 +876,7 @@ dev.off()
 
 # Linear Mixed Effects (Welch Full Freq)
 
-```{r lme,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 df_lme <- df %>%
   select(Subject, Rest_Hurst_FullFreq, Movie_Hurst_FullFreq, Rest_Glx, Movie_Glx, Rest_GABAplus, Movie_GABAplus, Rest_FWHM_SLASER, Movie_FWHM_SLASER, Rest_FWHM_Osprey, Movie_FWHM_Osprey, Rest_MeanFD, Movie_MeanFD) %>%
   rename(Rest_Hurst = Rest_Hurst_FullFreq, Movie_Hurst = Movie_Hurst_FullFreq, Rest_FWHMsLASER = Rest_FWHM_SLASER, Movie_FWHMsLASER = Movie_FWHM_SLASER, Rest_FWHMOsprey = Rest_FWHM_Osprey, Movie_FWHMOsprey = Movie_FWHM_Osprey)
@@ -872,7 +885,7 @@ df_lme <- full_join(df_lme, subjects_lme, by = "Subject")
 df_lme$Sex <- as.factor(df_lme$Sex)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 df_lme <- df_lme %>% pivot_longer(
   cols = -c(Age, Sex, Subject), # Exclude the Subject column from the transformation
   names_to = c("Condition", ".value"), # Split original column names
@@ -883,7 +896,7 @@ df_lme$EI <- df_lme$Glx / df_lme$GABAplus
 df_lme$Condition <- as.factor(df_lme$Condition)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 model <- lmer(Hurst ~ EI + Age + Sex + Condition + MeanFD + (1 | Subject), data = df_lme)
 #model <- lmer(Hurst ~ EI + (1 | Subject), data = df_lme)
 # model <- lmer(Hurst ~ EI + Age + Sex + FWHMsLASER + FWHMOsprey + Condition + MeanFD + (1 | Subject), data = df_lme)
@@ -891,7 +904,7 @@ model <- lmer(Hurst ~ EI + Age + Sex + Condition + MeanFD + (1 | Subject), data 
 summary(model)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 # Plotting residuals to check assumptions
 plot(resid(model) ~ fitted(model))
 abline(h = 0, col = "red")
@@ -902,7 +915,7 @@ qqnorm(resid(model))
 qqline(resid(model))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 # Comparing a simpler model without the EI predictor
 model_without_EI <- lmer(Hurst ~ Age + Sex + Condition + (1 | Subject), data = df_lme)
 anova(model, model_without_EI)
@@ -914,7 +927,7 @@ anova(model, model_without_Condition)
 ## Remove Spectroscopy and fMRI Outliers
 
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 df_lme_nooutliers <- df_lme %>% filter(!c(Subject == 3 | Subject == 5 | Subject == 8 | Subject == 14 | Subject == 17 | Subject == 21 | Subject == 25))
 model <- lmer(Hurst ~ EI + Age + Sex + Condition + (1 | Subject), data = df_lme_nooutliers)
 summary(model)
@@ -922,7 +935,7 @@ summary(model)
 
 # Linear Mixed Effects (Rescaled Range)
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 df_rs_lme <- df %>%
   select(Subject, Rest_RS, Movie_RS, Rest_Glu, Movie_Glu, Rest_GABA, Movie_GABA, Rest_FWHM_SLASER, Movie_FWHM_SLASER, Rest_FWHM_Osprey, Movie_FWHM_Osprey, Rest_MeanFD, Movie_MeanFD) %>%
   rename(Rest_Hurst = Rest_RS, Movie_Hurst = Movie_RS, Rest_FWHMsLASER = Rest_FWHM_SLASER, Movie_FWHMsLASER = Movie_FWHM_SLASER, Rest_FWHMOsprey = Rest_FWHM_Osprey, Movie_FWHMOsprey = Movie_FWHM_Osprey)
@@ -931,7 +944,7 @@ df_rs_lme <- full_join(df_rs_lme, subjects_lme, by = "Subject")
 df_rs_lme$Sex <- as.factor(df_rs_lme$Sex)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 df_rs_lme <- df_rs_lme %>% pivot_longer(
   cols = -c(Age, Sex, Subject), # Exclude the Subject column from the transformation
   names_to = c("Condition", ".value"), # Split original column names
@@ -942,14 +955,14 @@ df_rs_lme$EI <- df_rs_lme$Glu / df_rs_lme$GABA
 df_rs_lme$Condition <- as.factor(df_rs_lme$Condition)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 model <- lmer(Hurst ~ EI + Age + Sex + Condition + MeanFD + (1 | Subject), data = df_rs_lme)
 # model <- lmer(Hurst ~ EI + Age + Sex + FWHMsLASER + FWHMOsprey + Condition + MeanFD + (1 | Subject), data = df_rs_lme)
 
 summary(model)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE,results='hide'}
+```{r}
 # Plotting residuals to check assumptions
 plot(resid(model) ~ fitted(model))
 abline(h = 0, col = "red")
@@ -960,7 +973,7 @@ qqnorm(resid(model))
 qqline(resid(model))
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 # Comparing a simpler model without the EI predictor
 model_without_EI <- lmer(Hurst ~ Age + Sex + Condition + (1 | Subject), data = df_rs_lme)
 anova(model, model_without_EI)
@@ -969,8 +982,12 @@ model_without_Condition <- lmer(Hurst ~ Age + Sex + EI + (1 | Subject), data = d
 anova(model, model_without_Condition)
 ```
 
-```{r,echo=F,error=FALSE,warning=FALSE,message=FALSE}
+```{r}
 df_rs_lme_nooutliers <- df_rs_lme %>% filter(!c(Subject == 3 | Subject == 5 | Subject == 8 | Subject == 14 | Subject == 17 | Subject == 21 | Subject == 25))
 model <- lmer(Hurst ~ EI + Age + Sex + Condition + (1 | Subject), data = df_rs_lme_nooutliers)
 summary(model)
+```
+
+```{r}
+save.image('results.RData')
 ```
