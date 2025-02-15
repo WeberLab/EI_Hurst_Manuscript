@@ -86,6 +86,20 @@ options(knitr.kable.NA = '') # how kable handles NA
 options(reticulate.repl.quiet = TRUE)
 ```
 
+```{r libraries}
+#libraries
+library(tidyverse) # ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats
+library(english) # numbers to words
+library(tools) # title-case
+capitalize_first <- function(x) {
+  paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))
+}
+```
+
+```{r}
+load("notebooks/results.RData")
+```
+
 ## Abstract
 
 A 3T multimodal MRI study of healthy adults (n=19; 10 female; 21-54 years) was performed to investigate the potential link between fMRI long-range temporal correlations and excitatory/inhibitory balance. The study objective was to determine if the Hurst exponent (HE) – an estimate of the self-correlation and signal complexity of the blood-oxygen-level-dependent (BOLD) signal – is correlated with the excitatory-inhibitory (E/I) ratio. Findings in this domain have implications for neurological and neuropsychiatric conditions with disrupted E/I balance, such as autism spectrum disorder, schizophrenia, and Alzheimer’s disease. From a methodological perspective, HE is also considerably easier to accurately measure than E/I ratio. If HE can serve as a proxy for E/I, it may serve as a useful clinical biomarker for E/I imbalance. Moreover, E/I has been proposed to serve as a control parameter for brain criticality, which HE is believed to be a measure of. Thus, understanding if HE and E/I are correlated would serve to clarify this relationship. The study collected movie-watching and rest data including fMRI – which was used to calculate HE – and magnetic resonance spectroscopy (MRS) – which was used to measure inhibitory and excitatory neurotransmitters – GABA and glutamate, respectively. HE was found to increase with movie compared to rest, while E/I did not change between conditions. HE and E/I were not correlated during either movie or rest. This study represents the first attempt to investigate this connection *in vivo* in humans. We conclude that, at 3T and with our particular methodologies, no association was found.
@@ -116,5 +130,8 @@ There are a handful of studies suggesting a link between HE and E/I, however the
 
 ## Study Participants
 
-Ethics approval was granted by the Clinical Research Ethics Board at the University of British Columbia and BC Children's & Women's Hospital (H21-02686). Written informed consent was obtained from all participants. Twenty-six participants were scanned between the age of 21 and 54 (29.7 ± 7.9 years; 11 males).
+Ethics approval was granted by the Clinical Research Ethics Board at the University of British Columbia and BC Children's & Women's Hospital (H21-02686). Written informed consent was obtained from all participants. `r capitalize_first(as.character(english(as.numeric(count(orig_subjects)))))` participants were scanned between the ages of `r round(min(orig_subjects$Age),1)` and `r round(max(orig_subjects$Age),1)` (mean ± sd: `r round(mean(orig_subjects$Age),1)` ± `r round(sd(orig_subjects$Age),1)` years; `r sum(orig_subjects$Sex == "M")` males).
+
+
+After our analysis and performing quality assurance (see below), `r as.character(english(as.numeric(count(orig_subjects) - count(subjects))))` participants were removed for having poor quality data, leaving `r as.character(english(as.numeric(count(subjects))))` final participants, between the ages of `r round(min(subjects$Age),1)` and `r round(max(subjects$Age),1)` (mean ± sd: `r round(mean(subjects$Age),1)` ± `r round(sd(subjects$Age),1)` years; `r sum(subjects$Sex == "M")` males).
 
