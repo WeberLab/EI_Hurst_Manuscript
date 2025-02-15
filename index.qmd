@@ -126,6 +126,8 @@ There are a handful of studies suggesting a link between HE and E/I, however the
 
 : Summary of Methods for Existing E/I-Hurst Studies {#tbl-lit}
 
+<!-- test -->
+
 # Methods
 
 ## Study Participants
