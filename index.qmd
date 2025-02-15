@@ -1,111 +1,86 @@
 ---
-title: La Palma Earthquakes
-author:
-  - name: Steve Purves
-    orcid: 0000-0002-0760-5497
-    corresponding: true
-    email: steve@curvenote.com
+title: "Does the Brain’s E/I Balance Really Shape Long-Range Temporal Correlations?"
+titlerunning: ""
+authors:
+  - name: Lydia Sochan
+    orcid: 
+    email: lydiasochan@gmail.com
     roles:
-      - Investigation
-      - Project administration
-      - Software
-      - Visualization
+      - data curation
+      - formal analysis
+      - investigation
+      - software
+      - visualization
+      - writing - original draft preparation
     affiliations:
-      - Curvenote
-  - name: Rowan Cockett
-    orcid: 0000-0002-7859-8394
-    corresponding: false
-    roles: []
+      - ref: 1
+    degrees:
+      - BMSc
+      - MASc
+  - name: Alexander Mark Weber
+    orcid: 0000-0001-7295-0775
+    corresponding: true
+    email: aweber@bcchr.ca
+    roles:
+      - conceptualization
+      - data curation
+      - formal analysis
+      - funding acquisition
+      - investigation
+      - methodology
+      - project administration
+      - resources
+      - supervision
+      - validation
+      - visualization
+      - writing - review & editing
     affiliations:
-      - Curvenote
+      - ref: 1
+      - ref: 2
+      - ref: 3
+    degrees:
+      - PhD
+      - MSc
+affiliations:
+  - id: 1
+    name: School of Biomedical Engineering, The University of British Columbia, Vancouver, BC, Canada
+  - id: 2
+    name: BC Children's Hospital Research Institute, The University of British Columbia, Vancouver, BC, Canada
+  - id: 3
+    name: Pediatrics, The University of British Columbia, Vancouver, BC, Canada
+
 keywords:
-  - La Palma
-  - Earthquakes
-abstract: |
-  In September 2021, a significant jump in seismic activity on the island of La Palma (Canary Islands, Spain) signaled the start of a volcanic crisis that still continues at the time of writing. Earthquake data is continually collected and published by the Instituto Geográphico Nacional (IGN). ...
-plain-language-summary: |
-  Earthquake data for the island of La Palma from the September 2021 eruption is found ...
-key-points:
-  - A web scraping script was developed to pull data from the Instituto Geogràphico Nacional into a machine-readable form for analysis
-  - Earthquake events on La Palma are consistent with the presence of both mantle and crustal reservoirs.
-date: last-modified
-bibliography: references.bib
+  - 
+
+filters:
+  - authors-block
+
+notebook-links: false
+number-sections: false
 citation:
-  container-title: Earth and Space Science
-number-sections: true
+  container-title: Unpublished
+# date: last-modified
+bibliography: EIHurst.bib
+csl: nature.csl
+
+crossref:
+  fig-title: '**Figure**'
+  tbl-title: '**Table**'
+  title-delim: "**.**"
 ---
 
-## Introduction
+## Abstract
 
-```{r}
-eruptions <- c(1492, 1585, 1646, 1677, 1712, 1949, 1971, 2021)
-n_eruptions <- length(eruptions)
-```
+A 3T multimodal MRI study of healthy adults (n=19; 10 female; 21-54 years) was performed to investigate the potential link between fMRI long-range temporal correlations and excitatory/inhibitory balance. The study objective was to determine if the Hurst exponent (HE) – an estimate of the self-correlation and signal complexity of the blood-oxygen-level-dependent (BOLD) signal – is correlated with the excitatory-inhibitory (E/I) ratio. Findings in this domain have implications for neurological and neuropsychiatric conditions with disrupted E/I balance, such as autism spectrum disorder, schizophrenia, and Alzheimer’s disease. From a methodological perspective, HE is also considerably easier to accurately measure than E/I ratio. If HE can serve as a proxy for E/I, it may serve as a useful clinical biomarker for E/I imbalance. Moreover, E/I has been proposed to serve as a control parameter for brain criticality, which HE is believed to be a measure of. Thus, understanding if HE and E/I are correlated would serve to clarify this relationship. The study collected movie-watching and rest data including fMRI – which was used to calculate HE – and magnetic resonance spectroscopy (MRS) – which was used to measure inhibitory and excitatory neurotransmitters – GABA and glutamate, respectively. HE was found to increase with movie compared to rest, while E/I did not change between conditions. HE and E/I were not correlated during either movie or rest. This study represents the first attempt to investigate this connection *in vivo* in humans. We conclude that, at 3T and with our particular methodologies, no association was found.
 
-```{r}
-#| label: fig-timeline
-#| fig-cap: Timeline of recent earthquakes on La Palma
-#| fig-alt: An event plot of the years of the last 8 eruptions on La Palma.
-#| fig-height: 1.5
-#| fig-width: 6
-par(mar = c(3, 1, 1, 1) + 0.1)
-plot(eruptions, rep(0, n_eruptions), 
-  pch = "|", axes = FALSE)
-axis(1)
-box()
-```
+# Introduction
 
-```{r}
-#| output: false
-avg_years_between_eruptions <- mean(diff(eruptions[-n_eruptions]))
-avg_years_between_eruptions
-```
+Thirty years ago, functional magnetic resonance imaging (fMRI) profoundly changed the world of MRI by allowing real-time analysis of pressing neuropsychological questions [@ogawaMagneticResonanceImaging1990; @ogawaBrainMagneticResonance1990; @stephanShortHistoryCausal2012]. While initially used to probe task-based responses, researchers have more recently developed an interest in studying brain function at rest, known as resting-state fMRI (rs-fMRI) [@decoRestingBrainsNever2013], i.e. to understand how brain dynamics at rest are related to neurological functioning as well as individual differences. A critical tool in analyzing these dynamics is the Hurst exponent (HE) [@campbellMonofractalAnalysisFunctional2022], a measure of self-similarity derived from the blood-oxygen-dependent (BOLD) signal. HE estimates the extent to which the BOLD signal displays long-term memory, where a higher value indicates a self-similar signal with long-term positive autocorrelations [@campbellMonofractalAnalysisFunctional2022; @beggsBeingCriticalCriticality2012]. Another way of understanding HE is that a signal with high HE is fractal: similar temporal signal fluctuations are observed, no matter the time scale [@campbellMonofractalAnalysisFunctional2022].
 
-Based on data up to and including 1971, eruptions on La Palma happen every `{r} round(avg_years_between_eruptions, 1)` years on average.
+HE has also emerged as a valuable tool in clinical research, capturing changes in BOLD signal dynamics across various neuropsychiatric conditions. In aging populations for instance, HE has been found to be elevated [@dongHurstExponentAnalysis2018; @winkAgeCholinergicEffects2006]; this relationship has also been found in mild cognitive impairment and Alzheimer’s disease [@maximFractionalGaussianNoise2005; @longBrainnetomeAtlasBased2018]. Additionally, changes in HE have been observed in conditions such as autism, mood disorders, and brain injury [@laiShiftRandomnessBrain2010; @donaTemporalFractalAnalysis2017; @weiIdentifyingMajorDepressive2013; @jingIdentifyingCurrentRemitted2017; @donaFractalAnalysisBrain2017]. These differences suggest HE may reflect changes in global and local functioning.
 
-Studies of the magma systems feeding the volcano, such as @marrero2019, have proposed that there are two main magma reservoirs feeding the Cumbre Vieja volcano; one in the mantle (30-40km depth) which charges and in turn feeds a shallower crustal reservoir (10-20km depth).
+Underlying these observations is the critical brain hypothesis, which posits that the brain operates at a critical point, a state where order and disorder are perfectly balanced to enable optimal information processing [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @barangerChaosComplexityEntropy2000; @bassettUnderstandingComplexityHuman2011; @zimmernWhyBrainCriticality2020; @liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011]. When operating at a critical point, the brain is maximally sensitive to external stimuli, and can dynamically transition between ordered and disordered states to promote efficient cognitive processing [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011].Recent papers suggest the control parameter underlying the brain’s ability to transition between states is the excitatory-inhibitory (E/I) ratio, the balance of excitatory and inhibitory neural activity, often operationalized as the ratio of the primary excitatory-to-inhibitory neurotransmitters, i.e. glutamate-to-GABA ratio [@liangExcitationInhibitionBalance2024; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. It is thought that E/I controls criticality by modulating the brain’s signal-to-noise ratio [@liangExcitationInhibitionBalance2024; @rubensteinModelAutismIncreased2003].
 
-Eight eruptions have been recorded since the late 1400s (@fig-timeline).
+Besides the implications to the critical brain hypothesis, understanding if E/I is related to HE may allow for easier estimation of excitatory and inhibitory neurotransmitters, as accurate E/I measurement is technically challenging [@ajramContribution1HMagnetic2019]. Magnetic resonance spectroscopy (MRS) is the only non-invasive method of measuring the ratio of glutamate (excitatory) to GABA (inhibitory) *in vivo* [@stanleyFunctionalMagneticResonance2018]. Unfortunately, it has both limited spatial and temporal resolution [@gaoInferringSynapticExcitation2017; @ajramContribution1HMagnetic2019; @stanleyFunctionalMagneticResonance2018;]. Consequently, if HE could serve as a proxy for E/I, it would be much easier to estimate E/I in conditions of interest such as autism, Alzheimer’s, and schizophrenia.
 
-Data and methods are discussed in @sec-data-methods.
-
-Let $x$ denote the number of eruptions in a year. Then, $x$ can be modeled by a Poisson distribution
-
-$$
-p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
-$$ {#eq-poisson}
-
-where $\lambda$ is the rate of eruptions per year. Using @eq-poisson, the probability of an eruption in the next $t$ years can be calculated.
-
-| Name                 | Year   |
-| -------------------- | ------ |
-| Current              | 2021   |
-| Teneguía             | 1971   |
-| Nambroque            | 1949   |
-| El Charco            | 1712   |
-| Volcán San Antonio   | 1677   |
-| Volcán San Martin    | 1646   |
-| Tajuya near El Paso  | 1585   |
-| Montaña Quemada      | 1492   |
-
-: Recent historic eruptions on La Palma {#tbl-history}
-
-@tbl-history summarises the eruptions recorded since the colonization of the islands by Europeans in the late 1400s.
-
-![Map of La Palma](images/la-palma-map.png){#fig-map}
-
-La Palma is one of the west most islands in the Volcanic Archipelago of the Canary Islands (@fig-map). 
-
-{{< embed notebooks/explore-earthquakes.qmd#fig-spatial-plot >}}
-
-@fig-spatial-plot shows the location of recent Earthquakes on La Palma.
-
-## Data & Methods {#sec-data-methods}
-
-## Conclusion
-
-## References {.unnumbered}
-
-:::{#refs}
-
-:::
+There are a handful of studies suggesting a link between HE and E/I, however they are all either computational models or animal studies [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. Moreover, their findings are inconsistent, with some reporting positive linear, negative linear, or U-shaped relationships between the two variables (see Table 1). Thus, there is a need for further study, both to clarify the nature of a potential E/I-Hurst relationship, and also to confirm if this relationship indeed exists in the human brain. Therefore, the current study seeks to investigate the potential E/I-Hurst relationship in vivo, within the visual cortex during movie-watching and rest.
