@@ -99,7 +99,7 @@ capitalize_first <- function(x) {
 ```
 
 ```{r}
-load("_analysis/results.RData")
+load("notebooks/results.RData")
 ```
 
 ## Abstract
