@@ -69,7 +69,6 @@ crossref:
   title-delim: "**.**"
 ---
 
-
 ```{r}
 #| label: setup
 #| include: false
