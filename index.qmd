@@ -70,7 +70,9 @@ crossref:
 ---
 
 
-```{r setup, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
 # options
 knitr::opts_chunk$set(
   # fig.width=8, fig.height=5,
@@ -86,7 +88,8 @@ options(knitr.kable.NA = '') # how kable handles NA
 options(reticulate.repl.quiet = TRUE)
 ```
 
-```{r libraries}
+```{r}
+#| label: libraries
 #libraries
 library(tidyverse) # ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats
 library(english) # numbers to words
