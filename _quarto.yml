@@ -13,7 +13,7 @@ code-links:
   - binder
 
 execute:
-  freeze: true
+  freeze: auto
   cache: false
 
 format:
