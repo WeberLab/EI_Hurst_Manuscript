@@ -26,6 +26,8 @@ library(lmerTest)
 library(lme4)
 ```
 
+# Load and Format Data
+
 ```{r}
 ### LOAD DATA
 
@@ -114,15 +116,8 @@ df_additionalHurst$Subject <- as.numeric(df_additionalHurst$Subject)
 df_RS <- df_additionalHurst %>% select(Subject, Rest_RS, Movie_RS)
 ```
 
-```{r}
-df <- full_join(df, df_RS, by = "Subject")
-## only include selected participants
-df <- df %>% dplyr::filter(Rest_MeanFD <= 0.15, Movie_MeanFD <= 0.15, Rest_FWHM_SLASER <= 10, Rest_FWHM_Osprey <= 10, Movie_FWHM_Osprey <= 10, Movie_FWHM_SLASER <= 10)
-```
+# Original Subject Demographics
 
-# Subject Demographics
-
-We collected age, sex and handedness:
 
 ```{r}
 # Let's start by compiling our dataframe with subject demographics. We create a function to calculate age at scan from birthday and scan date.
@@ -148,15 +143,37 @@ mean age = `r mean(orig_subjects$Age)`
 age range = `r range(orig_subjects$Age)`  
 number of males = `r sum(orig_subjects$Sex == "M")`
 
+# Filter Data
+
+Let's remove any subject that has mean framewise displacement > 0.15mm, and anyone with a FWHM > 10:
+
 ```{r}
-subjects <- subjects[c(1:2, 4, 6:7, 9:13, 15:16, 18:20, 22:24, 26), ]
+olddf <- df
+df <- full_join(df, df_RS, by = "Subject")
+## only include selected participants
+df <- df %>% dplyr::filter(Rest_MeanFD <= 0.15, Movie_MeanFD <= 0.15, Rest_FWHM_SLASER <= 10, Rest_FWHM_Osprey <= 10, Movie_FWHM_Osprey <= 10, Movie_FWHM_SLASER <= 10)
+```
+
+# Demographics
+
+```{r}
+subjects <- subjects[df$Subject, ]
 num_subjects <- 19
 year <- substring(subjects$DOB, 7, 10)
 month <- substring(subjects$DOB, 4, 5)
 day <- substring(subjects$DOB, 1, 2)
 #subjects$DOB <- paste0(year, "-", month, "-", day)
 subjects$Age <- as.numeric(interval(dmy(subjects$DOB), dmy(subjects$DOS)) / years(1))
-subjects$Subject <- c(1:2, 4, 6:7, 9:13, 15:16, 18:20, 22:24, 26)
+subjects$Subject <- df$Subject
+```
+
+Number of subjects lost: `r (count(orig_subjects) - count(subjects))`
+After filtering, 
+mean age = `r mean(subjects$Age)`  
+age range = `r range(subjects$Age)`  
+number of males = `r sum(subjects$Sex == "M")`
+
+```{r}
 subs_clean <- dplyr::select(subjects, Subject, Age, Sex, Handedness)
 
 color.picker.sex <- function(z) {
@@ -198,6 +215,7 @@ sub_dem <- formattable(subs_clean, list(
 ))
 sub_dem
 ```
+
 
 Here are some summary statistics, grouped by sex, looking at age:
 
@@ -268,7 +286,6 @@ Summary statistics:
 knitr::kable(fwhm_df %>% group_by(Condition, Method) %>% summarise(mean = round(mean(FWHM), 2), sd = round(sd(FWHM), 2)))
 ```
 
-Number of subjects lost: `r (count(orig_subjects) - count(subjects))`
 
 ```{r}
 (fwhm_plot <- ggplot(fwhm_df, aes(x = FWHM, group = Condition, fill = Condition)) +
@@ -293,9 +310,9 @@ dev.off()
 Who are the subjects, and under which condition, do we have FWHM > 10?
 
 ```{r}
-fwhm_df <- dplyr::select(df, grep("FWHM", names(df)))
+fwhm_df <- dplyr::select(olddf, grep("FWHM", names(olddf)))
 fwhm_df <- fwhm_df %>% rename(Rest_FWHM_MEGAPRESS = Rest_FWHM_Osprey, Movie_FWHM_MEGAPRESS = Movie_FWHM_Osprey)
-fwhm_df$SubjectID <- subjects$SubjectID
+fwhm_df$SubjectID <- orig_subjects$SubjectID
 fwhm_df <- reshape2::melt(fwhm_df)
 fwhm_df$Condition <- gsub("_.*", "", fwhm_df$variable)
 fwhm_df$Method <- gsub(".*_.*_", "", fwhm_df$variable)
@@ -306,13 +323,9 @@ fwhm_df$Condition <- factor(fwhm_df$Condition, levels = c("Rest", "Movie"))
 knitr::kable(fwhm_df %>% filter(FWHM > 10))
 ```
 
-
-
 Now let's take a look at quality for our fMRI data. Mean framewise displacement (mean FD) is an estimate of a participant's movement over time. In general, we want to see mean FD lower than 0.15.
 
 Summary statistics:
-
-
 
 ```{r}
 meanfd <- dplyr::select(df, Rest_MeanFD, Movie_MeanFD)
@@ -349,8 +362,8 @@ dev.off()
 Who are the subjects, and under what conditions, do we see meanFD > 0.15?
 
 ```{r}
-meanfd2 <- dplyr::select(df, Rest_MeanFD, Movie_MeanFD)
-meanfd2$SubjectID <- subjects$SubjectID
+meanfd2 <- dplyr::select(olddf, Rest_MeanFD, Movie_MeanFD)
+meanfd2$SubjectID <- orig_subjects$SubjectID
 meanfd2 <- reshape2::melt(meanfd2)
 meanfd2$Condition <- gsub("_.*", "", meanfd2$variable)
 meanfd2 <- meanfd2 %>% select(-c("variable"))
@@ -466,30 +479,6 @@ glu_FWHM_plot
 dev.off()
 ```
 
-If we remove the two subjects with FWHM > 10, what happens?
-
-```{r}
-(glufwhm_nooutliers_cor <- df %>% filter(!Rest_FWHM_SLASER > 10) %>% with(cor.test(Rest_Glx, Rest_FWHM_SLASER)))
-```
-
-```{r}
-glu_FWHM_nooutliers_plot <- df %>%
-  filter(!Rest_FWHM_SLASER > 10) %>%
-  ggplot(aes(x = Rest_FWHM_SLASER, y = Rest_Glx)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  theme_classic(base_size = 15) +
-  theme(axis.title = element_text(face = "bold")) +
-  ylab("Glutamate") +
-  xlab("FWHM") +
-  annotate(geom = "text", x = 9, y = 1.3, label = parse(text = paste(
-    "p == ",
-    round(glufwhm_nooutliers_cor$p.value, 2)
-  )))
-print(glu_FWHM_nooutliers_plot)
-```
-
-It seems to go away. We may want to remove these two subjects, or control for FWHM in our modelling.
 
 Are FWHM different between MEGAPRESS and sLASER?
 ```{r}
