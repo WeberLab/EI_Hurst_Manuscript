@@ -1,4 +1,3 @@
-## A Quarto Manuscript Template
+## Quarto Manuscript for "Does the Brain’s E/I Balance Really Shape Long-Range Temporal Correlations?"
 
-This is a template repo for generating a manuscript from Quarto that accompanies the tutorial at: [Quarto Manuscripts: RStudio](https://quarto.org/docs/manuscripts/authoring/rstudio.html)
-
+This is a repo for generating our manuscript.
