@@ -6,25 +6,28 @@ date: "2025-02-15"
 
 ```{r}
 # First, let's load our packages.
-library(tidyverse)
-library(reshape2)
-library(rio)
-library(corrplot)
+library(FactoMineR)
 library(Hmisc)
-library(viridis)
-library(ggrepel)
+library(broom.mixed)
+library(corrplot)
+library(corrr)
+library(factoextra)
 library(formattable)
+library(ggcorrplot)
+library(ggrepel)
+library(glmnet)
+library(lme4)
+library(lmerTest)
 library(lsr)
 library(nlme)
-library(corrr)
-library(ggcorrplot)
-library(FactoMineR)
-library(factoextra)
-library(glmnet)
-library(psych)
-library(lmerTest)
-library(lme4)
 library(patchwork)
+library(performance)
+library(psych)
+library(report)
+library(reshape2)
+library(rio)
+library(tidyverse)
+library(viridis)
 ```
 
 # Load and Format Data
@@ -480,6 +483,7 @@ dat_text <- data.frame(
     mapping = aes(x = x, y = y, label = label),
     inherit.aes = FALSE
   ) +
+  ylab("Glx / tCr") + 
   scale_x_continuous(guide = guide_axis(angle = 40)) +
   theme(panel.spacing = unit(2, "lines")) +
   #scale_color_manual(values = c("Rest" = "green", "Movie" = "orange")) #+
@@ -522,9 +526,9 @@ dat_text <- data.frame(
     mapping = aes(x = x, y = y, label = label),
     inherit.aes = FALSE
   ) +
+  ylab("GABA+ / tCr") + 
   scale_x_continuous(guide = guide_axis(angle = 40)) +
   theme(panel.spacing = unit(2, "lines")) +
-  #scale_color_manual(values = c("Rest" = "green", "Movie" = "orange")) #+
   scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange"))
 )
 png(file = "GABA_FWHM_Plot.png", width = 7, height = 3, units = "in", res = 300)
@@ -982,16 +986,31 @@ df_lme <- df_lme %>% pivot_longer(
   names_pattern = "(.*)_(.*)" # Pattern to split the original column names
 )
 df_lme$EI <- df_lme$Glx / df_lme$GABAplus
-# df_lme <- df_lme %>% select(-c(Glu,GABA))
 df_lme$Condition <- as.factor(df_lme$Condition)
 ```
 
+
 ```{r}
-model <- lmer(Hurst ~ EI + Age + Sex + Condition + MeanFD + (1 | Subject), data = df_lme)
-#model <- lmer(Hurst ~ EI + (1 | Subject), data = df_lme)
-# model <- lmer(Hurst ~ EI + Age + Sex + FWHMsLASER + FWHMOsprey + Condition + MeanFD + (1 | Subject), data = df_lme)
+model <- lme4::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMOsprey + MeanFD + (1 | Subject), data = df_lme)
 
 summary(model)
+```
+```{r}
+model <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMOsprey + MeanFD + (1 | Subject), data = df_lme)
+
+(model_summary <- summary(model))
+```
+
+```{r}
+(r2_values <- performance::r2(model))
+```
+```{r}
+(confint_values <- lme4::confint.merMod(model, method="Wald"))
+confint_values
+```
+
+```{r}
+report(model)
 ```
 
 ```{r}
@@ -1017,9 +1036,9 @@ anova(model, model_without_Condition)
 ## Remove Spectroscopy and fMRI Outliers
 
 ```{r}
-df_lme_nooutliers <- df_lme %>% filter(!c(Subject == 3 | Subject == 5 | Subject == 8 | Subject == 14 | Subject == 17 | Subject == 21 | Subject == 25))
-model <- lmer(Hurst ~ EI + Age + Sex + Condition + (1 | Subject), data = df_lme_nooutliers)
-summary(model)
+# df_lme_nooutliers <- df_lme %>% filter(!c(Subject == 3 | Subject == 5 | Subject == 8 | Subject == 14 | Subject == 17 | Subject == 21 | Subject == 25))
+# model <- lmer(Hurst ~ EI + Age + Sex + Condition + (1 | Subject), data = df_lme_nooutliers)
+# summary(model)
 ```
 
 ```{r}

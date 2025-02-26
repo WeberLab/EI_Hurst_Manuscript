@@ -1,5 +1,5 @@
 ---
-title: "Does the Brain’s E/I Balance Really Shape Long-Range Temporal Correlations?"
+title: "Does the Brain’s E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI"
 titlerunning: ""
 authors:
   - name: Lydia Sochan
@@ -58,6 +58,7 @@ keywords:
   - visual task
   - functional magnetic resnonance imaging
   - magnetic resonance spectroscopy
+  - functional magnetic resonance spectroscopy
 
 filters:
   - authors-block
@@ -66,7 +67,7 @@ notebook-links: false
 number-sections: true
 citation:
   container-title: Unpublished
-# date: last-modified
+date: last-modified
 bibliography: EIHurst.bib
 csl: nature.csl
 
@@ -100,9 +101,6 @@ options(reticulate.repl.quiet = TRUE)
 library(tidyverse) # ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats
 library(english) # numbers to words
 library(tools) # title-case
-capitalize_first <- function(x) {
-  paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))
-} # capitalize first letter
 library(patchwork) # figure manipulation
 library(magick) # load images
 library(ggpubr)
@@ -121,34 +119,26 @@ format_p <- function(p, digits = 2) {
     format(round(p, digits), nsmall = digits)
   }
 }
+capitalize_first <- function(x) {
+  paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))
+} # capitalize first letter
 ```
 
 ## Abstract {.unnumbered}
 
-<!-- A 3T multimodal MRI study of healthy adults (n=19; 10 female; 21-54 years) was performed to investigate the potential link between fMRI long-range temporal correlations and excitatory/inhibitory balance. The study objective was to determine if the Hurst exponent (H) – an estimate of the self-correlation and signal complexity of the blood-oxygen-level-dependent (BOLD) signal – is correlated with the excitatory-inhibitory (E/I) ratio. Findings in this domain have implications for neurological and neuropsychiatric conditions with disrupted E/I balance, such as autism spectrum disorder, schizophrenia, and Alzheimer’s disease. From a methodological perspective, H is also considerably easier to accurately measure than E/I ratio. If H can serve as a proxy for E/I, it may serve as a useful clinical biomarker for E/I imbalance. Moreover, E/I has been proposed to serve as a control parameter for brain criticality, which H is believed to be a measure of. Thus, understanding if H and E/I are correlated would serve to clarify this relationship. The study collected movie-watching and rest data including fMRI – which was used to calculate H – and magnetic resonance spectroscopy (MRS) – which was used to measure inhibitory and excitatory neurotransmitters – GABA and glutamate, respectively. H was found to increase with movie compared to rest, while E/I did not change between conditions. H and E/I were not correlated during either movie or rest. This study represents the first attempt to investigate this connection *in vivo* in humans. We conclude that, at 3T and with our particular methodologies, no association was found. -->
+A 3T multimodal MRI study of healthy adults (n=`r as.numeric(count(subjects))`; `r sum(subjects$Sex == "F")` female; `r round(min(subjects$Age),1)` - `r round(max(subjects$Age),1)` years) was performed to investigate the potential link between fMRI long-range temporal correlations and excitatory/inhibitory balance. The study objective was to determine if the Hurst exponent (H) --- an estimate of the self-correlation and signal complexity --- of the blood-oxygen-level-dependent signal is correlated with the excitatory-inhibitory (E:I) ratio. E:I has been proposed to serve as a control parameter for brain criticality, which H is believed to be a measure of. Thus, understanding if H and E:I are correlated would serve to clarify this relationship. Moreover, findings in this domain have implications for neurological and neuropsychiatric conditions with disrupted E:I balance, such as autism spectrum disorder, schizophrenia, and Alzheimer’s disease. From a practical perspective, H is easier to accurately measure than E:I ratio at 3T MRI. If H can serve as a proxy for E:I, it may serve as a more useful clinical biomarker for this imbalance and for neuroscience research in general. The study collected functional MRI and magnetic resonance spectroscopy data during rest and movie-watching. H was found to increase with movie-watching compared to rest, while E:I did not change between conditions. H and E:I were not correlated during either movie-watching or rest. This study represents the first attempt to investigate this connection *in vivo* in humans. We conclude that, at 3T and with our particular methodologies, no association was found. We end with lessons learned and suggestions for future research.
 
 # Introduction
 
-Thirty years ago, functional magnetic resonance imaging (fMRI) profoundly changed the world of MRI by allowing real-time analysis of pressing neuropsychological questions [@ogawaMagneticResonanceImaging1990; @ogawaBrainMagneticResonance1990; @stephanShortHistoryCausal2012]. While initially used to probe task-based responses, researchers have more recently developed an interest in studying brain function at rest, known as resting-state fMRI (rs-fMRI) [@decoRestingBrainsNever2013], i.e. to understand how brain dynamics at rest are related to neurological functioning as well as individual differences. A critical tool in analyzing these dynamics is the Hurst exponent (H) [@campbellMonofractalAnalysisFunctional2022], a measure of self-similarity derived from the blood-oxygen-dependent (BOLD) signal. H estimates the extent to which the BOLD signal displays long-term memory, where a higher value indicates a self-similar signal with long-term positive autocorrelations [@campbellMonofractalAnalysisFunctional2022; @beggsBeingCriticalCriticality2012]. Another way of understanding H is that a signal with high H is fractal: similar temporal signal fluctuations are observed, no matter the time scale [@campbellMonofractalAnalysisFunctional2022].
+The brain is composed of individual neurons, each computationally-limited, that ultimately work together to produce astonishingly complex operations. Understanding how these neurons produce this emergent behaviour remains one of the great scientific challenges of our time. Recent advances in neuroscience have led to the emergence of the Critical Brain Hypothesis, which posits that the brain operates at a critical point, a state where order and disorder are balanced to enable the most efficient information processing [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @barangerChaosComplexityEntropy2000; @bassettUnderstandingComplexityHuman2011; @zimmernWhyBrainCriticality2020; @liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011]. When in a critical state, the brain is optimally responsive to both internal and external stimuli while maintaining a balance between stability and instability [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011]. A fundamental theorem proposing how neural networks achieve this delicate balance centers around the excitation-inhibition (E:I) ratio: the balance of excitatory and inhibitory neural activity, often operationalized as the ratio of the primary excitatory and inhibitory neurotransmitters (i.e. glutamate (Glu) and $\gamma$-aminobutyric acid (GABA) [@liangExcitationInhibitionBalance2024; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]).
 
-H has also emerged as a valuable tool in clinical research, capturing changes in BOLD signal dynamics across various neuropsychiatric conditions. In aging populations for instance, H has been found to be elevated [@dongHurstExponentAnalysis2018; @winkAgeCholinergicEffects2006]; this relationship has also been found in mild cognitive impairment and Alzheimer’s disease [@maximFractionalGaussianNoise2005; @longBrainnetomeAtlasBased2018]. Additionally, changes in H have been observed in conditions such as autism, mood disorders, and brain injury [@laiShiftRandomnessBrain2010; @donaTemporalFractalAnalysis2017; @weiIdentifyingMajorDepressive2013; @jingIdentifyingCurrentRemitted2017; @donaFractalAnalysisBrain2017]. These differences suggest H may reflect changes in global and local functioning.
+*In vivo* measurement of brain criticality can be achieved using several available methods, as systems near a critical state often exhibit fractal-like fluctuations or scale-invariance [@munozColloquiumCriticalityDynamical2018]. Scale-invariance has been observed extensively across various neuronal spatio-temporal scales, from dendritic branching structures [@casertaDeterminationFractalDimension1995] in the spatial domain, to neurotransmitter release [@lowenQuantalNeurotransmitterSecretion1997], neuronal firing rates [@mazzoniDynamicsSpontaneousActivity2007], local field potentials [@bedardMacroscopicModelsLocal2009], electroencephalography (EEG) [@bullmoreFractalAnalysisElectroencephalographic1994] and functional magnetic resonance imaging (fMRI), which measures the blood oxygen level-dependent (BOLD) signal [@zarahnEmpiricalAnalysesBOLD1997; @fadiliWaveletGeneralizedLeastSquares2002; @campbellMonofractalAnalysisFunctional2022] in the time domain. This fractal structure can be quantified by assessing the signal's long-range temporal correlations (LRTC), which reflect the persistence or memory in a time series, where future values are statistically related to past values over long extended periods. The Hurst exponent (H) is a useful measure for evaluating LRTC [@ekeFractalCharacterizationComplexity2002; @campbellMonofractalAnalysisFunctional2022]. An H value between 0.5 and 1 indicates a long-range positive correlation, with large values being followed by large values and small values by small ones. Conversely, an H exponent value between 0 and 0.5 indicates a long-range negative correlation, where large values are likely to be followed by small ones and vice versa. An H value of 0.5 is uncorrelated random noise.
 
-Underlying these observations is the critical brain hypothesis, which posits that the brain operates at a critical point, a state where order and disorder are perfectly balanced to enable optimal information processing [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @barangerChaosComplexityEntropy2000; @bassettUnderstandingComplexityHuman2011; @zimmernWhyBrainCriticality2020; @liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011]. When operating at a critical point, the brain is maximally sensitive to external stimuli, and can dynamically transition between ordered and disordered states to promote efficient cognitive processing [@decoRestingBrainsNever2013; @beggsBeingCriticalCriticality2012; @tianTheoreticalFoundationsStudying2022; @rubinovNeurobiologicallyRealisticDeterminants2011].Recent papers suggest the control parameter underlying the brain’s ability to transition between states is the excitatory-inhibitory (E/I) ratio, the balance of excitatory and inhibitory neural activity, often operationalized as the ratio of the primary excitatory-to-inhibitory neurotransmitters, i.e. glutamate-to-GABA ratio [@liangExcitationInhibitionBalance2024; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. It is thought that E/I controls criticality by modulating the brain’s signal-to-noise ratio [@liangExcitationInhibitionBalance2024; @rubensteinModelAutismIncreased2003].
+H has emerged as a valuable tool in neuroscience and clinical research. Typically, H values reported in adult brains are above 0.5, with higher H values in grey matter than white matter or cerebrospinal fluid [@dongHurstExponentAnalysis2018; @winkMonofractalMultifractalDynamics2008]. Some key findings from neuroscience research include: a decrease in H during task performance [@ciuciuInterplayFunctionalConnectivity2014; @heScaleFreePropertiesFunctional2011], negative correlations with task novelty and difficulty [@churchillSuppressionScalefreeFMRI2016], increases with age in the frontal and parietal lobes [@dongHurstExponentAnalysis2018], and hippocampus [@winkAgeCholinergicEffects2006], but decreases with age in the insula, and limbic, occipital and temporal lobes [@dongHurstExponentAnalysis2018], and more [@campbellMonofractalAnalysisFunctional2022]. In terms of clinical findings, abnormal H values have been identified in Alzheimer's disease (AD) [@maximFractionalGaussianNoise2005; @warsiCorrelatingBrainBlood2012], autism spectrum disorder (ASD) [@donaTemporalFractalAnalysis2017; @laiShiftRandomnessBrain2010], mild traumatic brain injury [@donaFractalAnalysisBrain2017], major depressive disorder [@weiIdentifyingMajorDepressive2013; @jingIdentifyingCurrentRemitted2017] and schizophrenia [@sokunbiNonlinearComplexityAnalysis2014]. Crucially, these same disorders have been associated with imbalances in E:I (AD: [@lauterbornIncreasedExcitatoryInhibitory2021; @vicovarelaExcitatoryinhibitoryImbalanceAlzheimers2019]; ASD [@sohalExcitationinhibitionBalanceFramework2019; @uzunovaExcitatoryInhibitoryImbalance2016; @bruiningMeasurementExcitationinhibitionRatio2020]; depression [@pagePrefrontalExcitatoryInhibitory2019]; and schizophrenia [@kangInterplayMentalDisorder2019])
 
-Besides the implications to the critical brain hypothesis, understanding if E/I is related to H may allow for easier estimation of excitatory and inhibitory neurotransmitters, as accurate E/I measurement is technically challenging [@ajramContribution1HMagnetic2019]. Magnetic resonance spectroscopy (MRS) is the only non-invasive method of measuring the ratio of glutamate (Glu; excitatory) to Gamma-aminobutyric acid (GABA; inhibitory) *in vivo* [@stanleyFunctionalMagneticResonance2018]. Unfortunately, it has both limited spatial and temporal resolution [@gaoInferringSynapticExcitation2017; @ajramContribution1HMagnetic2019; @stanleyFunctionalMagneticResonance2018]. Consequently, if H could serve as a proxy for E/I, it would be much easier to estimate E/I in conditions of interest such as autism, Alzheimer’s, and schizophrenia.
+In addition to its implications for the critical brain hypothesis, establishing a connection between E:I and H could facilitate simpler estimation of excitatory and inhibitory neurotransmitters, as precise measurement of E:I is technically challenging [@ajramContribution1HMagnetic2019]. Currently, magnetic resonance spectroscopy (MRS) is the only non-invasive method for *in vivo* assessment of the Glu/GABA ratio (excitatory to inhibitory neurotransmitters) in humans [@stanleyFunctionalMagneticResonance2018; @harrisEdited1Magnetic2017]. Unfortunately, MRS suffers from limited spatial and temporal resolution [@gaoInferringSynapticExcitation2017; @ajramContribution1HMagnetic2019; @stanleyFunctionalMagneticResonance2018]. If H could function as a substitute for E:I, it would simplify the estimation of E:I in conditions of interest such as ASD, AD, and schizophrenia.
 
-There are a handful of studies suggesting a link between H and E/I, however they are all either computational models or animal studies [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. Moreover, their findings are inconsistent, with some reporting positive linear, negative linear, or U-shaped relationships between the two variables (see @tbl-lit). Thus, there is a need for further study, both to clarify the nature of a potential E/I-Hurst relationship, and also to confirm if this relationship indeed exists in the human brain. Therefore, the current study seeks to investigate the potential E/I-Hurst relationship in vivo, within the visual cortex during movie-watching and rest.
-
-| Citation | Study Type | H Data Type | H Calculation Method | E/I Type | E/I-Hurst Relationship |
-| ------------- | -------------- | -------------- | ------------- | -------------- | -------------- |
-| Poil et al. (2012)@poilCriticalStateDynamicsAvalanches2012 | Computational with in-house simulated model | Neuronal avalanche size | Detrendend fluctuation analysis (DFA) | Structural: number of E-to-I neurons | Inverse U |
-| Bruining et al. (2020)@bruiningMeasurementExcitationinhibitionRatio2020 | Computational with model by Poil et al. (2012); modified in-house | Neuronal oscillation amplitude | DFA | Structural: number of E-to-I synapses | Inverse U |
-| Gao et al. (2017)@gaoInferringSynapticExcitation2017 | Computational; in vivo in rats and macaques | Local field potential (LFP) | PSD | Estimated from LFP | Positive linear |
-| Lombardi et al. (2017)@lombardiBalanceExcitationInhibition2017 | Computational with in-house model | Neuronal avalanche size | PSD | Structural: number of E-to-I neurons | Negative linear |
-| Trakoshis et al. (2020)@trakoshisIntrinsicExcitationinhibitionImbalance | Computational with simulated data; in vivo in mice | fMRI BOLD signal | Wavelet-based maximum likelihood method | E-to-I synaptic conductance | Positive linear |
-
-: Summary of methods for existing E/I-Hurst studies {#tbl-lit}
-
+Going beyond clinical observations that imply a link between H and E:I, several studies have attempted to explore this association directly. However, they have primarily relied on computational models or animal studies [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. To date, no *in vivo* study has validated this association in humans. Moreover, the existing research findings have so far been inconsistent, with some reporting positive-linear, negative-linear, or U-shaped relationships between the two variables. Therefore, further investigation is needed to establish the true nature of the potential E:I-Hurst relationship and to confirm its presence within the human brain. The current study aimed to explore the potential E:I-Hurst relationship in vivo , specifically within the visual cortex during movie-watching and resting periods.
 
 # Methods
 
@@ -162,20 +152,25 @@ Written informed consent was obtained from all participants. Ethics approval was
 
 ## Scanning Procedure
 
-After two anatomical sequences were acquired, participants were instructed to visually fixate on a cross-hair for 24 minutes. During this period, an fMRI, MEGA-PRESS, and sLASER sequence were acquired (see @fig-method A and @sec-mriacq). Next, participants were instructed to watch a nature documetnary (Our Planet (2019), Episode 3, “Jungles” @cordeyJungles2019) for 24 minutes.  During this period, another set of fMRI, sLASER, and MEGA-PRESS sequences were acquired. See @fig-method B for a visual representation of the scanning protocol. Total scan duration was approximately 1 hour. All participants followed the same order of rest than movie, and all participants saw the same movie segment, beginning at the same time during the scan.
-
+After two anatomical sequences were acquired, participants were instructed to visually fixate on a cross-hair for 24 minutes. During this period, an fMRI, single-voxel semi Localization by Adiabatic SElective Refocusing (sLASER) [@ozShortechoSingleshotFullintensity2011], and single-voxel MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS) [@mescherSimultaneousVivoSpectral1998] sequences were acquired (see @fig-method A and @sec-mriacq). Next, participants were instructed to watch a nature documentary (Our Planet (2019), Episode 3, “Jungles” @cordeyJungles2019) for 24 minutes.  During this period, another set of fMRI, sLASER, and MEGA-PRESS sequences were acquired. See @fig-method B for a visual representation of the scanning protocol. Total scan duration was approximately 1 hour. All participants followed the same order of rest than movie, and all participants saw the same movie segment, beginning at the same time during the scan.
 
 ```{r}
 #| label: fig-method
 #| fig-cap: "**Overview of the MRI acquisition protocol.** A) fMRI coverage was across the whole-brain (example coverage in red). MRS voxels were placed in the visual cortex (blue). Background image is of a T1w acquisition from a sample subject. B) fMRI, MEGA-PRESS and sLASER were acquired first with participants looking at a white cross for 24 mintues. Next, the same sequences were acquired with the participants viewing a nature documentary for an identical period of time."
+layout="
+  #AA#
+  BBBB
+  "
+
 fmrimrs <- image_read('../Figures/StudyDesign/studydesign_fmri_mrs.png')
 fmrimrs_dim <- image_info(fmrimrs)
+fmrimrs <- ggplot() + background_image(fmrimrs) + theme_void() #+ theme(aspect.ratio = fmrimrs_dim$height / fmrimrs_dim$width)
 
-fmrimrs <- ggplot() + background_image(fmrimrs) + theme_void() +
-  theme(aspect.ratio = fmrimrs_dim$height / fmrimrs_dim$width)
 studydesign <- image_read('../Figures/StudyDesign/StudyDesign.png')
 studydesign <- ggplot() + background_image(studydesign) + theme_void()
-p <- (fmrimrs + plot_spacer()) / studydesign
+# p <- (fmrimrs + plot_spacer()) / studydesign
+p <- fmrimrs + studydesign + plot_layout(design = layout)
+# p + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 p + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
 
@@ -186,18 +181,18 @@ Scans were performed at BC Children’s Hospital MRI Research Facility on a 3.0 
 The following MRI scans were acquired. A 3D T1-weighted sagittal fast spoiled gradient echo (FSPGR) sequence;
 a 3D T2-weighted sagittal CUBE;
 a 2D echo-planar imaging (EPI) multi-echo gradient-echo fMRI sequence;
-a semi-LASER (sLASER) sequence;
-and a MEGA-PRESS sequence. Details are listed in @tbl-mriacq.
+a MEGA-PRESS sequence;
+and an sLASER sequence. Details are listed in @tbl-mriacq.
 
-| Sequence                        | TE (ms)        | TR (ms)    | Flip Angle | FOV            | Slice Thickness (mm) | In-Plane Resolution (mm²) | Other Parameters                   |
-|---------------------------------|---------------|------------|------------|----------------|----------------------|----------------------------|-------------------------------------|
-| **3D T1-weighted FSPGR**        | 2.176         | 7.216      | 12         | 256 × 256      | 0.9                  | 0.9375 × 0.9375           | -                           |
-| **3D T2-weighted CUBE**         | 75.242        | 2,504.0    | 90          | 256 x 256       | 0.9                  | 0.9375 × 0.9375          | - |
-| **2D EPI Multi-Echo fMRI**      | 12.2, 35.352, 58.504 | 1,500 | 52         | 64 x 64        | 3.6                  | 3.5938 × 3.5938          | Acceleration factor = 6    |
-| **sLASER**                      | 35            | 2,000      | 90         | -      | 28.0                    | 28.0 x 28.0           | -                             |
-| **MEGA-PRESS**                  | 68            | 1,800      | 90         | -      | 28.0                    | 28.0 x 28.0           | -                             |
+| Sequence                        | TE (ms)        | TR (ms)    | Flip Angle | FOV            | Slice Thickness (mm) | In-Plane Resolution (mm²) | Other Parameters                   | Time (mins) |
+|---------------------------------|---------------|------------|------------|----------------|----------------------|----------------------------|-------------------------------------|----|
+| 3D T1-weighted FSPGR        | 2.176         | 7.216      | 12         | 256 × 256      | 0.9                  | 0.9375 × 0.9375           | -                           | 5 |
+| 3D T2-weighted CUBE         | 75.242        | 2,504.0    | 90          | 256 x 256       | 0.9                  | 0.9375 × 0.9375          | - | 4 |
+| 2D EPI Multi-Echo fMRI      | 12.2, 35.352, 58.504 | 1,500 | 52         | 64 x 64        | 3.6                  | 3.5938 × 3.5938          | Acceleration factor = 6    | 12 |
+| MEGA-PRESS                  | 68            | 1,800      | 90         | -      | 28.0                    | 28.0 x 28.0           | -                             | 4 |
+| sLASER                      | 35            | 2,000      | 90         | -      | 28.0                    | 28.0 x 28.0           | -                             | 8 |
 
-: Summary of MRI acquisition details {#tbl-mriacq}
+: **Summary of MRI acquisition details** TE = echo time; TR = repetition time; FOV = field of view; FSPGD = fast spoiled gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI = functional magnetic resonance imaging; sLASER = semi localization by adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood point-resolved spectroscopy  {#tbl-mriacq}
 
 For both MRS sequences, the voxel size was set to 2.8 x 2.8 x 2.8 cm^3^. MRS voxels were rotated and placed in the occipital lobe, aligned along the calcarine fissure.
 Finally, blip-up and blip-down spin-echo versions of the fMRI sequence were acquired at the end to estimate the B0 non-uniformity map for fMRI phase distortion correction.
@@ -220,14 +215,14 @@ Participants were excluded from further ananlysis if their mean FD was > 0.15 mm
 
 ## MRS
 
-sLASER data were processed and fit to a spectrum using `Osprey` [@oeltzschnerOspreyOpenSourceProcessing2020] (v2.4.0). Full width half-maximum (FWHM) of the single-Lorentzian fit of the N-acetylaspartate (NAA) peak were calculated for quality assurance purposes. The MRS voxel was co-registered to T1w reference image and segmented by SPM12 [@fristonStatisticalParametricMapping2007] into CSF, GM, and WM. Metabolites were water-scaled as well as tissue- and relaxation-corrected by the Gasparovic et al. (2006) method [@gasparovicUseTissueWater2006]. Processed (non-fitted) data from `Osprey` was also fed to `LCModel` [@provencherAutomaticQuantitationLocalized2001] (v6.1) for fitting. Cramer-Rao lower bounds (CRLBs) were calculated from LCModel fit. `Osprey` estimates were used for further analysis. Glutamate is challenging to capture due to its signal overlaps with other metabolites [@pasantaFunctionalMRSStudies2023]. In particular, Glu shares a similar chemical structure with glutamine (Gln) which causes the spectral features of Glu to be contaminated with Gln [@ramadanGlutamateGlutamineReview2013]. As a result, we decided to report Glx values, which co-reports Glu and Gln to avoid errors in spectral assignment, especially since it is controversial whether Glu can reliably be separated from Gln at 3T [@pasantaFunctionalMRSStudies2023; @ramadanGlutamateGlutamineReview2013]. We henceforth refer to Glu as either Glx or glutamate. 
+sLASER data were processed and fit to a spectrum using `Osprey` [@oeltzschnerOspreyOpenSourceProcessing2020] (v2.4.0). Full width half-maximum (FWHM) of the single-Lorentzian fit of the N-acetylaspartate (NAA) peak were calculated for quality assurance purposes. The MRS voxel was co-registered to T1w reference image and segmented by `SPM12` [@fristonStatisticalParametricMapping2007] into CSF, GM, and WM. Metabolites were water-scaled as well as tissue- and relaxation-corrected by the Gasparovic et al. (2006) method [@gasparovicUseTissueWater2006]. <!-- Processed (non-fitted) data from `Osprey` was also fed to `LCModel` [@provencherAutomaticQuantitationLocalized2001] (v6.1) for fitting. Cramer-Rao lower bounds (CRLBs) were calculated from LCModel fit. `Osprey` estimates were used for further analysis. --> Glutamate is challenging to capture due to its signal overlaps with other metabolites [@pasantaFunctionalMRSStudies2023]. In particular, Glu shares a similar chemical structure with glutamine (Gln) which causes the spectral features of Glu to be contaminated with Gln [@ramadanGlutamateGlutamineReview2013]. As a result, we decided to report Glx values, which co-reports Glu and Gln to avoid errors in spectral assignment, especially since it is controversial whether Glu can reliably be separated from Gln at 3T [@pasantaFunctionalMRSStudies2023; @ramadanGlutamateGlutamineReview2013]. We henceforth refer to Glu as either Glx. 
 <!-- Does this make sense? -->
 
-MEGA-PRESS data were processed and fit with `Osprey` and `LCModel` as previously described (see Figure 5). Data were also fit with `Gannet` (v3.3.0); they were relaxation-, tissue- and alpha-corrected using the Harris et al. (2015) method [@harrisSpectralEditingMeasurementsGABA2015]. `Osprey` values were ultimately used for further analysis. Due to the J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is macromolecule quantification [@harrisSpectralEditingMeasurementsGABA2015]. As a result, we report GABA+, a measure which co-reports GABA with macromolecules. Macromolecules (MM) are expected to account for approximately 45% of the GABA+ signal [@harrisSpectralEditingMeasurementsGABA2015]. While a macromolecule-suppressed estimate of GABA seems ideal, a recent 25-site and multi-vendor study conducted at 3T found that GABA+ showed much lower coefficient of variation than MM-suppressed GABA, meaning that GABA+ is more consistent across research sites and MRI vendors (i.e., Philips, GE, Siemens) [@mikkelsenBigGABAII2019]. Moreover, GABA+ showed greater reliability for both creatine-referenced and water-suppressed estimates [@mikkelsenBigGABAEdited2017; @mikkelsenBigGABAII2019]. MM-supressed GABA and GABA+ estimates are also correlated, albeit weakly- to moderately-so [@harrisSpectralEditingMeasurementsGABA2015; @mikkelsenBigGABAII2019; @mikkelsenBigGABAEdited2017]. Consequently, we report GABA+ (henceforth referred to as GABA) to allow for easier comparison of our results to other studies as well as reproducibility.
+MEGA-PRESS data were processed and fit with `Osprey`, and were relaxation-, tissue- and alpha-corrected using the Harris et al. (2015) method [@harrisSpectralEditingMeasurementsGABA2015]. `Osprey` values were ultimately used for further analysis. Due to the J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is macromolecule quantification [@harrisSpectralEditingMeasurementsGABA2015]. As a result, we report GABA+, a measure which co-reports GABA with macromolecules. Macromolecules (MM) are expected to account for approximately 45% of the GABA+ signal [@harrisSpectralEditingMeasurementsGABA2015]. While a macromolecule-suppressed estimate of GABA seems ideal, a recent 25-site and multi-vendor study conducted at 3T found that GABA+ showed much lower coefficient of variation than MM-suppressed GABA, meaning that GABA+ is more consistent across research sites and MRI vendors (i.e., Philips, GE, Siemens) [@mikkelsenBigGABAII2019]. Moreover, GABA+ shows greater reliability for both creatine-referenced and water-suppressed estimates [@mikkelsenBigGABAEdited2017; @mikkelsenBigGABAII2019]. MM-supressed GABA and GABA+ estimates are also correlated, albeit weakly- to moderately-so [@harrisSpectralEditingMeasurementsGABA2015; @mikkelsenBigGABAII2019; @mikkelsenBigGABAEdited2017]. Consequently, we report GABA+ to allow for easier comparison of our results to other studies as well as reproducibility.
 
-Basis sets were created using `MRSCloud` [@huiMRSCloudCloudbasedMRS2022; @moriMRICloudDeliveringHighThroughput2016]. For sLASER, ‘localization’ was set to 'sLASER', ‘vendor’ to ‘GE’, ‘editing’ to 'UnEdited', and ‘TE’ to 35. For MEGA-PRESS, ‘localization’ was set to ‘PRESS’, ‘editing’ to 'MEGA', ‘TE’ to 68, ‘edit on’ to ‘1.9’, ‘edit off’ to ‘7.5’, and ‘pulse duration’ to ‘14’. Metabolites included for both basis sets were: Asc, Asp, Cr, CrCH2, EA, GABA, GPC, GSH, Gln, Glu, Gly, H2O, Lac, NAA, NAAG, PCh, PCr, PE, Ser, Tau, mI, and sI. Excitatory-inhibitory ratio (E/I) was calculated as [Glx in i.u.]/[GABA+ in i.u.], a common practice to report E/I using MRS [@rideauxNoBalanceGlutamate+glutamine2021].
+Basis sets were created using `MRSCloud` [@huiMRSCloudCloudbasedMRS2022; @moriMRICloudDeliveringHighThroughput2016]. For sLASER, ‘localization’ was set to 'sLASER', ‘vendor’ to ‘GE’, ‘editing’ to 'UnEdited', and ‘TE’ to 35. For MEGA-PRESS, ‘localization’ was set to ‘PRESS’, ‘editing’ to 'MEGA', ‘TE’ to 68, ‘edit on’ to ‘1.9’, ‘edit off’ to ‘7.5’, and ‘pulse duration’ to ‘14’. Metabolites included for both basis sets were: Asc, Asp, Cr, CrCH2, EA, GABA, GPC, GSH, Gln, Glu, Gly, H2O, Lac, NAA, NAAG, PCh, PCr, PE, Ser, Tau, mI, and sI. Excitatory-inhibitory ratio (E:I) was calculated as [Glx in i.u.]/[GABA+ in i.u.], a common practice to report E:I using MRS [@rideauxNoBalanceGlutamate+glutamine2021].
 
-Participants were excluded from further analysis if any of their MRS scans had FWHM > 10. Originally we intended to calculate, report and analyze MRS as tissue-corrected quantitative values. However, the `Osprey` software was reporting Glx values that were an order of magnitude larger than reported Glx values in the literature. Despite several attempts, we were unable to locate the source of this error. Therefore we decided to use Glx/Cr and GABA+/Cr values to be safe. 
+Participants were excluded from further analysis if any of their MRS scans had FWHM > 10. Originally we intended to calculate, report and analyze MRS as tissue-corrected quantitative values. However, the `Osprey` software was reporting Glx values that were an order of magnitude larger than reported values in the literature. Despite several attempts, we were unable to locate the source of this error. Therefore we decided to use metabolite to creatine ratios (i.e. Glx / tCr and GABA+ / tCr) to be safe. 
 
 ## Hurst Exponent Calculation
 
@@ -241,8 +236,7 @@ Since it cannot be assumed that all fBm is removed from the signal, we use the c
 
 ## Statistics
 
-All statistical analyses were performed using `R` [@rcoreteamLanguageEnvironmentStatistical2021] and `RStudio` (v2023.06.0+421). Glutamate, GABA, E/I ratio, and H were compared between rest and movie conditions using paired Student’s t-tests [@studentProbableErrorMean1908]. Glutamate, GABA, and E/I ratio were tested for correlation with H using Pearson’s method [@freedmanStatistics2007].
-
+All statistical analyses were performed using `R` [@rcoreteamLanguageEnvironmentStatistical2021] and `RStudio` (v2023.06.0+421). Difference of means between rest and movie conditions were calculated using paired Student’s t-tests [@studentProbableErrorMean1908]. Correlations were calculated using Pearson’s method [@freedmanStatistics2007]. Finally, linear mixed-effect models were used to test for more complicated models.
 
 # Results
 
@@ -255,8 +249,6 @@ All statistical analyses were performed using `R` [@rcoreteamLanguageEnvironment
 The final study sample included `r sum(subjects$Sex == "M")` males and `r sum(subjects$Sex == "F")` females between ages `r round(min(subjects$Age),1)` and `r round(max(subjects$Age),1)`, with a mean age and standard deviation of  `r round(mean(subjects$Age),1)` ± `r round(sd(subjects$Age),1)` years.
 
 ## Data Quality
-
-### MRS
 
 After exclusion, FWHM (mean ± sd) at rest in sLASER and MEGAPRESS were `r as.numeric(fwhm_stats[2,3, drop = T])` ± `r as.numeric(fwhm_stats[2,4, drop = T])`
 and `r as.numeric(fwhm_stats[1,3, drop = T])` ± `r as.numeric(fwhm_stats[1,4, drop = T])`, respectively. During movie watching, FWHM in sLASER and MEGAPRESS were `r as.numeric(fwhm_stats[4,3, drop = T])` ± `r as.numeric(fwhm_stats[4,4, drop = T])`
@@ -281,22 +273,24 @@ An average of all MRS voxel placements can be seen in @fig-mrsquality A, and a s
 
 layout <- "
   AAAA
+  AAAA
   BBCC
+  BBCC
+  DDDD
   DDDD
   DDDD
   "
 
 mrsvoxel <- image_read("./images/MRSVoxelAverage.png") # From Figures.ipynb
-mrsvoxel <- ggplot() + background_image(mrsvoxel) + theme_void()
+mrsvoxel <- ggplot() + background_image(mrsvoxel) + theme_void() #+ coord_fixed()
 
 ospreyslaser <- image_read("../Data_from_BCCHRI/derivatives/slaser/sub-Pilot10/rest/Reports/reportFigures/sub-Pilot10/sub-Pilot10_metab_A_model.jpg")
 ospreyslaser_dim <- image_info(ospreyslaser)
-ospreyslaser <- ggplot() + background_image(ospreyslaser) + theme_void() #+
-  # theme(aspect.ratio = ospreyslaser_dim$height / ospreyslaser_dim$width)
+ospreyslaser <- ggplot() + background_image(ospreyslaser) + theme_void() #+ coord_fixed() # + theme(aspect.ratio = ospreyslaser_dim$height / ospreyslaser_dim$width)
 
 ospreymegapress <- image_read("../Data_from_BCCHRI/derivatives/megapress/sub-Pilot10/rest_osprey/Reports/reportFigures/sub-Pilot10/sub-Pilot10_metab_diff1_model.jpg")
 ospreymegapress_dim <- image_info(ospreymegapress)
-ospreymegapress <- ggplot() + background_image(ospreymegapress) + theme_void() #+
+ospreymegapress <- ggplot() + background_image(ospreymegapress) + theme_void() #+ coord_fixed()
   # theme(aspect.ratio = ospreymegapress_dim$height / ospreymegapress_dim$width)
 
 # p1 <- free(mrsvoxel) + ospreyslaser + ospreymegapress + glu_FWHM_plot
@@ -304,9 +298,8 @@ p1 <- free(mrsvoxel) + free(ospreyslaser) + free(ospreymegapress) + free(gluandg
   plot_layout(design = layout)
 p1 + plot_annotation(tag_levels = "A") & theme(plot.tag = element_text(size = 11))
 ```
-### fMRI and Hurst
 
-A sample of the combined grey-matter and MRS voxel mask used to average H values can be seen in @fig-hurstsamp A, along with a sample Hurst exponent map in @fig-hurstsamp B, and sample fits for H calculation during rest in @fig-hurstsamp C.
+A sample of the combined grey-matter and MRS voxel mask used to average H values, along with a sample Hurst exponent map, and sample fits for H calculation during rest can be found in @fig-hurstsamp A, B, and C, respectively.
 
 Mean FD was not correlated with H during rest (r = `r round(meanfd_rest.model$estimate,2)`, p = `r round(meanfd_rest.model$p.value,2)` but was moderately negatively correlated with H during movie watching (r = `r format(round(meanfd_movie.model$estimate,2), nsmall=2)`, p = `r round(meanfd_movie.model$p.value,2)`; see @fig-hurstsamp D).
 
@@ -328,14 +321,19 @@ layout = "
   "
 
 fmrimask <- image_read("./images/SampleMask.png")
+# add white space to the right
 fmrimask_dim <- image_info(fmrimask)
-fmrimask <- ggplot() + background_image(fmrimask) + theme_void() #+ theme(aspect.ratio = fmrimask_dim$height / fmrimask_dim$width)
+white <- image_blank(fmrimask_dim$width/8.3, fmrimask_dim$height, "white")
+fmrimask <- c(fmrimask, white)
+fmrimask <- image_append(fmrimask)
+fmrimask <- ggplot() + background_image(fmrimask) + theme_void()
 
 hurstsamp <- image_read("./images/HurstSample.png")
 hurstsamp_dim <- image_info(hurstsamp)
-hurstsamp <- ggplot() + background_image(hurstsamp) + theme_void() #+ 
+hurstsamp <- ggplot() + background_image(hurstsamp) + theme_void()
   #theme(aspect.ratio = hurstsamp_dim$height / hurstsamp_dim$width)
   #coord_fixed()
+
 
 psdplot <- image_read("./images/PSDs.png")
 psdplot_dim <- image_info(psdplot)
@@ -350,22 +348,22 @@ fmrimask + hurstsamp + psdplot + meanfd_hurst +
   plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
 
-## Paired Student's T Tests
+## Relationship between H and E:I
 
-Mean ± sd of metabolites, E/I, and H during rest and movie are reported in @tbl-results. Neither Glx nor GAB+ were different between movie and rest conditions (@fig-results A & B, respectively). E/I ratio did not change between conditions either (@fig-results C). H was found to be greater during movie watching than rest (@fig-results D).
+Mean ± sd of metabolites, E:I, and H during rest and movie are reported in @tbl-results. Boxplots between rest and movie can be seen in @fig-results. Neither Glx nor GAB+ were different between movie and rest conditions. E:I ratio did not change between conditions either. H was found to be greater during movie watching than rest.
 
 |                  | Rest | Movie | p-value |
 | ---------------- | ---- | ----- | ------- |
 | **Glx / tCr**    | `r as.numeric(glu_stats[1,2, drop = T])` ± `r as.numeric(glu_stats[1,3, drop = T])` | `r as.numeric(glu_stats[2,2, drop = T])` ± `r as.numeric(glu_stats[2,3, drop = T])`  | `r format_p(ttest_glu$p.value)` |
 | **GABA+ / tCr**  | `r as.numeric(gaba_stats[1,2, drop = T])` ± `r as.numeric(gaba_stats[1,3, drop = T])` | `r as.numeric(gaba_stats[2,2, drop = T])` ± `r as.numeric(gaba_stats[2,3, drop = T])`  | `r format_p(ttest_gaba$p.value)` |
-| **E/I Ratio**    | `r as.numeric(ei_stats[1,2, drop = T])` ± `r as.numeric(ei_stats[1,3, drop = T])` | `r as.numeric(ei_stats[2,2, drop = T])` ± `r as.numeric(ei_stats[2,3, drop = T])`  | `r format_p(ttest_ei$p.value)` |
+| **E:I Ratio**    | `r as.numeric(ei_stats[1,2, drop = T])` ± `r as.numeric(ei_stats[1,3, drop = T])` | `r as.numeric(ei_stats[2,2, drop = T])` ± `r as.numeric(ei_stats[2,3, drop = T])`  | `r format_p(ttest_ei$p.value)` |
 | **H**     | `r format(round(mean(hurst_stats$Rest_Hurst),2), nsmall = 2) ` ± `r format(round(mean(hurst_stats$Rest_Hurst),2), nsmall = 2) ` | `r format(round(mean(hurst_stats$Movie_Hurst),2), nsmall = 2)` ± `r format(round(mean(hurst_stats$Movie_Hurst),2), nsmall = 2) ` | `r format_p(ttest_hurst$p.value)` |
 
-: Summary of main results {#tbl-results}
+: **Summary of main results** {#tbl-results}
 
 ```{r}
 #| label: fig-results
-#| fig-cap: "**Paired comparison of metabolite values during rest (green) and movie (orange) conditions.** A) Glx / tCr; B) GABA+ / tCr; and C) E/I. Paired dots represent the same participant across conditions. Mean difference with 95% confidence intervals, and as Cohen's D are reported at the top of each plot."
+#| fig-cap: "**Paired comparison of metabolite values during rest (green) and movie (orange) conditions.** A) Glx / tCr; B) GABA+ / tCr; and C) E:I. Paired dots represent the same participant across conditions. Mean difference with 95% confidence intervals, and as Cohen's D are reported at the top of each plot."
 #| fig-width: 10
 #| fig-height: 8
 layout <- "
@@ -376,14 +374,13 @@ layout <- "
 glu_boxplot + gaba_boxplot + ei_boxplot + hurst_boxplot + plot_layout(design = layout) + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
 
-## Correlations
-
-H was not found to correlate with Glx, GABA+, or E/I, during rest or movie (@fig-correlations).
+H was not found to correlate with Glx, GABA+, or E:I, during rest or movie (@fig-correlations).
+<!-- TODO: add r to the above sentence -->
 
 
 ```{r}
 #| label: fig-correlations
-#| fig-cap: "**Scatter plots of H vs. metabolites.** A) Glx / tCr; B) GABA+ / tCr; and C) E/I. Rest is in green, while movie is in orange. p-values are reported at the top of each plot."
+#| fig-cap: "**Scatter plots of H vs. metabolites.** A) Glx / tCr; B) GABA+ / tCr; and C) E:I. Rest is in green, while movie is in orange. p-values are reported at the top of each plot."
 #| fig-width: 7
 #| fig-height: 6
 layout <- "
@@ -392,28 +389,82 @@ AABB
 "
 glu_hurst_plot + gaba_hurst_plot + ei_hurst_plot + plot_layout(design=layout, guides = 'collect', axes = 'collect', axis_titles = 'collect') + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
+
+To ensure that meanFD and FWHM were not confounding our results, we also ran a linear mixed-effects model with H as dependent variable, Glx/GABA+ as primary predictor of interest, and meanFD, FWHM(Glx), and FWHM(GABA+) as covariates, Condition (rest vs. movie) as fixed effects, and subjects as random effects:
+
+$$
+\mathrm{H} \sim \frac{\mathrm{Glx}}{\mathrm{GABA+}} + \mathrm{meanFD} + \mathrm{FWHM_{Glx}} + \mathrm{FWHM_{GABA+}} + \mathrm{Condition} + (1 | \mathrm{Subject})
+$$
+
+The model's total explanatory power was substantial (conditional r^2^ = `r round(r2_values$R2_conditional,2)`), with fixed effects alone (marginal r^2^) equal to `r round(r2_values$R2_marginal,2)`. The model's intercept, corresponding to EI = 0, Condition = Movie, FWHMs_Glx_ = 0, FWHM_GABA+_ = 0 and meanFD = 0, was `r round(model_summary$coefficients[1,1],2)` (95%
+CI [`r round(confint_values["(Intercept)", "2.5 %"],2)`, `r round(confint_values["(Intercept)", "97.5 %"],2)`], t(30) = `r round(model_summary$coefficients["(Intercept)","t value"],2)`, p = `r round(model_summary$coefficients["(Intercept)","Pr(>|t|)"],3)`). Within this model, only the effect of Condition [Rest] was statistically significant (beta = `r round(model_summary$coefficients["ConditionRest","Estimate"],2)`, 95% CI [`r round(confint_values["ConditionRest", "2.5 %"],2)`, `r round(confint_values["ConditionRest", "97.5 %"],2)`], t(30) = `r round(model_summary$coefficients["ConditionRest","t value"],2)`, p `r format_p(model_summary$coefficients["ConditionRest","Pr(>|t|)"],2)`).
+
 # Discussion
 
-We report here the first in vivo human study of the E/I-H relationship. An increase in H was observed during movie-watching as compared to rest, indicating a decrease in BOLD signalling complexity in response to visual stimuli. However, no difference in E/I was observed between conditions, nor was H found to be related to E/I during either movie-watching or rest. Our finding that H increases during movie-watching compared to rest is consistent with a previous study by our lab, which found that H increases in the visual network during movie-watching [@campbellFractalBasedAnalysisFMRI2022]. However, previous studies have observed a task-dependent H decrease using highly-structured, active tasks requiring patient input [@heScaleFreePropertiesFunctional2011; @churchillSuppressionScalefreeFMRI2016; @ciuciuInterplayFunctionalConnectivity2014; @barnesEndogenousHumanBrain2009]. The results of our study in combination with our lab’s previous study [@campbellFractalBasedAnalysisFMRI2022], suggest that the naturalistic, passive task of movie-watching induces a different effect on H than more structured tasks. This is in line with literature suggesting that distinct neural responses and BOLD signal characteristics are observed in conventional, active visual tasks compared to naturalistic and passive visual stimuli [@campbellFractalBasedAnalysisFMRI2022; @hassonReliabilityCorticalActivity2010].
+We report here the first *in vivo* human study of the E:I-H relationship. An increase in H was observed during movie-watching as compared to rest, indicating stronger long-range temporal dependencies in BOLD activity during visual stimulation. No difference was found in Glx, GABA+, nor Glx/GABA+ between rest and movie-watching. Furthermore, no association was found between H and Glx, GABA+, nor Glx/GABA+. Attempting to control for meanFD and FWHM using a linear mixed-effects model did not alter these results.
 
-<!-- is higher H = higher complexity? I can't figure this out -->
-It may also be that richer scaling properties (higher H) during movie-watching comes about to support the continuous perception of visual stimuli during movie-watching [@campbellFractalBasedAnalysisFMRI2022]. Moreover, task-induced H changes have been observed to be dependent on task complexity and novelty [@churchillSuppressionScalefreeFMRI2016]. Given this finding, it seems reasonable to suggest that differences in task complexity and novelty may account for discrepancies in task-induced H changes.
+Our finding that H increases during movie-watching compared to rest is consistent with a previous study from our lab [@campbellFractalBasedAnalysisFMRI2022], which reported increased H in the visual network (from Yeo's seven resting-state networks [@thomasyeoOrganizationHumanCerebral2011]) during movie-watching using data from the Human Connectome Project [@vanessenHumanConnectomeProject2012]. While this increase in H is consistent with our prior findings, other studies have reported decreases in H during active tasks [@heScaleFreePropertiesFunctional2011; @churchillSuppressionScalefreeFMRI2016; @ciuciuInterplayFunctionalConnectivity2014; @barnesEndogenousHumanBrain2009]. Our results suggest that the naturalistic, passive nature of movie-watching elicits a different effect on H compared to more active tasks. This is consistent with literature indicating distinct neural responses and BOLD signal characteristics between conventional active visual tasks and naturalistic passive visual stimuli [@campbellFractalBasedAnalysisFMRI2022; @hassonReliabilityCorticalActivity2010]. Richer scaling properties (higher H) during movie-watching may support the continuous perception of visual stimuli [@campbellFractalBasedAnalysisFMRI2022].
 
-We found no task-induced change in GABA+. This finding is consistent with a large meta-analytic review which pooled the results of 49 MRS studies [@pasantaFunctionalMRSStudies2023]. They too reported no task-dependent GABA change in the visual cortex. This may due to the technical difficulties of capturing GABA levels using MRS at 3T, owing to its low concentration in the brain as well as signal overlap with higher abundance metabolites [@pasantaFunctionalMRSStudies2023]. However, several studies have successfully reported changes in GABA at 3T using different paradigms / regions (for example: [@floyer-leaRapidModulationGABA2006; @sampaio-baptistaChangesFunctionalConnectivity2015; @staggRoleGABAHuman2011]; see @pasantaFunctionalMRSStudies2023 for more).
+We found no changes in either Glx or GABA+ between conditions. Given that no difference was observed for either metabolite, it is unsurprising that E:I did not change either. This was unfortunate as our study was designed to include two conditions in order to elicit changes in H, Glx, and GABA+, aiming to confirm that our experiment induced measurable alterations in these metrics. Establishing such changes would have provided a foundation for directly examining the correlation between H and the E/I ratio. However, because Glx and GABA+ did not show significant changes between conditions, our main results are likely to be met with doubt. Without evidence of condition-induced variations in Glx and GABA+, it remains unclear whether the absence of correlation reflects a true lack of association or insufficient sensitivity of our measurement approach to detect changes in these metabolites.
 
-We also found no change in Glx between conditions. This is somewhat consistent with the literature -- while a meta-analysis of recent Glu/Glx studies has reported a small task-induced increase in Glu/Glx in the visual cortex, this finding was non-specific to visual stimuli, including pain, learning, and motor tasks [@pasantaFunctionalMRSStudies2023]. It is also true that a large number of the studies included were conducted at 7T and thus have greater sensitivity to detect changes in Glu/Glx than the present study. Like GABA, glutamate is difficult to capture due to its similar chemical structure and signal overlaps with other metabolites.
+A recent meta-analysis of Glu/Glx studies [@pasantaFunctionalMRSStudies2023] reported a minimal task-induced increase in Glu/Glx within the visual cortex; however, this finding was not linked to any visual stimuli task, but rather to pain, learning, and motor tasks. Additionally, many of the studies included in the review were conducted at 7T, offering increased sensitivity for detecting changes in Glu/Glx. Nonetheless, several studies have demonstrated changes in Glu/Glx at 3T (e.g., [@gutzeitDifferentialNMRSpectroscopy2013; @cleveAssessmentIntraInterregional2017; @apsvalkaEventrelatedDynamicsGlutamate2015]). Regarding our GABA+ findings, the same meta-analysis [@pasantaFunctionalMRSStudies2023] reported no task-dependent change in GABA within the visual cortex. This may be attributable to technical difficulties associated with capturing GABA levels using MRS at 3T due to its low concentration and signal overlap with more abundant metabolites [@pasantaFunctionalMRSStudies2023]. Nevertheless, it is worth noting that several studies have successfully reported changes in GABA at 3T using different paradigms and/or regions of interest (e.g., [@floyer-leaRapidModulationGABA2006; @sampaio-baptistaChangesFunctionalConnectivity2015; @staggRoleGABAHuman2011]).
 
-Given that no difference was observed for either glutamate or GABA between conditions, it is unsurprising that E/I does not change either. 
+Another reason we may not have found changes in Glx or GABA+ may be due to use of a block-design: collecting 24 minutes of rest data, then collecting 24 minutes of movie-watching data. While a block design has the advantage of a more robust metabolite quantification due to greater signal averaging, brain homeostatis during these long blocks may lead to an erasure of any real metabolic changes [@mangiaMetabolicPathwaysActivitydependent2012; @apsvalkaEventrelatedDynamicsGlutamate2015]. 
+Indeed, @pasantaFunctionalMRSStudies2023 found the magnitude of effect sizes were observed to be smaller for block designs than event-related designs.
 
-In terms of the central question of our research, we did not find a relationship between H and E/I during either movie-watching or rest. This is not entirely surprising given the large disparity of existing findings in this regard, especially with regard to the directionality and linearity of the proposed E/I-Hurst relationship [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017]. The heterogeneity across these E/I-Hurst studies highlights the challenges of studying this phenomenon as well as the complexity of any potential relationship between these two metrics. It may be that, given the heterogeneity of these studies in combination with our data, an E/I-Hurst relationship --- should it exist --- is perhaps more complex than initially thought, and may depend in part on how the data is collected.
+However, it may be possible that our results do support the idea that H and E:I are not directly linked; at least not in a simple manner. This is would perhaps not be surprising given the large disparity of findings in the literature, especially with regard to the directionality and linearity of the proposed E:I-Hurst relationship [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017] (see @tbl-lit). The heterogeneity across these E:I-Hurst studies highlights the challenges of studying this phenomenon as well as the complexity of any potential relationship between these two metrics. It may be that, given the mixed-findings of these studies in combination with our data, an E:I-Hurst relationship --- should it exist --- may depend in part on how the data is collected. This could include variables such as the experimental setup, sampling methods, or data analysis techniques used. Further research is needed to elucidate the true nature of any potential E:I-Hurst relationship and better understand the complexities involved in studying this phenomenon.
 
-Another reason we may not have found a relationship between E/I and H is that we sampled too narrow a range of profiles in terms of E/I and Hurst. Because our study included only healthy adults, it is possible that the participants did not show enough range in E/I and Hurst values to see a relationship. It is also possible that while an E/I-Hurst relationship exists, it is not observed within the visual cortex. This theory seems plausible given that MRS studies of disrupted E/I, mostly conducted within the context of adult autism spectrum disorder, have found changes in E/I within other brain regions such as the anterior cingulate cortex (ACC), frontal lobe, or temporal lobe [@ajramContribution1HMagnetic2019]. Moreover, findings with reference to changes in excitatory or inhibitory neurotransmitters within the visual cortex tend to be difficult to capture, perhaps indicating that E/I shows less changes in this region [@pasantaFunctionalMRSStudies2023].
+| Citation | Study Type | H Data Type | H Calculation Method | E:I Type | E:I-Hurst Relationship |
+| ------------- | -------------- | -------------- | ------------- | -------------- | -------------- |
+| Poil et al. (2012)@poilCriticalStateDynamicsAvalanches2012 | Computational with in-house simulated model | Neuronal avalanche size | Detrendend fluctuation analysis (DFA) | Structural: number of E-to-I neurons | Inverse U |
+| Bruining et al. (2020)@bruiningMeasurementExcitationinhibitionRatio2020 | Computational with model by Poil et al. (2012); modified in-house | Neuronal oscillation amplitude | DFA | Structural: number of E-to-I synapses | Inverse U |
+| Gao et al. (2017)@gaoInferringSynapticExcitation2017 | Computational; in vivo in rats and macaques | Local field potential (LFP) | PSD | Estimated from LFP | Positive linear |
+| Lombardi et al. (2017)@lombardiBalanceExcitationInhibition2017 | Computational with in-house model | Neuronal avalanche size | PSD | Structural: number of E-to-I neurons | Negative linear |
+| Trakoshis et al. (2020)@trakoshisIntrinsicExcitationinhibitionImbalance | Computational with simulated data; in vivo in mice | fMRI BOLD signal | Wavelet-based maximum likelihood method | E-to-I synaptic conductance | Positive linear |
 
-## Limitations
+: **Summary of methods for existing E:I-Hurst studies** {#tbl-lit}
 
-There are two key limitations to our study which should be acknowledged. First is the small sample size. As this was a first-attempt pilot study, only 26 participants were initially scanned. Once individuals were excluded for poor MRI quality, only 19 participants’ data were analyzed. With such a small sample size, it is difficult to make conclusions about a concept as complex as the E/I-Hurst relationship as well as its relations to criticality. The other key limitation of our study is the low sensitivity of our MRS method --- as a result, it is hard to conclusively state whether we found no E/I-Hurst link because it truly does not exist or if we found no E/I-Hurst link because our methods lacked the sensitivity to detect it. A possible solution would be to conduct a future study using ultra-high-field 7T MRI as opposed to conventional 3T MRI.
+Finally, it is also possible that while an E:I-Hurst relationship exists, it is not observed within the visual cortex. This theory seems plausible given that MRS studies of disrupted E:I, mostly conducted within the context of adult autism spectrum disorder, have found changes in E:I within other brain regions such as the anterior cingulate cortex, frontal lobe, or temporal lobe [@ajramContribution1HMagnetic2019]. Moreover, findings with reference to changes in excitatory or inhibitory neurotransmitters within the visual cortex tend to be difficult to capture, perhaps indicating that E:I shows less changes in this region [@pasantaFunctionalMRSStudies2023]. However, this would suggest that the E:I-H relationship would be region dependent, and therefore not a generalizable theory as it is often portrayed.
+
+## Limitations and Strengths
+
+Beyond the limitations already mentioned (field strength, visual cortex, passive task, block design), another limitation was our small sample size. As this was a pilot study, `r as.numeric(count(orig_subjects))` participants were initially scanned. Once individuals were excluded for poor MRI quality, only `r as.numeric(count(subjects))` participants’ data were analyzed. With this small sample size, it is difficult to make conclusions about a concept as complex as the E:I-Hurst relationship. We hope that by publishing our work, future researchers can use our reported effect sizes to calculate potential sample sizes. We would also like to list some of the strengths of our study, which include: using sLASER (as opposed to PRESS), which has been shown to have enhanced detection of complex multiplets such as Glu [@wilsonMethodologicalConsensusClinical2019]; using the J-editing sequence MEGA-PRESS for improved GABA detection [@peekComprehensiveGuideMEGAPRESS2023]; using a large MRS voxel size (~22 ml) as per consensus recommendations [@peekBrainGABAGlutamate2020; @choiSpectralEditing1H2021; @linMinimumReportingStandards2021]; measuring H within the same region as our single-voxel MRS; and using multi-echo fMRI for improved motion artifact regression [@kunduMultiechoFMRIReview2017].
+
+## Lessons for Future Researchers
+
+Finally, we hope that by publishing our findings, we can provide some guidance to future researchers. The following is a non-exhaustive list of suggestions for future work: 
+
+- future studies should consider using ultra-high-field 7T MRI, which provides improved spectral resolution and more reliable detection of Glu and GABA compared to conventional 3T MRI; 
+- examining paradigms that have consistently demonstrated alterations in these metabolites, such as pain studies, may enhance the likelihood of detecting changes in Glu and GABA [@archibaldMetaboliteActivityAnterior2020; @cleveAssessmentIntraInterregional2017; @gutzeitDifferentialNMRSpectroscopy2013].
+- exploring brain regions beyond the visual cortex, such as the anterior cingulate cortex, which is commonly implicated in pain processing [@archibaldMetaboliteActivityAnterior2020; @mullinsNovelTechniqueStudy2005; @gussewTimeresolvedFunctional1H2010; @gutzeitInsulaspecificResponsesInduced2011];
+- including a more diverse participant sample --- beyond healthy controls --- may help capture a wider range of H and E:I values, potentially improving sensitivity to metabolite-related changes;
+- increasing sample size in order to detect small effect sizes;
+- using an event-related design, as opposed to the block design we used, may provide more sensitivity to detecting rapid and transient neural responses due to its ability to isolate specific events within the scan session [@mullinsTheoryFunctionalMagnetic2018]. However, see @pasantaFunctionalMRSStudies2023 for a longer discussion and possible downsides to this approach;
+- and finally, using a combined fMRI-MRS sequence [@ipCombinedFMRIMRSAcquires2017; @dwyerSimultaneousMeasurementBOLD2021] to measure BOLD and Glu/GABA near-simultaneously.
+
+Together, these considerations may help in overcoming the limitations observed in the present study and contribute to a clearer understanding of the potential relationship between E:I and H.
 
 # Conclusion
 
-In conclusion, our findings do not support a relationship between H and E/I in the visual cortex either during rest or during movie-watching at 3T in humans. In addition, while we found a task-related change in H, we did not find any changes in glutamate, GABA, or E/I between movie and rest. Comparing our findings to the broader literature, E/I balance may be too subtle to be detected with conventional MRS methods. With regards to the broader E/I-Hurst relationship, we similarly suggest that either this relationship is insufficiently captured with our methods, or that the relationship between these two variables may be more complex than originally envisaged—perhaps they are not directly related, but rather connected through other mediating variables in a non-linear fashion. To our knowledge, this is the first in vivo human study to test for this relationship. It is our hope that as the literature grows, more authors will examine this in vivo relationship with respect to other brain regions and using other methods, and will use the lessons learned in this study to inform their own. Hopefully then it will be possible to corroborate findings to probe the complex relationships that may exist with regards to H and E/I in the human brain.
+In conclusion, our findings do not support a relationship between H and E:I in the visual cortex either during rest or during movie-watching at 3T in humans. In addition, while we found a task-related change in H, we did not find any changes in Glu, GABA, or E:I between movie and rest. Comparing our findings to the broader literature, E:I balance may be too subtle to be detected with conventional 3T MRS methods. With regards to the broader E:I-Hurst relationship, we similarly suggest that either this relationship is insufficiently captured with our methods, or that the relationship between these two variables may be more complex than originally envisaged --- perhaps they are not directly related, but rather connected through other mediating variables in a non-linear fashion. To our knowledge, this is the first *in vivo* human study to test for this relationship. It is our hope that as the literature grows, more authors will examine this relationship with respect to other brain regions and using other methods, and will use the lessons learned in this study to inform their own. Hopefully then it will be possible to corroborate findings to probe the complex relationships that may exist with regards to H and E:I in the human brain.
 
+# Data availability statement {.unnumbered}
+
+All code used in this paper is available at [github.com/WeberLab/EI_Hurst_Analysis](https://github.com/WeberLab/EI_Hurst_Analysis). The data used in this paper is available by contacting the author. The manuscript was written in a 'reproducible manner'. The entire manuscript, including statistics reported, figures, and tables, can be reproduced here: [weberlab.github.io/EI_Hurst_Manuscript/](https://weberlab.github.io/EI_Hurst_Manuscript/)
+
+# Competing interests {.unnumbered}
+
+The authors declare they have no known competing interests.
+
+# Author contributions {.unnumbered}
+
+LS performed data curation, formal analysis, investigation, software, visualization, and wrote the original draft. AMW performed, conceptualization, data curation, formal analysis, funding acquisition, investigation, methodology, project administration, resources, supervision, validation, visualization, and writing - review & editing.
+
+# Acknowledgements {.unnumbered}
+
+The work presented in this paper was supported in part by
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
