@@ -293,7 +293,7 @@ correlation, with large values being followed by large values and small
 values by small ones. Conversely, an H exponent value between 0 and 0.5
 indicates a long-range negative correlation, where large values are
 likely to be followed by small ones and vice versa. An H value of 0.5 is
-uncorrelated random noise.
+uncorrelated random noise \citep{hurstLongTermStorageCapacity1951}.
 
 H has emerged as a valuable tool in neuroscience and clinical research.
 Typically, H values reported in adult brains are above 0.5, with higher
@@ -301,25 +301,27 @@ H values in grey matter than white matter or cerebrospinal fluid
 \citep{dongHurstExponentAnalysis2018, winkMonofractalMultifractalDynamics2008}.
 Some key findings from neuroscience research include: a decrease in H
 during task performance
-\citep{ciuciuInterplayFunctionalConnectivity2014, heScaleFreePropertiesFunctional2011},
+\citep{ciuciuInterplayFunctionalConnectivity2014, heScaleFreePropertiesFunctional2011};
 negative correlations with task novelty and difficulty
-\citep{churchillSuppressionScalefreeFMRI2016}, increases with age in the
+\citep{churchillSuppressionScalefreeFMRI2016}; increases with age in the
 frontal and parietal lobes \citep{dongHurstExponentAnalysis2018}, and
-hippocampus \citep{winkAgeCholinergicEffects2006}, but decreases with
-age in the insula, and limbic, occipital and temporal lobes
-\citep{dongHurstExponentAnalysis2018}, and more
+hippocampus \citep{winkAgeCholinergicEffects2006}; decreases with age in
+the insula, and limbic, occipital and temporal lobes
+\citep{dongHurstExponentAnalysis2018}; H \textless{} 0.5 in preterm
+infants \citep{mellaTemporalComplexityBOLDsignal2024}; and more
 \citep{campbellMonofractalAnalysisFunctional2022}. In terms of clinical
 findings, abnormal H values have been identified in Alzheimer's disease
 (AD)
 \citep{maximFractionalGaussianNoise2005, warsiCorrelatingBrainBlood2012},
 autism spectrum disorder (ASD)
-\citep{donaTemporalFractalAnalysis2017, laiShiftRandomnessBrain2010},
+\citep{donaTemporalFractalAnalysis2017, laiShiftRandomnessBrain2010, linkeAlteredDevelopmentHurst2024, uscatescuUsingExcitationInhibition2023},
 mild traumatic brain injury \citep{donaFractalAnalysisBrain2017}, major
 depressive disorder
 \citep{weiIdentifyingMajorDepressive2013, jingIdentifyingCurrentRemitted2017}
-and schizophrenia \citep{sokunbiNonlinearComplexityAnalysis2014}.
+and schizophrenia
+\citep{sokunbiNonlinearComplexityAnalysis2014, uscatescuUsingExcitationInhibition2023}.
 Crucially, these same disorders have been associated with imbalances in
-E:I (AD:
+E:I (AD
 \citep{lauterbornIncreasedExcitatoryInhibitory2021, vicovarelaExcitatoryinhibitoryImbalanceAlzheimers2019};
 ASD
 \citep{sohalExcitationinhibitionBalanceFramework2019, uzunovaExcitatoryInhibitoryImbalance2016, bruiningMeasurementExcitationinhibitionRatio2020};
@@ -349,12 +351,15 @@ studies
 To date, no \emph{in vivo} study has validated this association in
 humans. Moreover, the existing research findings have so far been
 inconsistent, with some reporting positive-linear, negative-linear, or
-U-shaped relationships between the two variables. Therefore, further
-investigation is needed to establish the true nature of the potential
-E:I-Hurst relationship and to confirm its presence within the human
-brain. The current study aimed to explore the potential E:I-Hurst
-relationship in vivo , specifically within the visual cortex during
-movie-watching and resting periods.
+U-shaped relationships between the two variables. Despite these
+uncertainties, several clinical studies have used fMRI-derived H values
+as proxies for the E:I ratio
+\citep{linkeAlteredDevelopmentHurst2024, xiePharmacoresistantTemporalLobe2024, uscatescuUsingExcitationInhibition2023}.
+Therefore, further investigation is needed to establish the true nature
+of the potential E:I-Hurst relationship and to confirm its presence
+within the human brain. The current study aimed to explore the potential
+E:I-Hurst relationship in vivo , specifically within the visual cortex
+during movie-watching and resting periods.
 
 \section{Methods}\label{methods}
 
@@ -405,11 +410,11 @@ at the same time during the scan.
 \caption{\label{fig-method}\textbf{Overview of the MRI acquisition
 protocol.} A) fMRI coverage was across the whole-brain (example coverage
 in red). MRS voxels were placed in the visual cortex (blue). Background
-image is of a T1w acquisition from a sample subject. B) fMRI, MEGA-PRESS
-and sLASER were acquired first with participants looking at a white
-cross for 24 mintues. Next, the same sequences were acquired with the
-participants viewing a nature documentary for an identical period of
-time.}
+image is of a T1w acquisition from a sample subject. Figure was inspired
+by \citep{ipCombinedFMRIMRSAcquires2017} B) fMRI, MEGA-PRESS and sLASER
+were acquired first with participants looking at a white cross for 24
+mintues. Next, the same sequences were acquired with the participants
+viewing a nature documentary for an identical period of time.}
 
 \end{figure}%
 
@@ -611,15 +616,14 @@ spectral features of Glu to be contaminated with Gln
 report Glx values, which co-reports Glu and Gln to avoid errors in
 spectral assignment, especially since it is controversial whether Glu
 can reliably be separated from Gln at 3T
-\citep{pasantaFunctionalMRSStudies2023, ramadanGlutamateGlutamineReview2013}.
-We henceforth refer to Glu as either Glx.
+\citep{zollnerComparisonDifferentLinearcombination2021, zollnerComparisonLinearCombination2022}.
+We henceforth refer to Glu as Glx.
 
 MEGA-PRESS data were processed and fit with \texttt{Osprey}, and were
 relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
-method \citep{harrisSpectralEditingMeasurementsGABA2015}.
-\texttt{Osprey} values were ultimately used for further analysis. Due to
-the J-editing sequence of MEGA-PRESS, a challenge of GABA quantification
-is macromolecule quantification
+method \citep{harrisSpectralEditingMeasurementsGABA2015}. Due to the
+J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is
+macromolecule quantification
 \citep{harrisSpectralEditingMeasurementsGABA2015}. As a result, we
 report GABA+, a measure which co-reports GABA with macromolecules.
 Macromolecules (MM) are expected to account for approximately 45\% of
@@ -653,11 +657,15 @@ i.u.{]}/{[}GABA+ in i.u.{]}, a common practice to report E:I using MRS
 Participants were excluded from further analysis if any of their MRS
 scans had FWHM \textgreater{} 10. Originally we intended to calculate,
 report and analyze MRS as tissue-corrected quantitative values. However,
-the \texttt{Osprey} software was reporting Glx values that were an order
-of magnitude larger than reported values in the literature. Despite
-several attempts, we were unable to locate the source of this error.
-Therefore we decided to use metabolite to creatine ratios (i.e.~Glx /
-tCr and GABA+ / tCr) to be safe.
+the \texttt{Osprey} software was reporting metabolite concentrations
+that were an order of magnitude larger than reported values in the
+literature. Attempts to re-analyze the data using \texttt{fsl\_mrs}
+\citep{clarkeFSLMRSEndtoendSpectroscopy2021} resulted in similar
+concentrations. Despite several attempts, we were unable to locate the
+source of this error. Therefore we decided to analyze and report
+metabolite to creatine (tCr) ratios (i.e.~Glx / tCr and GABA+ / tCr),
+which agreed well with reported literature values
+\citep{boillatMetaboliteConcentrationChanges2020, dwyerSimultaneousMeasurementBOLD2021, martinez-maestroDynamicMetabolicChanges2019, mekleDetectionMetaboliteChanges2017, schallerNetIncreaseLactate2013}.
 
 \subsection{Hurst Exponent
 Calculation}\label{hurst-exponent-calculation}
@@ -683,8 +691,9 @@ distinct H calculation methods
 using Welch's method \citep{welchUseFastFourier1967} from the Python
 \texttt{Scipy.Signal} library \citep{virtanenSciPy10Fundamental2020}.
 Data were divided into 8 windows of 50\% overlap and averaged. The
-spectral index, , was calculated from the full frequency spectrum. The
-spectral index was then converted to H using the following equation
+spectral index, \(\beta\), was calculated from the full frequency
+spectrum. The spectral index was then converted to H using the following
+equation
 \citep{ekeFractalCharacterizationComplexity2002, schaeferComparativeAnalysisSpectral2014}:
 
 \[
@@ -692,16 +701,16 @@ H = \frac{1 + \beta}{2}
 \]
 
 Since it cannot be assumed that all fBm is removed from the signal, we
-use the concept of `extended Hurst' (H') in this study: for 0
+employed the `extended Hurst' (H') concept in this study: for 0
 \textless{} H \textless{} 1, the signal is understood as fGn, while for
-1 \textless{} H \textless{} 2, the signal is assumed to be fBm
-\citep{campbellFractalBasedAnalysisFMRI2022}. More generally, it is also
-assumed that when 0.5 \textless{} H \textless{} 1.5, the signal displays
-1/f behaviour \citep{zimmernWhyBrainCriticality2020}.H was calculated
-for all voxels in the brain of each subject. A brain mask was then
-applied which included only GM and the region of the MRS voxel in the
-visual cortex. H was averaged across the brain mask area, using only
-non-zero voxels.
+1 \textless{} H \textless{} 2, the signal is understood to be fBm
+\citep{campbellFractalBasedAnalysisFMRI2022, hartmannRealtimeFractalSignal2013, ekePhysiologicalTimeSeries2000}.
+More generally, it is assumed that when 0.5 \textless{} H \textless{}
+1.5, the signal displays 1/f behaviour
+\citep{zimmernWhyBrainCriticality2020}. H was calculated for all voxels
+in the brain of each subject. A brain mask was then applied which
+included only GM and the region of the MRS voxel in the visual cortex. H
+was averaged across the brain mask area, using only non-zero voxels.
 
 \subsection{Statistics}\label{statistics}
 
