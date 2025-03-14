@@ -220,29 +220,31 @@ Vancouver, BC, Canada
 \addcontentsline{toc}{subsection}{Abstract}
 
 A 3T multimodal MRI study of healthy adults (n=19; 10 female; 21.3 -
-53.4 years) was performed to investigate the potential link between fMRI
+53.4 years) was performed to investigate the relationship between fMRI
 long-range temporal correlations and excitatory/inhibitory balance. The
 study objective was to determine if the Hurst exponent (H) --- an
 estimate of the self-correlation and signal complexity --- of the
 blood-oxygen-level-dependent signal is correlated with the
 excitatory-inhibitory (E:I) ratio. E:I has been proposed to serve as a
-control parameter for brain criticality, which H is believed to be a
-measure of. Thus, understanding if H and E:I are correlated would serve
-to clarify this relationship. Moreover, findings in this domain have
+control parameter for brain criticality --- the theory that the brain
+operates near a critical point between order and disorder, optimizing
+information processing and adaptability --- which H is believed to be a
+measure of. Thus, understanding if H and E:I are correlated would
+clarify this relationship. Moreover, findings in this domain have
 implications for neurological and neuropsychiatric conditions with
 disrupted E:I balance, such as autism spectrum disorder, schizophrenia,
 and Alzheimer's disease. From a practical perspective, H is easier to
 accurately measure than E:I ratio at 3T MRI. If H can serve as a proxy
-for E:I, it may serve as a more useful clinical biomarker for this
+for E:I, it may serve as a more practical clinical biomarker for this
 imbalance and for neuroscience research in general. The study collected
 functional MRI and magnetic resonance spectroscopy data during rest and
 movie-watching. H was found to increase with movie-watching compared to
-rest, while E:I did not change between conditions. H and E:I were not
-correlated during either movie-watching or rest. This study represents
-the first attempt to investigate this connection \emph{in vivo} in
-humans. We conclude that, at 3T and with our particular methodologies,
-no association was found. We end with lessons learned and suggestions
-for future research.
+rest, while E:I (glutamate/GABA) did not change between conditions. H
+and E:I were not correlated during either movie-watching or rest. This
+study represents the first attempt to investigate this connection
+\emph{in vivo} in humans. We conclude that, at 3T and with our
+particular methodologies, no association was found. We end with lessons
+learned and suggestions for future research.
 
 \section{Introduction}\label{introduction}
 
@@ -302,16 +304,18 @@ H values in grey matter than white matter or cerebrospinal fluid
 Some key findings from neuroscience research include: a decrease in H
 during task performance
 \citep{ciuciuInterplayFunctionalConnectivity2014, heScaleFreePropertiesFunctional2011};
-negative correlations with task novelty and difficulty
+an increase in H during movie watching in the visual resting state
+network \citep{campbellFractalBasedAnalysisFMRI2022}; negative
+correlations with task novelty and difficulty
 \citep{churchillSuppressionScalefreeFMRI2016}; increases with age in the
 frontal and parietal lobes \citep{dongHurstExponentAnalysis2018}, and
 hippocampus \citep{winkAgeCholinergicEffects2006}; decreases with age in
 the insula, and limbic, occipital and temporal lobes
-\citep{dongHurstExponentAnalysis2018}; H \textless{} 0.5 in preterm
-infants \citep{mellaTemporalComplexityBOLDsignal2024}; and more
-\citep{campbellMonofractalAnalysisFunctional2022}. In terms of clinical
-findings, abnormal H values have been identified in Alzheimer's disease
-(AD)
+\citep{dongHurstExponentAnalysis2018}; and H \textless{} 0.5 in preterm
+infants \citep{mellaTemporalComplexityBOLDsignal2024}. For a more in
+depth review, see \citet{campbellMonofractalAnalysisFunctional2022}. In
+terms of clinical findings, abnormal H values have been identified in
+Alzheimer's disease (AD)
 \citep{maximFractionalGaussianNoise2005, warsiCorrelatingBrainBlood2012},
 autism spectrum disorder (ASD)
 \citep{donaTemporalFractalAnalysis2017, laiShiftRandomnessBrain2010, linkeAlteredDevelopmentHurst2024, uscatescuUsingExcitationInhibition2023},
@@ -337,9 +341,17 @@ spectroscopy (MRS) is the only non-invasive method for \emph{in vivo}
 assessment of the Glu/GABA ratio (excitatory to inhibitory
 neurotransmitters) in humans
 \citep{stanleyFunctionalMagneticResonance2018, harrisEdited1Magnetic2017}.
-Unfortunately, MRS suffers from limited spatial and temporal resolution
+Unfortunately, MRS suffers from limited spatial and temporal resolution,
+with single-voxel spectrosopy sizes between 20 and 27 cm\^{}3, and scan
+times between 5-10 minutes
 \citep{gaoInferringSynapticExcitation2017, ajramContribution1HMagnetic2019, stanleyFunctionalMagneticResonance2018}.
-If H could function as a substitute for E:I, it would simplify the
+In addition, quantification of GABA at 3T necessitates the use of a
+specialized J-difference spectral-editing sequence (such as MEGA-PRESS),
+in order to isolate GABA (at 3 ppm, 2.3 ppm, and 1.9 ppm) from
+overlapping peaks (e.g.~creatine and glutamate)
+\citep{peekComprehensiveGuideMEGAPRESS2023}. The need for this
+additional sequence therefore reduces the temporal resolution further.
+If H could function as a substitute for E:I, it could simplify the
 estimation of E:I in conditions of interest such as ASD, AD, and
 schizophrenia.
 
@@ -358,17 +370,21 @@ as proxies for the E:I ratio
 Therefore, further investigation is needed to establish the true nature
 of the potential E:I-Hurst relationship and to confirm its presence
 within the human brain. The current study aimed to explore the potential
-E:I-Hurst relationship in vivo , specifically within the visual cortex
-during movie-watching and resting periods.
+E:I-Hurst relationship \emph{in vivo}, specifically within the visual
+cortex during movie-watching and resting periods. We hypothesized that H
+would increase in the visual cortex during movie watching
+\citep{campbellFractalBasedAnalysisFMRI2022}, and that H would
+negatively correlate with E:I
+\citep{trakoshisIntrinsicExcitationinhibitionImbalance}.
 
 \section{Methods}\label{methods}
 
 \subsection{Participants}\label{participants}
 
 Twenty-seven healthy adult participants were recruited to the study. One
-participant was not scanned due to feelings of claustrophobia while in
-the scanner. After our analysis and performing quality assurance (see
-below), a further seven participants were removed for having less than
+participant was not scanned due to claustrophobia while in the scanner.
+After our analysis and performing quality assurance (see below for
+details), a further seven participants were removed for having less than
 ideal MRI data quality, leaving nineteen final participants, between the
 ages of 21.3 and 53.4 (mean age ± sd: 30.1 ± 8.7 years; 9 males).
 
@@ -382,11 +398,11 @@ University of British Columbia and BC Children's \& Women's Hospital
 \subsection{Scanning Procedure}\label{scanning-procedure}
 
 After two anatomical sequences were acquired, participants were
-instructed to visually fixate on a cross-hair for 24 minutes. During
-this period, an fMRI, single-voxel semi Localization by Adiabatic
-SElective Refocusing (sLASER)
-\citep{ozShortechoSingleshotFullintensity2011}, and single-voxel
-MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS)
+instructed to visually fixate on a cross-hair for 24 minutes (see
+Table~\ref{tbl-mriacq} and below for more details). During this period,
+an fMRI, single-voxel semi Localization by Adiabatic SElective
+Refocusing (sLASER) \citep{ozShortechoSingleshotFullintensity2011}, and
+single-voxel MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS)
 \citep{mescherSimultaneousVivoSpectral1998} sequences were acquired (see
 Figure~\ref{fig-method} A and Section~\ref{sec-mriacq}). Next,
 participants were instructed to watch a nature documentary (Our Planet
@@ -394,9 +410,10 @@ participants were instructed to watch a nature documentary (Our Planet
 minutes. During this period, another set of fMRI, sLASER, and MEGA-PRESS
 sequences were acquired. See Figure~\ref{fig-method} B for a visual
 representation of the scanning protocol. Total scan duration was
-approximately 1 hour. All participants followed the same order of rest
-than movie, and all participants saw the same movie segment, beginning
-at the same time during the scan.
+approximately 1 hour of uninterrupted scanning (i.e.~subjects were not
+removed from the scanner). All participants followed the same order of
+rest than movie, and all participants saw the same movie segment,
+beginning at the same time during the scan.
 
 \phantomsection\label{cell-fig-method}
 \begin{figure}[H]
@@ -411,7 +428,7 @@ at the same time during the scan.
 protocol.} A) fMRI coverage was across the whole-brain (example coverage
 in red). MRS voxels were placed in the visual cortex (blue). Background
 image is of a T1w acquisition from a sample subject. Figure was inspired
-by \citep{ipCombinedFMRIMRSAcquires2017} B) fMRI, MEGA-PRESS and sLASER
+by \citep{ipCombinedFMRIMRSAcquires2017} B) fMRI, sLASER, and MEGA-PRESS
 were acquired first with participants looking at a white cross for 24
 mintues. Next, the same sequences were acquired with the participants
 viewing a nature documentary for an identical period of time.}
@@ -504,8 +521,8 @@ Time (mins)
 0.9375 & - & 4 \\
 2D EPI Multi-Echo fMRI & 12.2, 35.352, 58.504 & 1,500 & 52 & 64 x 64 &
 3.6 & 3.5938 × 3.5938 & Acceleration factor = 6 & 12 \\
-MEGA-PRESS & 68 & 1,800 & 90 & - & 28.0 & 28.0 x 28.0 & - & 4 \\
-sLASER & 35 & 2,000 & 90 & - & 28.0 & 28.0 x 28.0 & - & 8 \\
+sLASER & 35 & 2,000 & 90 & - & 28.0 & 28.0 x 28.0 & - & 4 \\
+MEGA-PRESS & 68 & 1,800 & 90 & - & 28.0 & 28.0 x 28.0 & - & 8 \\
 \end{longtable}
 
 For both MRS sequences, the voxel size was set to 2.8 x 2.8 x 2.8
@@ -593,7 +610,7 @@ TE-dependent or -independent. TE-dependent components were classified as
 BOLD, while TE-independent components were classified as non-BOLD and
 were discarded as part of data cleaning.
 
-Participants were excluded from further ananlysis if their mean FD was
+Participants were excluded from further analysis if their mean FD was
 \textgreater{} 0.15 mm.
 
 \subsection{MRS}\label{mrs}
@@ -617,7 +634,6 @@ report Glx values, which co-reports Glu and Gln to avoid errors in
 spectral assignment, especially since it is controversial whether Glu
 can reliably be separated from Gln at 3T
 \citep{zollnerComparisonDifferentLinearcombination2021, zollnerComparisonLinearCombination2022}.
-We henceforth refer to Glu as Glx.
 
 MEGA-PRESS data were processed and fit with \texttt{Osprey}, and were
 relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
@@ -650,9 +666,9 @@ was set to `PRESS', `editing' to `MEGA', `TE' to 68, `edit on' to `1.9',
 `edit off' to `7.5', and `pulse duration' to `14'. Metabolites included
 for both basis sets were: Asc, Asp, Cr, CrCH2, EA, GABA, GPC, GSH, Gln,
 Glu, Gly, H2O, Lac, NAA, NAAG, PCh, PCr, PE, Ser, Tau, mI, and sI.
-Excitatory-inhibitory ratio (E:I) was calculated as {[}Glx in
-i.u.{]}/{[}GABA+ in i.u.{]}, a common practice to report E:I using MRS
-\citep{rideauxNoBalanceGlutamate+glutamine2021}.
+Excitatory-inhibitory ratio (E:I) was calculated as {[}Glx from sLASER
+in i.u.{]}/{[}GABA+ from MEGA-PRESS in i.u.{]}, a common practice to
+report E:I using MRS \citep{rideauxNoBalanceGlutamate+glutamine2021}.
 
 Participants were excluded from further analysis if any of their MRS
 scans had FWHM \textgreater{} 10. Originally we intended to calculate,
@@ -666,6 +682,13 @@ source of this error. Therefore we decided to analyze and report
 metabolite to creatine (tCr) ratios (i.e.~Glx / tCr and GABA+ / tCr),
 which agreed well with reported literature values
 \citep{boillatMetaboliteConcentrationChanges2020, dwyerSimultaneousMeasurementBOLD2021, martinez-maestroDynamicMetabolicChanges2019, mekleDetectionMetaboliteChanges2017, schallerNetIncreaseLactate2013}.
+
+In order to be confident in our results, we re-ran all MRS analyses,
+acquiring quantitative Glx and GABA+ values from the MEGA-PRESS sequence
+only using the software \texttt{Gannet}
+\citep{eddenGannetBatchprocessingTool2014} (v3.3.0). Values were
+relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
+method \citep{harrisSpectralEditingMeasurementsGABA2015}.
 
 \subsection{Hurst Exponent
 Calculation}\label{hurst-exponent-calculation}
@@ -716,11 +739,13 @@ was averaged across the brain mask area, using only non-zero voxels.
 
 All statistical analyses were performed using \texttt{R}
 \citep{rcoreteamLanguageEnvironmentStatistical2021} and \texttt{RStudio}
-(v2023.06.0+421). Difference of means between rest and movie conditions
-were calculated using paired Student's t-tests
-\citep{studentProbableErrorMean1908}. Correlations were calculated using
-Pearson's method \citep{freedmanStatistics2007}. Finally, linear
-mixed-effect models were used to test for more complicated models.
+(v2023.06.0+421). Difference of means of H, Glx, and GABA+ between rest
+and movie conditions were calculated using paired Student's t-tests
+\citep{studentProbableErrorMean1908}. Correlations between H and Glx,
+GABA+ and E:I were calculated using Pearson's method
+\citep{freedmanStatistics2007}. Finally, a linear mixed-effect model was
+used to test for the correlation of H and E:I while controlling for
+possible confounding effects of MRS FWHM and fMRI motion (see Results).
 
 \section{Results}\label{results}
 
@@ -728,7 +753,7 @@ mixed-effect models were used to test for more complicated models.
 
 Twenty-seven participants were originally recruited for the study.
 Twenty-six of these participants were successfully scanned, but one
-participant experienced anxiety and chose not to continue. Of the
+participant experienced claustrophobia and chose not to continue. Of the
 remaining 26 participants, 19 were included in the final analysis: two
 were removed due to low MRS quality (FWHM \textgreater{} 10) and five
 were removed due to low fMRI quality (mean FD \textgreater{} 0.15 mm).
@@ -755,9 +780,9 @@ and 53.4, with a mean age and standard deviation of 30.1 ± 8.7 years.
 
 \subsection{Data Quality}\label{data-quality}
 
-After exclusion, FWHM (mean ± sd) at rest in sLASER and MEGAPRESS were
+After exclusion, FWHM (mean ± sd) at rest in sLASER and MEGA-PRESS were
 8.52 ± 0.7 and 7.02 ± 0.7, respectively. During movie watching, FWHM in
-sLASER and MEGAPRESS were 8.37 ± 0.65 and 6.98 ± 0.86.
+sLASER and MEGA-PRESS were 8.37 ± 0.65 and 6.98 ± 0.86.
 
 Glx and GABA+ were tested for associations with FWHM values during rest
 and movie watching. Glx during rest was found to be negatively
@@ -766,7 +791,7 @@ significant.
 
 An average of all MRS voxel placements can be seen in
 Figure~\ref{fig-mrsquality} A, and a sample of the \texttt{Osprey}
-sLASER and MEGAPRESS spectrum fits at rest can be seen in
+sLASER and MEGA-PRESS spectrum fits at rest can be seen in
 Figure~\ref{fig-mrsquality} B and C, respectively.
 
 \phantomsection\label{cell-fig-mrsquality}
@@ -786,7 +811,7 @@ represents voxel locations unique to participants. MRS voxels were
 registered to MNI space and averaged. Underlay is T1w MNI152 at 0.5 mm
 resolution. B) Sample Osprey sLASER Spectrum. Yellow spectrum indicates
 overall model fit. Model fits for individual metabolites are shown in
-blue below overall fit. C) Sample Osprey MEGAPRESS Spectrum. Yellow
+blue below overall fit. C) Sample Osprey MEGA-PRESS Spectrum. Yellow
 spectrum indicates overall model fit. Model fits for individual
 metabolites are shown in blue below overall fit. D) Correlation plots of
 Glx / tCr vs.~FWHM for rest (green) and movie (red). E) Correlation
@@ -824,7 +849,7 @@ PSD spectrum. All participants' PSD spectrums during rest are plotted
 using light grey lines. Mean PSD is plotted in solid red Mean linear
 regression line is plotted in dashed blue. H for each participant was
 calculated from the slope of their mean linear regression line. D)
-Correlation plots of H vs.~meanFD for rest (green) and movie (orange).}
+Correlation plots of H vs.~mean FD for rest (green) and movie (orange).}
 
 \end{figure}%
 
@@ -892,11 +917,11 @@ each plot.}
 
 \end{figure}%
 
-To ensure that meanFD and FWHM were not confounding our results, we also
-ran a linear mixed-effects model with H as dependent variable, Glx/GABA+
-as primary predictor of interest, and meanFD, FWHM(Glx), and FWHM(GABA+)
-as covariates, Condition (rest vs.~movie) as fixed effects, and subjects
-as random effects:
+To ensure that mean FD and FWHM were not confounding our results, we
+also ran a linear mixed-effects model with H as dependent variable,
+Glx/GABA+ as primary predictor of interest, and mean FD, FWHM(Glx), and
+FWHM(GABA+) as covariates, Condition (rest vs.~movie) as fixed effects,
+and subjects as random effects:
 
 \[
 \mathrm{H} \sim \frac{\mathrm{Glx}}{\mathrm{GABA+}} + \mathrm{meanFD} + \mathrm{FWHM_{Glx}} + \mathrm{FWHM_{GABA+}} + \mathrm{Condition} + (1 | \mathrm{Subject})
@@ -911,6 +936,12 @@ t(30) = 3.34, p = 0.002). Within this model, only the effect of
 Condition {[}Rest{]} was statistically significant (beta = -0.09, 95\%
 CI {[}-0.13, -0.04{]}, t(30) = -3.99, p \textless{} 0.01).
 
+\subsection{Re-analysis using Gannet}\label{re-analysis-using-gannet}
+
+Re-running our analysis using Glx and GABA+ values from Gannet did not
+result in any significant changes from the results reported above. We
+have included these results in the Supplementary Material.
+
 \section{Discussion}\label{discussion}
 
 We report here the first \emph{in vivo} human study of the E:I-H
@@ -919,7 +950,7 @@ compared to rest, indicating stronger long-range temporal dependencies
 in BOLD activity during visual stimulation. No difference was found in
 Glx, GABA+, nor Glx/GABA+ between rest and movie-watching. Furthermore,
 no association was found between H and Glx, GABA+, nor Glx/GABA+.
-Attempting to control for meanFD and FWHM using a linear mixed-effects
+Attempting to control for mean FD and FWHM using a linear mixed-effects
 model did not alter these results.
 
 Our finding that H increases during movie-watching compared to rest is
