@@ -164,7 +164,7 @@ true
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Does the Brain's E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI},
-  pdfauthor={, and },
+  pdfauthor={, , and },
   pdfkeywords={Hurst exponent, long range temporal
 correlation, excitatory / inhibitory balance, criticality, complex
 systems, visual task, functional magnetic resnonance imaging, magnetic
@@ -183,7 +183,7 @@ Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T
 MRI}
 
 % author setup
-\author[1]{\fnm{Lydia} \sur{Sochan}}\email{lydiasochan@gmail.com}\author*[1,2,3]{\fnm{Alexander Mark} \sur{Weber}}\email{aweber@bcchr.ca}
+\author[1]{\fnm{Lydia} \sur{Sochan}}\email{lydiasochan@gmail.com}\author[4]{\fnm{Jessica} \sur{Archibald}}\email{jea4025@med.cornell.edu}\author*[1,2,3]{\fnm{Alexander Mark} \sur{Weber}}\email{aweber@bcchr.ca}
 % affil setup
 \affil[1]{, \orgname{School of Biomedical Engineering, The University of
 British Columbia, Vancouver, BC, Canada}}
@@ -191,6 +191,8 @@ British Columbia, Vancouver, BC, Canada}}
 University of British Columbia, Vancouver, BC, Canada}}
 \affil[3]{, \orgname{Pediatrics, The University of British Columbia,
 Vancouver, BC, Canada}}
+\affil[4]{, \orgname{Department of Radiology, Weill Cornell Medicine,
+New York, New York, USA}}
 
 % abstract 
 
@@ -210,7 +212,9 @@ British Columbia, Vancouver, BC, Canada\\
 \textsuperscript{2} BC Children's Hospital Research Institute, The
 University of British Columbia, Vancouver, BC, Canada\\
 \textsuperscript{3} Pediatrics, The University of British Columbia,
-Vancouver, BC, Canada
+Vancouver, BC, Canada\\
+\textsuperscript{4} Department of Radiology, Weill Cornell Medicine, New
+York, New York, USA
 
 \textsuperscript{*} Correspondence:
 \href{mailto:aweber@bcchr.ca}{Alexander Mark Weber
@@ -406,7 +410,7 @@ single-voxel MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS)
 \citep{mescherSimultaneousVivoSpectral1998} sequences were acquired (see
 Figure~\ref{fig-method} A and Section~\ref{sec-mriacq}). Next,
 participants were instructed to watch a nature documentary (Our Planet
-(2019), Episode 3, ``Jungles'' \citet{cordeyJungles2019}) for 24
+(2019), Episode 3, ``Jungles'' \citep{cordeyJungles2019}) for 24
 minutes. During this period, another set of fMRI, sLASER, and MEGA-PRESS
 sequences were acquired. See Figure~\ref{fig-method} B for a visual
 representation of the scanning protocol. Total scan duration was
@@ -415,12 +419,11 @@ removed from the scanner). All participants followed the same order of
 rest than movie, and all participants saw the same movie segment,
 beginning at the same time during the scan.
 
-\phantomsection\label{cell-fig-method}
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-method-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-5-1.pdf}}
 
 }
 
@@ -428,10 +431,11 @@ beginning at the same time during the scan.
 protocol.} A) fMRI coverage was across the whole-brain (example coverage
 in red). MRS voxels were placed in the visual cortex (blue). Background
 image is of a T1w acquisition from a sample subject. Figure was inspired
-by \citep{ipCombinedFMRIMRSAcquires2017} B) fMRI, sLASER, and MEGA-PRESS
-were acquired first with participants looking at a white cross for 24
-mintues. Next, the same sequences were acquired with the participants
-viewing a nature documentary for an identical period of time.}
+by Ip et al.~(2017) \citep{ipCombinedFMRIMRSAcquires2017}. B) fMRI,
+sLASER, and MEGA-PRESS were acquired first with participants looking at
+a white cross for 24 minutes. Next, the same sequences were acquired
+with the participants viewing a nature documentary for an identical
+period of time.}
 
 \end{figure}%
 
@@ -463,12 +467,6 @@ Table~\ref{tbl-mriacq}.
   >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1564}}
   >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2067}}
   >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0223}}@{}}
-\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
-= repetition time; FOV = field of view; FSPGD = fast spoiled
-gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
-functional magnetic resonance imaging; sLASER = semi localization by
-adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
-point-resolved spectroscopy}\label{tbl-mriacq}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Sequence
@@ -514,6 +512,13 @@ Time (mins)
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
+= repetition time; FOV = field of view; FSPGD = fast spoiled
+gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
+functional magnetic resonance imaging; sLASER = semi localization by
+adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
+point-resolved spectroscopy}\label{tbl-mriacq}\tabularnewline
 \endlastfoot
 3D T1-weighted FSPGR & 2.176 & 7.216 & 12 & 256 × 256 & 0.9 & 0.9375 ×
 0.9375 & - & 5 \\
@@ -585,7 +590,7 @@ before spatiotemporal filtering using \texttt{mcflirt}
 v6.0.5.1:57b01774). The fieldmap was aligned with rigid registration to
 the target EPI reference run. Field coefficients were mapped to the
 reference EPI using the transform. BOLD runs were slice-time corrected
-to 643 ms (half of slice acquisitio range of 0-1290 ms) using
+to 643 ms (half of slice acquisition range of 0-1290 ms) using
 \texttt{3dTshift} from \texttt{AFNI} \citep{coxAFNISoftwareAnalysis1996}
 (RRIS: SCR\_005927). To estimate T2* map from preprocessed EPI echoes, a
 voxel-wise fitting was performed by fitting the maximum number of echoes
@@ -651,9 +656,9 @@ that GABA+ is more consistent across research sites and MRI vendors
 (i.e., Philips, GE, Siemens) \citep{mikkelsenBigGABAII2019}. Moreover,
 GABA+ shows greater reliability for both creatine-referenced and
 water-suppressed estimates
-\citep{mikkelsenBigGABAEdited2017, mikkelsenBigGABAII2019}. MM-supressed
-GABA and GABA+ estimates are also correlated, albeit weakly- to
-moderately-so
+\citep{mikkelsenBigGABAEdited2017, mikkelsenBigGABAII2019}.
+MM-suppressed GABA and GABA+ estimates are also correlated, albeit
+weakly- to moderately-so
 \citep{harrisSpectralEditingMeasurementsGABA2015, mikkelsenBigGABAII2019, mikkelsenBigGABAEdited2017}.
 Consequently, we report GABA+ to allow for easier comparison of our
 results to other studies as well as reproducibility.
@@ -673,22 +678,24 @@ report E:I using MRS \citep{rideauxNoBalanceGlutamate+glutamine2021}.
 Participants were excluded from further analysis if any of their MRS
 scans had FWHM \textgreater{} 10. Originally we intended to calculate,
 report and analyze MRS as tissue-corrected quantitative values. However,
-the \texttt{Osprey} software was reporting metabolite concentrations
-that were an order of magnitude larger than reported values in the
-literature. Attempts to re-analyze the data using \texttt{fsl\_mrs}
-\citep{clarkeFSLMRSEndtoendSpectroscopy2021} resulted in similar
+the \texttt{Osprey} software was reporting Glx metabolite concentrations
+from the sLASER sequence that were an order of magnitude larger than
+reported values in the literature (i.e.~x10). Attempts to re-analyze the
+sLASER data using \texttt{fsl\_mrs}
+\citep{clarkeFSLMRSEndtoendSpectroscopy2021} resulted in similarly large
 concentrations. Despite several attempts, we were unable to locate the
 source of this error. Therefore we decided to analyze and report
 metabolite to creatine (tCr) ratios (i.e.~Glx / tCr and GABA+ / tCr),
 which agreed well with reported literature values
 \citep{boillatMetaboliteConcentrationChanges2020, dwyerSimultaneousMeasurementBOLD2021, martinez-maestroDynamicMetabolicChanges2019, mekleDetectionMetaboliteChanges2017, schallerNetIncreaseLactate2013}.
-
-In order to be confident in our results, we re-ran all MRS analyses,
-acquiring quantitative Glx and GABA+ values from the MEGA-PRESS sequence
-only using the software \texttt{Gannet}
+In order to be confident in our results, however, we re-ran all MRS
+analyses, acquiring quantitative Glx and GABA+ values from the
+MEGA-PRESS sequence only using the software \texttt{Gannet}
 \citep{eddenGannetBatchprocessingTool2014} (v3.3.0). Values were
 relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
-method \citep{harrisSpectralEditingMeasurementsGABA2015}.
+method \citep{harrisSpectralEditingMeasurementsGABA2015}. Results using
+Glx and GABA+ from the \texttt{Gannet} analysis of MEGA-PRESS only are
+reported in the Supplementary Material.
 
 \subsection{Hurst Exponent
 Calculation}\label{hurst-exponent-calculation}
@@ -853,18 +860,16 @@ Correlation plots of H vs.~mean FD for rest (green) and movie (orange).}
 
 \end{figure}%
 
-\subsection{Relationship between H and
-E:I}\label{relationship-between-h-and-ei}
+\subsection{H and E:I}\label{h-and-ei}
 
 Mean ± sd of metabolites, E:I, and H during rest and movie are reported
 in Table~\ref{tbl-results}. Boxplots between rest and movie can be seen
-in Figure~\ref{fig-results}. Neither Glx nor GAB+ were different between
-movie and rest conditions. E:I ratio did not change between conditions
-either. H was found to be greater during movie watching than rest.
+in Figure~\ref{fig-results}. Neither Glx nor GABA+ were different
+between movie and rest conditions. E:I ratio did not change between
+conditions either. H was found to be greater during movie watching than
+rest.
 
 \begin{longtable}[]{@{}llll@{}}
-\caption{\textbf{Summary of main
-results}}\label{tbl-results}\tabularnewline
 \toprule\noalign{}
 & Rest & Movie & p-value \\
 \midrule\noalign{}
@@ -874,6 +879,9 @@ results}}\label{tbl-results}\tabularnewline
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of main
+results}}\label{tbl-results}\tabularnewline
 \endlastfoot
 \textbf{Glx / tCr} & 1.19 ± 0.11 & 1.14 ± 0.11 & 0.09 \\
 \textbf{GABA+ / tCr} & 0.45 ± 0.06 & 0.44 ± 0.06 & 0.50 \\
@@ -938,9 +946,11 @@ CI {[}-0.13, -0.04{]}, t(30) = -3.99, p \textless{} 0.01).
 
 \subsection{Re-analysis using Gannet}\label{re-analysis-using-gannet}
 
-Re-running our analysis using Glx and GABA+ values from Gannet did not
-result in any significant changes from the results reported above. We
-have included these results in the Supplementary Material.
+Re-running our analysis using Glx and GABA+ values from \texttt{Gannet}
+did not result in any significant changes from the results reported
+above. We did, however, obtain quantitative Glx values much closer to
+what has been reported in the literature. We have included these results
+in the Supplementary Material.
 
 \section{Discussion}\label{discussion}
 
@@ -1013,9 +1023,9 @@ the advantage of a more robust metabolite quantification due to greater
 signal averaging, brain homeostatis during these long blocks may lead to
 an erasure of any real metabolic changes
 \citep{mangiaMetabolicPathwaysActivitydependent2012, apsvalkaEventrelatedDynamicsGlutamate2015}.
-Indeed, \citet{pasantaFunctionalMRSStudies2023} found the magnitude of
-effect sizes were observed to be smaller for block designs than
-event-related designs.
+Indeed, Pasanta et al.~(2023) \citet{pasantaFunctionalMRSStudies2023}
+found the magnitude of effect sizes were observed to be smaller for
+block designs than event-related designs.
 
 However, it may be possible that our results do support the idea that H
 and E:I are not directly linked; at least not in a simple manner. This
@@ -1041,8 +1051,6 @@ understand the complexities involved in studying this phenomenon.
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1585}}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
   >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}@{}}
-\caption{\textbf{Summary of methods for existing E:I-Hurst
-studies}}\label{tbl-lit}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Citation
@@ -1076,6 +1084,9 @@ E:I-Hurst Relationship
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of methods for existing E:I-Hurst
+studies}}\label{tbl-lit}\tabularnewline
 \endlastfoot
 Poil et al.~(2012)\citet{poilCriticalStateDynamicsAvalanches2012} &
 Computational with in-house simulated model & Neuronal avalanche size &
@@ -1167,8 +1178,8 @@ of suggestions for future work:
   may provide more sensitivity to detecting rapid and transient neural
   responses due to its ability to isolate specific events within the
   scan session \citep{mullinsTheoryFunctionalMagnetic2018}. However, see
-  \citet{pasantaFunctionalMRSStudies2023} for a longer discussion and
-  possible downsides to this approach;
+  Pasanta et al.~(2023) \citet{pasantaFunctionalMRSStudies2023} for a
+  longer discussion and possible downsides to this approach;
 \item
   and finally, using a combined fMRI-MRS sequence
   \citep{ipCombinedFMRIMRSAcquires2017, dwyerSimultaneousMeasurementBOLD2021}
@@ -1206,10 +1217,10 @@ statement}\label{data-availability-statement}
 
 All code used in this paper is available at
 \href{https://github.com/WeberLab/EI_Hurst_Analysis}{github.com/WeberLab/EI\_Hurst\_Analysis}.
-The data used in this paper is available by contacting the author. The
-manuscript was written in a `reproducible manner'. The entire
-manuscript, including statistics reported, figures, and tables, can be
-reproduced here:
+The raw MRI data used in this paper is available by contacting the
+author. The manuscript was written in a `reproducible manner': the
+entire manuscript, including statistics reported, figures, and tables,
+can be reproduced here:
 \href{https://weberlab.github.io/EI_Hurst_Manuscript/}{weberlab.github.io/EI\_Hurst\_Manuscript/}
 
 \section*{Competing interests}\label{competing-interests}
@@ -1221,15 +1232,106 @@ The authors declare they have no known competing interests.
 \addcontentsline{toc}{section}{Author contributions}
 
 LS performed data curation, formal analysis, investigation, software,
-visualization, and wrote the original draft. AMW performed,
-conceptualization, data curation, formal analysis, funding acquisition,
-investigation, methodology, project administration, resources,
-supervision, validation, visualization, and writing - review \& editing.
+visualization, and wrote the original draft. JS helped with validation,
+visualization, and reviewed and edited the manuscript. AMW was
+responsible for conceptualization, data curation, formal analysis,
+funding acquisition, investigation, methodology, project administration,
+resources, supervision, validation, visualization, and writing - review
+\& editing.
 
 \section*{Acknowledgements}\label{acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-The work presented in this paper was supported in part by
+The work presented in this paper was supported in part from funding from
+the British Columbia Children's Hospital Foundation, and an NSERC
+Discovery Grant.
+
+\section*{Supplementary Material}\label{supplementary-material}
+\addcontentsline{toc}{section}{Supplementary Material}
+
+\subsection*{Gannet Results}\label{gannet-results}
+\addcontentsline{toc}{subsection}{Gannet Results}
+
+An example fit result from Gannet of a subject at rest is shown in
+Figure~\ref{fig-gannet}.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png}}
+
+}
+
+\caption{\label{fig-gannet}\textbf{Gannet Fit.} Sample Gannet fit result
+from a subject a rest. Glx (3.75ppm) and GABA (3) data (blue) and model
+fit (red) are shown top left. Water and creatine reference signals are
+shown bottom left. Table on right shows GABA+ and Glx values before
+tissue and tissue- and alpha-correction.}
+
+\end{figure}%
+
+Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest
+and movie, are reported in Table~\ref{tbl-gannetresults}. Boxplots
+between rest and movie can be seen in Figure~\ref{fig-gannetresults}.
+Neither Glx nor GABA+ were different between movie and rest conditions.
+E:I ratio did not change between conditions either.
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule\noalign{}
+& Rest & Movie & p-value \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+& Rest & Movie & p-value \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of main metabolite results using
+Gannet}}\label{tbl-gannetresults}\tabularnewline
+\endlastfoot
+\textbf{Glx} & 9.32 ± 0.85 & 9.19 ± 0.6 & 0.30 \\
+\textbf{GABA+} & 3.09 ± 0.32 & 3.03 ± 0.33 & 0.22 \\
+\textbf{E:I Ratio} & 3.04 ± 0.3 & 3.06 ± 0.26 & 0.68 \\
+\end{longtable}
+
+\phantomsection\label{cell-fig-gannetresults}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-gannetresults-1.pdf}}
+
+}
+
+\caption{\label{fig-gannetresults}\textbf{Paired comparison of
+metabolite values analyzed using Gannet during rest (green) and movie
+(orange) conditions.} A) Glx; B) GABA+; and C) E:I. Paired dots
+represent the same participant across conditions. Mean difference with
+95\% confidence intervals, and as Cohen's D are reported at the top of
+each plot.}
+
+\end{figure}%
+
+H was not found to correlate with Glx, GABA+, or E:I, during rest or
+movie (Figure~\ref{fig-gannetcorrelations}).
+
+\phantomsection\label{cell-fig-gannetcorrelations}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-gannetcorrelations-1.pdf}}
+
+}
+
+\caption{\label{fig-gannetcorrelations}\textbf{Scatter plots of H
+vs.~metabolites when analyzed using Gannet.} A) Glx; B) GABA+; and C)
+E:I. Rest is in green, while movie is in orange. p-values are reported
+at the top of each plot.}
+
+\end{figure}%
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
