@@ -499,12 +499,16 @@ The work presented in this paper was supported in part from funding from the Bri
 
 ## Gannet Results {.unnumbered}
 
+An example fit result from Gannet of a subject at rest is shown in @fig-gannet.
+
+![**Gannet Fit.** Sample Gannet fit result from a subject a rest. Glx (3.75ppm) and GABA (3) data (blue) and model fit (red) are shown top left. Water and creatine reference signals are shown bottom left. Table on right shows GABA+ and Glx values before tissue and tissue- and alpha-correction.](./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png){#fig-gannet}
+
 
 ```{r}
 load("./notebooks/Gannet_results.RData")
 ```
 
-Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest and movie are reported in @tbl-gannetresults. Boxplots between rest and movie can be seen in @fig-gannetresults. Neither Glx nor GABA+ were different between movie and rest conditions. E:I ratio did not change between conditions either.
+Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest and movie, are reported in @tbl-gannetresults. Boxplots between rest and movie can be seen in @fig-gannetresults. Neither Glx nor GABA+ were different between movie and rest conditions. E:I ratio did not change between conditions either.
 
 |                  | Rest | Movie | p-value |
 | ---------------- | ---- | ----- | ------- |

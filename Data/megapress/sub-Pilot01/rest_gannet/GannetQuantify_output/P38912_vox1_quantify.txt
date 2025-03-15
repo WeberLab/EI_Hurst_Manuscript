@@ -1,0 +1,72 @@
+Batch file: 1 of 1
+
+17-Nov-2023 11:37:21
+Voxel from P38912.7 on sub-Pilot01_T1w.nii
+
+Filename:
+Anatomical image:
+
+P38912.7
+sub-Pilot01_T1w.nii
+
+Relaxation-, tissue-corrected (Gasparovic et al. method)
+GABA+/Water:
+
+3.83 i.u.
+
+Glx/Water:
+
+12.48 i.u.
+
+Relaxation-, tissue-, alpha-corrected (Harris et al. method)
+GABA+/Water (
+
+= 0.5):
+
+3.27 i.u.
+
+Glx/Water (
+
+= 0.5):
+
+10.66 i.u.
+
+Relaxation-, tissue-, alpha-corrected; group-average-normalized
+(Harris et al. method)
+
+Difference Spectrum and Model Fit
+
+5
+
+4
+
+3
+
+2
+
+1
+
+GABA+/Water (
+
+= 0.5):
+
+2.86 i.u.
+
+Glx/Water (
+
+= 0.5):
+
+9.33 i.u.
+
+QuantifyVer:
+
+210331
+
+0
+
+ppm
+For complete documentation, please visit: https://markmikkelsen.github.io/Gannet-docs
+
+3.3.0
+
+
