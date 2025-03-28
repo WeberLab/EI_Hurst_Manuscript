@@ -1,6 +1,7 @@
 project:
   type: manuscript
-  # render: 
+  render: 
+    - "!notes.md"
   #   - "*.qmd"
   #   - "!pyvenv_csvo/"
   #   - "*.ipynb"
