@@ -14,5 +14,6 @@
 .httr-oauth
 .DS_Store
 
-notes.md
-eLife
+/notes.md
+/eLife
+/ImagingNeuroscience

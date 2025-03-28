@@ -488,6 +488,11 @@ AMW was responsible for conceptualization, data curation, formal analysis, fundi
 
 The work presented in this paper was supported in part from funding from the British Columbia Children's Hospital Foundation, and an NSERC Discovery Grant.
 
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
 # Supplementary Material {.appendix .unnumbered}
 
 ## Gannet Results {.unnumbered}
@@ -540,8 +545,4 @@ AABB
 glu_hurst_plot + gaba_hurst_plot + ei_hurst_plot + plot_layout(design=layout, guides = 'collect', axes = 'collect', axis_titles = 'collect') + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
 
-# References {.unnumbered}
-
-::: {#refs}
-:::
 

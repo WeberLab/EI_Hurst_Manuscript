@@ -24,16 +24,21 @@ format:
     toc: true
     comments:
       hypothesis: true
-  # docx: default
   docx:
     reference-doc: custom-reference.docx
     line-numbers: false
   # jats: default
+  # pdf:
+  #   colorlinks: true
+  #   keep-tex: true
   nature-pdf:
     journal: 
-      cite-style: sn-jnl
-    cite-method: natbib
-    keep-tex: true
+      cite-style: sn-nature
+      keep-tex: true
+      colorlinks: true
+      link-citations: true
+      pdf-engine: xelatex
+  #   cite-method: natbib
 
 filters:
   - parse-latex
