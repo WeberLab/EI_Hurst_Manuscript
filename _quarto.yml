@@ -2,9 +2,9 @@ project:
   type: manuscript
   render: 
     - "!notes.md"
-  #   - "*.qmd"
+    - "*.qmd"
   #   - "!pyvenv_csvo/"
-  #   - "*.ipynb"
+    - "*.ipynb"
 
 manuscript:
   article: index.qmd
@@ -32,6 +32,9 @@ format:
   #   colorlinks: true
   #   keep-tex: true
   nature-pdf:
+    # include-in-header:
+    #   - text: |
+    #       \usepackage{breqn}
     journal: 
       cite-style: sn-nature
       keep-tex: true
