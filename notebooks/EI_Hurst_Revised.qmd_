@@ -28,8 +28,6 @@ library(reshape2)
 library(rio)
 library(tidyverse)
 library(viridis)
-library(simr)
-library(car)
 ```
 
 # Load and Format Data
@@ -292,6 +290,24 @@ Summary statistics:
 (crsnr_stats <- crsnr_df %>% group_by(Condition, Method) %>% summarise(mean = round(mean(cr_snr), 2), sd = round(sd(cr_snr), 2)))
 ```
 
+### FreqShift
+
+```{r}
+freqshift_df <- dplyr::select(df, matches("freqshift")) %>% rename(Rest_freqshift_MEGAPRESS = Rest_mega_osprey_freqshift, Movie_freqshift_MEGAPRESS = Movie_mega_osprey_freqshift,
+                                                                Rest_FreqShift_SLASER = Rest_laser_osprey_freqshift, Movie_FreqShift_SLASER = Movie_laser_osprey_freqshift) %>%
+  reshape2::melt()
+freqshift_df$Condition <- gsub("_.*", "", freqshift_df$variable)
+freqshift_df$Method <- gsub(".*_.*_", "", freqshift_df$variable)
+freqshift_df <- freqshift_df[, -1]
+names(freqshift_df)[1] <- "freqshift"
+freqshift_df$Condition <- factor(freqshift_df$Condition, levels = c("Rest", "Movie"))
+```
+
+Summary statistics:
+
+```{r}
+(freqshift_stats <- freqshift_df %>% group_by(Condition, Method) %>% summarise(mean = round(mean(freqshift), 2), sd = round(sd(freqshift), 2)))
+```
 ### Voxel Angle around X-axis:
 ```{r}
 xangle_df <- dplyr::select(df, matches("Xangle"))
@@ -385,11 +401,6 @@ model <- lme4::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShiftsL
 summary(model)
 ```
 ```{r}
-(vif_values <- car::vif(model))
-```
-
-
-```{r}
 model <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShiftsLASER + FreqShiftMEGA + MeanFD + (1 | Subject), data = df_lme)
 (model_summary <- summary(model))
 ```
@@ -399,67 +410,22 @@ model <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShi
 ```
 ```{r}
 (confint_values <- lme4::confint.merMod(model, method="Wald"))
+confint_values
 ```
 
 ```{r}
 report(model)
 ```
-Power analyses
 
 ```{r}
-(power <- powerSim(model, fixed("EI", "z"), nsim=1000))
-```
-```{r}
-modelpower <- summary(power)$mean
-```
+# Plotting residuals to check assumptions
+plot(resid(model) ~ fitted(model))
+abline(h = 0, col = "red")
+hist(resid(model)) # Check for normality
 
-
-```{r}
-model_modified <- model
-fixef(model_modified)["EI"] <- 0.14
-(power0.1 <- powerSim(model_modified, fixed("EI", "z"), nsim=1000))
-```
-```{r}
-modelpower0.1 <- summary(power0.1)$mean
-```
-
-
-```{r}
-model_modified <- model
-fixef(model_modified)["EI"] <- 0.21
-(power0.15 <- powerSim(model_modified, fixed("EI", "z"), nsim=1000))
-```
-```{r}
-modelpower0.15 <- summary(power0.15)$mean
-```
-
-```{r}
-(modelresiduals_plot <- ggplot(data.frame(fitted = fitted(model), 
-                       residuals = resid(model)),
-            aes(x = fitted, y = residuals)) +
-  geom_point() +
-  geom_hline(yintercept = 0, color = "red") +
-  labs(x = "Fitted Values", y = "Residuals") +
-  theme_minimal())
-```
-
-```{r}
-# Create the plot as an object
-(modelhistresiduals_plot <- ggplot(data.frame(residuals = resid(model)), 
-            aes(x = residuals)) +
-  geom_histogram(bins = 10, fill = "grey", color = "black") +
-  labs(x = "Residuals", y = "Frequency") +
-  theme_minimal())
-```
-
-```{r}
-(modelqqnorm_plot <- ggplot(data.frame(residuals = resid(model)), 
-                      aes(sample = residuals)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  labs(x = "Theoretical Quantiles", 
-       y = "Sample Quantiles") +
-  theme_minimal())
+# QQ plot for normality of residuals
+qqnorm(resid(model))
+qqline(resid(model))
 ```
 
 # Post-hoc stats
@@ -477,7 +443,7 @@ hurst <- reshape2::melt(hurst)
 hurst <- hurst[, -1]
 ```
 
-## Is meanFD correlated with Hurst?
+Is meanFD correlated with Hurst?
 
 ```{r}
 meanfd_rest <- dplyr::filter(meanfd, Condition == "Rest")
@@ -529,7 +495,7 @@ meanfd_hurst_plot
 dev.off()
 ```
 
-## Is Glx or GABAplus correlated with FWHM?
+Is Glx or GABAplus correlated with FWHM?
 
 ```{r}
 (Restglxcortest <- cor.test(df$Rest_laser_osprey_glx, df$Rest_laser_osprey_waterfwhm))
@@ -592,7 +558,6 @@ gabaplusfwhm$gabaplus <- gabaplus
 gabaplusfwhm <- gabaplusfwhm %>% mutate(Condition = factor(Condition, levels = c("Rest", "Movie")))
 ```
 
-
 ```{r}
 dat_text <- data.frame(
   label = c(paste("p = ", round(Restgabapluscortest$p.value, 2)), paste("p = ", round(Moviegabapluscortest$p.value, 2))),
@@ -635,130 +600,6 @@ t.test(df$Rest_laser_osprey_waterfwhm, df$Rest_mega_osprey_waterfwhm)
 t.test(df$Movie_laser_osprey_waterfwhm, df$Movie_mega_osprey_waterfwhm)
 ```
 
-## FreqShift
-
-```{r}
-(Restglxfreqshiftcortest <- cor.test(df$Rest_laser_osprey_glx, df$Rest_laser_osprey_freqshift))
-(Movieglxfreqshiftcortest <- cor.test(df$Movie_laser_osprey_glx, df$Movie_laser_osprey_freqshift))
-(Restgabaplusfreqshiftcortest <- cor.test(df$Rest_mega_osprey_gabaplus, df$Rest_mega_osprey_freqshift))
-(Moviegabaplusfreqshiftcortest <- cor.test(df$Movie_mega_osprey_gabaplus, df$Movie_mega_osprey_freqshift))
-```
-
-```{r}
-glxfreqshift <- dplyr::select(df, matches("laser_osprey_freqshift")) %>% reshape2::melt()
-glxfreqshift$Condition <- gsub("_.*", "", glxfreqshift$variable)
-glxfreqshift$Method <- gsub(".*_.*_", "", glxfreqshift$variable)
-glxfreqshift <- glxfreqshift[, -c(1,4)]
-names(glxfreqshift)[1] <- "freqshift"
-glxfreqshift$Glx <- glx
-glxfreqshift <- glxfreqshift %>% mutate(Condition = factor(Condition, levels = c("Rest", "Movie")))
-```
-
-```{r}
-dat_text <- data.frame(
-  label = c(paste("p = ", round(Restglxfreqshiftcortest$p.value, 2)), paste("p = ", round(Movieglxfreqshiftcortest$p.value, 2))),
-  Condition = c("Rest", "Movie"),
-  x = c(-1.5, -1.5),
-  y = c(11.2, 11.2)
-)
-(glx_freqshift_plot <- ggplot(data = glxfreqshift, aes(x = freqshift, y = Glx, color = Condition, fill = Condition)) +
-  geom_point(color = "black") +
-  geom_smooth(method = "lm", color = "blue", aes(fill = Condition), alpha = 0.3) +
-  theme_classic(base_size = 12) +
-  theme(
-    strip.background = element_blank(), strip.text.x = element_text(size = 12, face = "bold"),
-    axis.title = element_text(face = "bold"), legend.title = element_text(face = "bold")
-  ) +
-  theme(legend.position = "none") +
-  facet_wrap(~ factor(Condition, levels = c("Rest", "Movie"))) +
-  geom_text(
-    data = dat_text,
-    mapping = aes(x = x, y = y, label = label),
-    inherit.aes = FALSE
-  ) +
-  ylab("Glx") + 
-  xlab("Frequency Shift (ppm)") +
-  scale_x_continuous(guide = guide_axis(angle = 40)) +
-  theme(panel.spacing = unit(2, "lines")) +
-  #scale_color_manual(values = c("Rest" = "green", "Movie" = "orange")) #+
-  scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange"))
-)
-png(file = "Glx_FreqShift_Plot.png", width = 7, height = 3, units = "in", res = 300)
-glx_freqshift_plot
-dev.off()
-```
-
-```{r}
-gabaplusfreqshift <- dplyr::select(df, matches("mega_osprey_freqshift")) %>% reshape2::melt()
-gabaplusfreqshift$Condition <- gsub("_.*", "", gabaplusfreqshift$variable)
-gabaplusfreqshift$Method <- gsub(".*_.*_", "", gabaplusfreqshift$variable)
-gabaplusfreqshift <- gabaplusfreqshift[, -c(1,4)]
-names(gabaplusfreqshift)[1] <- "freqshift"
-gabaplusfreqshift$gabaplus <- gabaplus
-gabaplusfreqshift <- gabaplusfreqshift %>% mutate(Condition = factor(Condition, levels = c("Rest", "Movie")))
-```
-
-
-```{r}
-dat_text <- data.frame(
-  label = c(paste("p = ", round(Restgabaplusfreqshiftcortest$p.value, 2)), paste("p = ", round(Moviegabaplusfreqshiftcortest$p.value, 2))),
-  Condition = c("Rest", "Movie"),
-  x = c(-2.5, -2.5),
-  y = c(5.8, 5.8)
-)
-(gabaplus_freqshift_plot <- ggplot(data = gabaplusfreqshift, aes(x = freqshift, y = gabaplus, color = Condition, fill = Condition)) +
-  geom_point(color = "black") +
-  geom_smooth(method = "lm", color = "blue", aes(fill = Condition), alpha = 0.3) +
-  theme_classic(base_size = 12) +
-  theme(
-    strip.background = element_blank(), strip.text.x = element_text(size = 12, face = "bold"),
-    axis.title = element_text(face = "bold"), legend.title = element_text(face = "bold")
-  ) +
-  theme(legend.position = "none") +
-  facet_wrap(~ factor(Condition, levels = c("Rest", "Movie"))) +
-  geom_text(
-    data = dat_text,
-    mapping = aes(x = x, y = y, label = label),
-    inherit.aes = FALSE
-  ) +
-  ylab("GABA+") + 
-  xlab("Frequency Shift (ppm)") +
-  scale_x_continuous(guide = guide_axis(angle = 40)) +
-  theme(panel.spacing = unit(2, "lines")) +
-  scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange"))
-)
-png(file = "GABAplus_freqshift_Plot.png", width = 7, height = 3, units = "in", res = 300)
-gabaplus_freqshift_plot
-dev.off()
-```
-
-```{r}
-(glxandgabaplus_freqshift_plot <- glx_freqshift_plot / gabaplus_freqshift_plot + plot_layout(guides = 'auto', axes = 'collect', axis_titles = 'collect'))
-```
-
-Are FWHM different between MEGAPRESS and sLASER?
-```{r}
-t.test(df$Rest_laser_osprey_waterfwhm, df$Rest_mega_osprey_waterfwhm)
-t.test(df$Movie_laser_osprey_waterfwhm, df$Movie_mega_osprey_waterfwhm)
-```
-
-
-```{r}
-freqshift_df <- dplyr::select(df, matches("freqshift")) %>% rename(Rest_freqshift_MEGAPRESS = Rest_mega_osprey_freqshift, Movie_freqshift_MEGAPRESS = Movie_mega_osprey_freqshift,
-                                                                Rest_FreqShift_SLASER = Rest_laser_osprey_freqshift, Movie_FreqShift_SLASER = Movie_laser_osprey_freqshift) %>%
-  reshape2::melt()
-freqshift_df$Condition <- gsub("_.*", "", freqshift_df$variable)
-freqshift_df$Method <- gsub(".*_.*_", "", freqshift_df$variable)
-freqshift_df <- freqshift_df[, -1]
-names(freqshift_df)[1] <- "freqshift"
-freqshift_df$Condition <- factor(freqshift_df$Condition, levels = c("Rest", "Movie"))
-```
-
-Summary statistics:
-
-```{r}
-(freqshift_stats <- freqshift_df %>% group_by(Condition, Method) %>% summarise(mean = round(mean(freqshift), 2), sd = round(sd(freqshift), 2)))
-```
 # Results 
 
 Let's move on to results! How does Hurst change with condition?
@@ -952,73 +793,6 @@ names(crlbglu_df) <- c("Sub", "Condition", "CRLB")
 crlbglu_df$Condition <- factor(crlbglu_df$Condition, levels = c("Rest", "Movie"))
 (crlbglu_stats <- crlbglu_df %>% group_by(Condition) %>% summarise(mean = round(mean(CRLB), 2), sd = round(sd(CRLB), 2)))
 ```
-
-## GABA
-How does GABA change with condition?
-
-```{r}
-gaba_df <- dplyr::select(df, Subject, Rest_mega_osprey_gaba, Movie_mega_osprey_gaba)
-gaba_effect_size <- cohensD(gaba_df$Rest_mega_osprey_gaba, gaba_df$Movie_mega_osprey_gaba)
-(ttest_gaba <- t.test(gaba_df$Rest_mega_osprey_gaba, gaba_df$Movie_mega_osprey_gaba, paired = TRUE))
-
-gaba_df <- reshape2::melt(gaba_df, id.vars = c("Subject"))
-gaba_df$variable <- gsub("_.*", "", gaba_df$variable)
-names(gaba_df) <- c("Sub", "Condition", "gaba")
-gaba_df$Condition <- factor(gaba_df$Condition, levels = c("Rest", "Movie"))
-
-gaba_df$Sub <- gaba_df$Sub
-gaba_df$Sex <- sub_dem$Sex
-gaba_m <- gaba_df %>% dplyr::filter(Sex == "M")
-gaba_f <- gaba_df %>% dplyr::filter(Sex == "F")
-t.test(gaba_m$gaba, gaba_f$gaba)
-gaba_df$Age <- sub_dem$Age
-cor.test(gaba_df$gaba, gaba_df$Age)
-```
-
-```{r}
-minmax <- c(min(gaba_df$gaba), max(gaba_df$gaba))
-space <- (minmax[2] - minmax[1]) / 10
-(gaba_boxplot <- ggplot(gaba_df, aes(x = Condition, y = gaba, fill = Condition)) +
-  scale_fill_manual(values = c("#98FB98", "#FFA500"), guide = "none") +
-  theme_classic(base_size = 15) +
-  ylab("GABA") +
-  theme(axis.title = element_text(face = "bold"), legend.position = "none") +
-  geom_boxplot(outlier.shape = NA) +
-  geom_point(alpha = 0.6, position = position_jitterdodge(dodge.width = 0.1, jitter.width = 0.01, seed = 123), aes(group = Sub)) +
-  geom_line(aes(group = Sub), position = position_jitterdodge(dodge.width = 0.1, jitter.width = 0.01, seed = 123), alpha = 0.5) +
-  ylim(minmax[1] - space, minmax[2] + space) +
-  annotate(geom = "text", x = 1.5, y = minmax[2] + space / 2, label = paste(
-    "mean difference [95% CI] = ",
-    round(as.numeric(ttest_gaba$estimate), 2),
-    "[",
-    round(as.numeric(ttest_gaba$conf.int)[1], 2),
-    " to ",
-    round(as.numeric(ttest_gaba$conf.int)[2], 2),
-    "]",
-    "\n Cohen's D = ",
-    round(gaba_effect_size, 2)
-  ))
-)
-png(file = "gaba_v_Condition_Plot.png", width = 7, height = 4, units = "in", res = 300)
-gaba_boxplot
-dev.off()
-```
-
-```{r}
-(gaba_stats <- gaba_df %>% group_by(Condition) %>% summarise(mean = round(mean(gaba), 2), sd = round(sd(gaba), 2)))
-```
-```{r}
-crlbgaba_df <- df %>% dplyr::select(Subject, Rest_mega_osprey_gaba_CRLB, Movie_mega_osprey_gaba_CRLB)
-crlbgaba_df <- reshape2::melt(crlbgaba_df, id.vars = c("Subject"))
-crlbgaba_df$variable <- gsub("_.*", "", crlbgaba_df$variable)
-names(crlbgaba_df) <- c("Sub", "Condition", "CRLB")
-crlbgaba_df$Condition <- factor(crlbgaba_df$Condition, levels = c("Rest", "Movie"))
-(crlbgaba_stats <- crlbgaba_df %>% group_by(Condition) %>% summarise(mean = round(mean(CRLB), 2), sd = round(sd(CRLB), 2)))
-```
-
-
-
-
 ## GABA+
 How does GABA change with condition?
 
@@ -1238,7 +1012,7 @@ print(gabaplush_movie_pearson)
 dat_text <- data.frame(
   label = c(paste("p = ", round(gabaplush_rest_pearson$p.value, 2)), paste("p = ", round(gabaplush_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
-  x = c(5, 5),
+  x = c(4.5, 4.5),
   y = c(1.25, 1.25)
 )
 (gabaplus_hurst_plot <- ggplot(data = gabaplush_df, aes(x = GABAplus, y = Hurst, color = Condition, fill = Condition)) +
@@ -1290,7 +1064,7 @@ print(eih_movie_pearson)
 dat_text <- data.frame(
   label = c(paste("p = ", round(eih_rest_pearson$p.value, 2)), paste("p = ", round(eih_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
-  x = c(2, 2),
+  x = c(2.3, 2.3),
   y = c(1.25, 1.25)
 )
 (ei_hurst_plot <- ggplot(data = eih_df, aes(x = EI, y = Hurst, color = Condition, fill = Condition)) +
@@ -1362,7 +1136,7 @@ summary(gannetmodel)
 ```
 ```{r}
 gannetmodel <- lmerTest::lmer(Hurst ~ EI + Condition +  FWHMMEGA +  FreqShiftMEGA + MeanFD + (1 | Subject), data = gannetdf_lme)
-(gannetmodel_summary <- summary(gannetmodel))
+(model_summary <- summary(model))
 ```
 
 ```{r}
@@ -1617,7 +1391,7 @@ dat_text <- data.frame(
   ) +
   scale_x_continuous(guide = guide_axis(angle = 40)) +
   scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange")) +
-  theme(panel.spacing = unit(1, "lines"))
+  theme(panel.spacing = unit(.1, "lines"))
 )
 
 png(file = "Glutamate_Hurst_Plot_Gannet.png", width = 7, height = 4, units = "in", res = 300)
@@ -1649,7 +1423,7 @@ print(gannetgabah_movie_pearson)
 dat_text <- data.frame(
   label = c(paste("p = ", round(gannetgabah_rest_pearson$p.value, 2)), paste("p = ", round(gannetgabah_movie_pearson$p.value, 2))),
   Condition = c("Rest", "Movie"),
-  x = c(3.2, 3.2),
+  x = c(3, 3),
   y = c(1.25, 1.25)
 )
 (gannetgaba_hurst_plot <- ggplot(data = gannetgabah_df, aes(x = GABAplus, y = Hurst, color = Condition, fill = Condition)) +
@@ -1670,10 +1444,10 @@ dat_text <- data.frame(
     inherit.aes = FALSE
   )+
   scale_x_continuous(guide = guide_axis(angle = 40)) +
-  theme(panel.spacing = unit(1, "lines")) +
+  theme(panel.spacing = unit(.1, "lines")) +
   scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange"))
 )
-png(file = "GABA_Hurst_PlotGannet.png", width = 7, height = 4, units = "in", res = 300)
+png(file = "GABA_Hurst_Plot.png", width = 7, height = 4, units = "in", res = 300)
 gannetgaba_hurst_plot
 dev.off()
 ```
@@ -1722,7 +1496,7 @@ dat_text <- data.frame(
     inherit.aes = FALSE
   ) +
   scale_x_continuous(guide = guide_axis(angle = 40)) +
-  theme(panel.spacing = unit(1, "lines"))+
+  theme(panel.spacing = unit(0.1, "lines"))+
   scale_fill_manual(values = c("Rest" = "green", "Movie" = "orange"))
 )
 png(file = "EI_Hurst_Plot_Gannet.png", width = 7, height = 4, units = "in", res = 300)
@@ -1738,79 +1512,17 @@ AABB
 gannetglx_hurst_plot + gannetgaba_hurst_plot + gannetei_hurst_plot + plot_layout(design=layout, guides = 'collect', axes = 'collect', axis_titles = 'collect') + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
 
-# all metabolites
-```{r}
-library(knitr)
-library(kableExtra)
-```
-## sLASER
-
-```{r}
-(slaserfullrestresults <- as.data.frame(read_tsv(paste0(base_dir, "slaserrest_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-(slaserfullmovieresults <- as.data.frame(read_tsv(paste0(base_dir, "slasermovie_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-```
-```{r}
-slaserfullrestresults$Mean_SD <- as.character(paste0(round(slaserfullrestresults$mean,2), " ± ", round(slaserfullrestresults$sd,2)))
-slaserfullmovieresults$Mean_SD <- as.character(paste0(round(slaserfullmovieresults$mean,2), " ± ", round(slaserfullmovieresults$sd,2)))
-```
-
-```{r}
-slaserfullrestcrlbresults <- as.data.frame(read_csv(paste0(base_dir, "slaserrest_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-slaserfullrestcrlbresults <- slaserfullrestcrlbresults[grepl("%SD", rownames(slaserfullrestcrlbresults)), ]
-slaserfullrestcrlbresults$Mean_SD <- as.character(paste0(round(slaserfullrestcrlbresults$mean,2), " ± ", round(slaserfullrestcrlbresults$sd,2)))
-slaserfullrestcrlbresults
-```
-```{r}
-slaserfullmoviecrlbresults <- as.data.frame(read_csv(paste0(base_dir, "slasermovie_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-slaserfullmoviecrlbresults <- slaserfullmoviecrlbresults[grepl("%SD", rownames(slaserfullmoviecrlbresults)), ]
-slaserfullmoviecrlbresults$Mean_SD <- as.character(paste0(round(slaserfullmoviecrlbresults$mean,2), " ± ", round(slaserfullmoviecrlbresults$sd,2)))
-slaserfullmoviecrlbresults
-```
-
-```{r}
-slaserfullresults <- slaserfullrestresults %>% select(Mean_SD)
-slaserfullresults$Movie <- slaserfullmovieresults$Mean_SD
-slaserfullresults <- slaserfullresults[-1,]
-slaserfullresults$restcrlb <- slaserfullrestcrlbresults$Mean_SD
-slaserfullresults$moviecrlb <- slaserfullmoviecrlbresults$Mean_SD
-slaserfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
-```
-
-## MEGAPRESS
-
-```{r}
-(megapressfullrestresults <- as.data.frame(read_tsv(paste0(base_dir, "megapressrest_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-(megapressfullmovieresults <- as.data.frame(read_tsv(paste0(base_dir, "megapressmovie_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-```
-```{r}
-megapressfullrestresults$Mean_SD <- paste0(round(megapressfullrestresults$mean,2), " ± ", round(megapressfullrestresults$sd,2))
-megapressfullrestresults
-megapressfullmovieresults$Mean_SD <- paste0(round(megapressfullmovieresults$mean,2), " ± ", round(megapressfullmovieresults$sd,2))
-megapressfullmovieresults
-```
-```{r}
-megapressfullrestcrlbresults <- as.data.frame(read_csv(paste0(base_dir, "megapressrest_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-megapressfullrestcrlbresults <- megapressfullrestcrlbresults[grepl("%SD", rownames(megapressfullrestcrlbresults)), ]
-megapressfullrestcrlbresults$Mean_SD <- as.character(paste0(round(megapressfullrestcrlbresults$mean,2), " ± ", round(megapressfullrestcrlbresults$sd,2)))
-(megapressfullrestcrlbresults <- megapressfullrestcrlbresults[c(1,4,3,8,10),])
-```
-```{r}
-megapressfullmoviecrlbresults <- as.data.frame(read_csv(paste0(base_dir, "megapressmovie_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-megapressfullmoviecrlbresults <- megapressfullmoviecrlbresults[grepl("%SD", rownames(megapressfullmoviecrlbresults)), ]
-megapressfullmoviecrlbresults$Mean_SD <- as.character(paste0(round(megapressfullmoviecrlbresults$mean,2), " ± ", round(megapressfullmoviecrlbresults$sd,2)))
-(megapressfullmoviecrlbresults <- megapressfullmoviecrlbresults[c(1,4,3,8,10),])
-```
-
-```{r}
-megapressfullresults <- megapressfullrestresults %>% select(Mean_SD)
-megapressfullresults$Movie <- megapressfullmovieresults$Mean_SD
-megapressfullresults <- megapressfullresults[-1,]
-megapressfullresults$restcrlb <- megapressfullrestcrlbresults$Mean_SD
-megapressfullresults$moviecrlb <- megapressfullmoviecrlbresults$Mean_SD
-megapressfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
-```
 
 
+```{r}
+# Comparing a simpler model without the EI predictor
+model_without_EI <- lmer(Hurst ~ Age + Sex + Condition + (1 | Subject), data = df_lme)
+anova(model, model_without_EI)
+
+model_without_Condition <- lmer(Hurst ~ Age + Sex + EI + (1 | Subject), data = df_lme)
+anova(model, model_without_Condition)
+```
 ```{r}
 save.image('results.RData')
 ```
+
