@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -6,21 +7,22 @@
 \documentclass[
 true
 ]{sn-jnl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -38,9 +40,6 @@ true
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -66,8 +65,7 @@ true
 \makeatother
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -79,17 +77,66 @@ true
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
 
 %%%% Standard Packages
 
@@ -153,15 +200,9 @@ true
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\usepackage[]{natbib}
-\bibliographystyle{plainnat}
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Does the Brain's E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI},
   pdfauthor={, , and },
@@ -175,6 +216,7 @@ resonance spectroscopy, functional magnetic resonance spectroscopy},
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
+
 
 \title[Does the Brain's E:I Balance Really Shape Long-Range Temporal
 Correlations? Lessons Learned from 3T MRI]{Does the Brain's E:I Balance
@@ -205,6 +247,7 @@ spectroscopy,  functional magnetic resonance spectroscopy}
 \begin{document}
 \maketitle
 
+
 \textsuperscript{1} School of Biomedical Engineering, The University of
 British Columbia, Vancouver, BC, Canada\\
 \textsuperscript{2} BC Children's Hospital Research Institute, The
@@ -221,163 +264,190 @@ York, New York, USA
 \subsection*{Abstract}\label{abstract}
 \addcontentsline{toc}{subsection}{Abstract}
 
-A 3T multimodal MRI study of healthy adults (n=19; 10 female; 21.3 -
-53.4 years) was performed to investigate the relationship between fMRI
-long-range temporal correlations and excitatory/inhibitory balance. The
-study objective was to determine if the Hurst exponent (H) --- an
-estimate of the self-correlation and signal complexity --- of the
-blood-oxygen-level-dependent signal is correlated with the
+A 3T multimodal MR study of healthy adults (n=18; 10 female; 21.3 - 53.4
+years) was performed to investigate the relationship between fMRI
+long-range temporal correlations and excitatory/inhibitory balance (via
+single voxel magnetic resonance spectroscopy measurements of glutamate
+and GABA). The study objective was to determine if the Hurst exponent
+(H) --- an estimate of self-correlation and signal complexity --- of the
+blood-oxygen-level-dependent signal was correlated with the
 excitatory-inhibitory (E:I) ratio. E:I has been proposed to serve as a
 control parameter for brain criticality --- the theory that the brain
 operates near a critical point between order and disorder, optimizing
 information processing and adaptability --- which H is believed to be a
-measure of. Thus, understanding if H and E:I are correlated would
+measure of. Thus, understanding if H and E:I are indeed correlated would
 clarify this relationship. Moreover, findings in this domain have
 implications for neurological and neuropsychiatric conditions with
-disrupted E:I balance, such as autism spectrum disorder, schizophrenia,
-and Alzheimer's disease. From a practical perspective, H is easier to
-accurately measure than E:I ratio at 3T MRI. If H can serve as a proxy
-for E:I, it may serve as a more practical clinical biomarker for this
-imbalance and for neuroscience research in general. The study collected
-functional MRI and magnetic resonance spectroscopy data during rest and
-movie-watching. H was found to increase with movie-watching compared to
-rest, while E:I (glutamate/GABA) did not change between conditions. H
-and E:I were not correlated during either movie-watching or rest. This
-study represents the first attempt to investigate this connection
-\emph{in vivo} in humans. We conclude that, at 3T and with our
-particular methodologies, no association was found. We end with lessons
-learned and suggestions for future research.
+disrupted E:I balance, such as autism, schizophrenia, and Alzheimer's
+disease. From a practical perspective, H is easier to accurately measure
+than E:I ratio at 3T MRI. If H can serve as a proxy for E:I, it may
+serve as a more practical clinical biomarker for this imbalance and for
+neuroscience research in general. The study collected functional MRI and
+magnetic resonance spectroscopy data during rest and movie-watching. H
+and E:I (glutamate/GABA) were not found to be correlated. H was found to
+increase with movie-watching compared to rest, while E:I did not change
+between conditions. This study represents the first attempt to
+investigate this connection \emph{in vivo} in humans. We conclude that,
+at 3T and with our particular methodologies, no association was found.
+We end with lessons learned and suggestions for future research.
 
 \section{Introduction}\label{introduction}
 
-The brain is composed of individual neurons, each
-computationally-limited, that ultimately work together to produce
-astonishingly complex operations. Understanding how these neurons
-produce this emergent behaviour remains one of the great scientific
-challenges of our time. Recent advances in neuroscience have led to the
+The human brain consists of interconnected networks of neurons whose
+collective activity gives rise to complex behaviors and cognition. In
+order to understand how neural systems generate this emergent
+functionality, neuroscience is increasingly using tools and concepts
+from the science of complexity. Recent advances have led to the
 emergence of the Critical Brain Hypothesis, which posits that the brain
-operates at a critical point, a state where order and disorder are
-balanced to enable the most efficient information processing
-\citep{decoRestingBrainsNever2013, beggsBeingCriticalCriticality2012, barangerChaosComplexityEntropy2000, bassettUnderstandingComplexityHuman2011, zimmernWhyBrainCriticality2020, liangExcitationInhibitionBalance2024, poilCriticalStateDynamicsAvalanches2012, lombardiBalanceExcitationInhibition2017, baumgartenCriticalExcitationinhibitionBalance2019, bruiningMeasurementExcitationinhibitionRatio2020, trakoshisIntrinsicExcitationinhibitionImbalance, gaoInferringSynapticExcitation2017, tianTheoreticalFoundationsStudying2022, rubinovNeurobiologicallyRealisticDeterminants2011}.
-When in a critical state, the brain is optimally responsive to both
-internal and external stimuli while maintaining a balance between
-stability and instability
-\citep{decoRestingBrainsNever2013, beggsBeingCriticalCriticality2012, tianTheoreticalFoundationsStudying2022, rubinovNeurobiologicallyRealisticDeterminants2011}.
-A fundamental theorem proposing how neural networks achieve this
-delicate balance centers around the excitation-inhibition (E:I) ratio:
-the balance of excitatory and inhibitory neural activity, often
-operationalized as the ratio of the primary excitatory and inhibitory
-neurotransmitters (i.e.~glutamate (Glu) and \(\gamma\)-aminobutyric acid
-(GABA)
-\citep{liangExcitationInhibitionBalance2024, lombardiBalanceExcitationInhibition2017, baumgartenCriticalExcitationinhibitionBalance2019, bruiningMeasurementExcitationinhibitionRatio2020, trakoshisIntrinsicExcitationinhibitionImbalance, gaoInferringSynapticExcitation2017}).
+--- across all regions and networks --- operates at a `critical point',
+a state where both order and disorder are balanced to enable the most
+efficient information processing\textsuperscript{1--14}. In fact,
+criticality is perhaps the main way that nature produces stable complex
+systems\textsuperscript{15,16}. When in a critical state, the brain is
+optimally responsive to both internal and external stimuli while
+maintaining a balance between stability and
+instability\textsuperscript{1,2,13,14}.
+
+Currently, the most popular theory proposing how the brain achieves this
+delicate balance --- what is known as the `control parameter' --- is the
+excitation-inhibition (E:I) ratio: the balance of excitatory and
+inhibitory neural activity, often operationalized as the ratio of the
+primary excitatory and inhibitory neurotransmitters (i.e.~glutamate
+(Glu) and \(\gamma\)-aminobutyric acid (GABA))\textsuperscript{6,8--12}.
+This theory essentially relies on the fact that E:I is a primary driver
+of the signal-to-noise ratio (SNR) of neuronal signalling, and hence
+could drive transitions between order and
+disorder\textsuperscript{6,17}. Thus, the E:I theory of criticality
+posits that altering the E:I ratio would allow for movement between sub-
+and super-critical states\textsuperscript{6}. When excitation is
+perfectly balanced with inhibition, the system is at a critical point,
+but if either excitation or inhibition are favoured, the system can
+become overly noisy (excess excitation) or overly controlled (excess
+inhibition), respectively\textsuperscript{6}. Thus, the relationship
+between E:I balance and large-scale brain dynamics offers a promising
+link between synaptic physiology and macroscopic neural computation, and
+for elucidating fundamental neural computational principles.
+Furthermore, understanding this relationship could hold great clinical
+relevance, as disruptions in E:I homeostasis have been implicated in
+multiple neuropsychiatric and neurodevelopmental disorders --- including
+autism, schizophrenia, and Alzheimer's disease --- making this an
+important target for biomarker development and therapeutic
+intervention\textsuperscript{10,18,19}.
 
 \emph{In vivo} measurement of brain criticality can be achieved using
 several available methods, as systems near a critical state often
-exhibit fractal-like fluctuations or scale-invariance
-\citep{munozColloquiumCriticalityDynamical2018}. Scale-invariance has
-been observed extensively across various neuronal spatio-temporal
-scales, from dendritic branching structures
-\citep{casertaDeterminationFractalDimension1995} in the spatial domain,
-to neurotransmitter release
-\citep{lowenQuantalNeurotransmitterSecretion1997}, neuronal firing rates
-\citep{mazzoniDynamicsSpontaneousActivity2007}, local field potentials
-\citep{bedardMacroscopicModelsLocal2009}, electroencephalography (EEG)
-\citep{bullmoreFractalAnalysisElectroencephalographic1994} and
-functional magnetic resonance imaging (fMRI), which measures the blood
-oxygen level-dependent (BOLD) signal
-\citep{zarahnEmpiricalAnalysesBOLD1997, fadiliWaveletGeneralizedLeastSquares2002, campbellMonofractalAnalysisFunctional2022}
-in the time domain. This fractal structure can be quantified by
-assessing the signal's long-range temporal correlations (LRTC), which
-reflect the persistence or memory in a time series, where future values
-are statistically related to past values over long extended periods. The
-Hurst exponent (H) is a useful measure for evaluating LRTC
-\citep{ekeFractalCharacterizationComplexity2002, campbellMonofractalAnalysisFunctional2022}.
-An H value between 0.5 and 1 indicates a long-range positive
-correlation, with large values being followed by large values and small
-values by small ones. Conversely, an H exponent value between 0 and 0.5
-indicates a long-range negative correlation, where large values are
-likely to be followed by small ones and vice versa. An H value of 0.5 is
-uncorrelated random noise \citep{hurstLongTermStorageCapacity1951}.
+exhibit fractal-like fluctuations or
+scale-invariance\textsuperscript{20}. Scale-invariance has been observed
+extensively across various neuronal spatio-temporal scales, from
+dendritic branching structures\textsuperscript{21} in the spatial
+domain, to neurotransmitter release\textsuperscript{22}, neuronal firing
+rates\textsuperscript{23}, local field potentials\textsuperscript{24},
+electroencephalography (EEG)\textsuperscript{25} and functional magnetic
+resonance imaging (fMRI) --- which measures the blood oxygen
+level-dependent (BOLD) signal\textsuperscript{26--28} --- in the time
+domain. This fractal structure can be quantified by assessing the
+signal's long-range temporal correlations (LRTC), which reflect the
+persistence or memory in a time series, where future values are
+statistically related to past values over long extended periods. The
+Hurst exponent (H) is a useful measure for evaluating
+LRTC\textsuperscript{28,29}. An H value between 0.5 and 1 indicates a
+long-range positive correlation, with large values being followed by
+large values and small values by small ones. Conversely, an H exponent
+value between 0 and 0.5 indicates a long-range negative correlation,
+where large values are likely to be followed by small ones and vice
+versa. An H value of 0.5 is uncorrelated random
+noise\textsuperscript{30}.
 
 H has emerged as a valuable tool in neuroscience and clinical research.
 Typically, H values reported in adult brains are above 0.5, with higher
-H values in grey matter than white matter or cerebrospinal fluid
-\citep{dongHurstExponentAnalysis2018, winkMonofractalMultifractalDynamics2008}.
-Some key findings from neuroscience research include: a decrease in H
-during task performance
-\citep{ciuciuInterplayFunctionalConnectivity2014, heScaleFreePropertiesFunctional2011};
-an increase in H during movie watching in the visual resting state
-network \citep{campbellFractalBasedAnalysisFMRI2022}; negative
-correlations with task novelty and difficulty
-\citep{churchillSuppressionScalefreeFMRI2016}; increases with age in the
-frontal and parietal lobes \citep{dongHurstExponentAnalysis2018}, and
-hippocampus \citep{winkAgeCholinergicEffects2006}; decreases with age in
-the insula, and limbic, occipital and temporal lobes
-\citep{dongHurstExponentAnalysis2018}; and H \textless{} 0.5 in preterm
-infants \citep{mellaTemporalComplexityBOLDsignal2024}. For a more in
-depth review, see \citet{campbellMonofractalAnalysisFunctional2022}. In
-terms of clinical findings, abnormal H values have been identified in
-Alzheimer's disease (AD)
-\citep{maximFractionalGaussianNoise2005, warsiCorrelatingBrainBlood2012},
-autism spectrum disorder (ASD)
-\citep{donaTemporalFractalAnalysis2017, laiShiftRandomnessBrain2010, linkeAlteredDevelopmentHurst2024, uscatescuUsingExcitationInhibition2023},
-mild traumatic brain injury \citep{donaFractalAnalysisBrain2017}, major
-depressive disorder
-\citep{weiIdentifyingMajorDepressive2013, jingIdentifyingCurrentRemitted2017}
-and schizophrenia
-\citep{sokunbiNonlinearComplexityAnalysis2014, uscatescuUsingExcitationInhibition2023}.
-Crucially, these same disorders have been associated with imbalances in
-E:I (AD
-\citep{lauterbornIncreasedExcitatoryInhibitory2021, vicovarelaExcitatoryinhibitoryImbalanceAlzheimers2019};
-ASD
-\citep{sohalExcitationinhibitionBalanceFramework2019, uzunovaExcitatoryInhibitoryImbalance2016, bruiningMeasurementExcitationinhibitionRatio2020};
-depression \citep{pagePrefrontalExcitatoryInhibitory2019}; and
-schizophrenia \citep{kangInterplayMentalDisorder2019})
+H values in grey matter than white matter or cerebrospinal
+fluid\textsuperscript{31,32}. Some key findings from neuroscience
+research include: a decrease in H during task
+performance\textsuperscript{33,34}; an increase in H during movie
+watching in the visual resting state network\textsuperscript{35};
+negative correlations with task novelty and
+difficulty\textsuperscript{36}; increases with age in the frontal and
+parietal lobes\textsuperscript{31}, and hippocampus\textsuperscript{37};
+decreases with age in the insula, and limbic, occipital and temporal
+lobes\textsuperscript{31}; and H \textless{} 0.5 in preterm
+infants\textsuperscript{38}. For a more in depth review, see Campbell et
+al.~(2022)\textsuperscript{28}. In terms of clinical findings, abnormal
+H values have been identified in Alzheimer's disease
+(AD)\textsuperscript{39,40}, autism\textsuperscript{41--44}, mild
+traumatic brain injury\textsuperscript{45}, major depressive
+disorder\textsuperscript{46,47} and
+schizophrenia\textsuperscript{44,48}. Crucially, these same disorders
+have been associated with imbalances in
+E:I\textsuperscript{10,18,19,49--52}.
 
 In addition to its implications for the critical brain hypothesis,
 establishing a connection between E:I and H could facilitate simpler
 estimation of excitatory and inhibitory neurotransmitters, as precise
-measurement of E:I is technically challenging
-\citep{ajramContribution1HMagnetic2019}. Currently, magnetic resonance
-spectroscopy (MRS) is the only non-invasive method for \emph{in vivo}
-assessment of the Glu/GABA ratio (excitatory to inhibitory
-neurotransmitters) in humans
-\citep{stanleyFunctionalMagneticResonance2018, harrisEdited1Magnetic2017}.
-Unfortunately, MRS suffers from limited spatial and temporal resolution,
-with single-voxel spectrosopy sizes between 20 and 27
-cm\textsuperscript{3}, and scan times between 5-10 minutes
-\citep{gaoInferringSynapticExcitation2017, ajramContribution1HMagnetic2019, stanleyFunctionalMagneticResonance2018}.
-In addition, quantification of GABA at 3T necessitates the use of a
-specialized J-difference spectral-editing sequence (such as MEGA-PRESS),
-in order to isolate GABA (at 3 ppm, 2.3 ppm, and 1.9 ppm) from
-overlapping peaks (e.g.~creatine and glutamate)
-\citep{peekComprehensiveGuideMEGAPRESS2023}. The need for this
-additional sequence therefore reduces the temporal resolution further.
-If H could function as a substitute for E:I, it could simplify the
-estimation of E:I in conditions of interest such as ASD, AD, and
-schizophrenia.
+measurement of E:I is technically challenging\textsuperscript{53}.
+Currently, magnetic resonance spectroscopy (MRS) is the only
+non-invasive method for \emph{in vivo} assessment of the Glu/GABA ratio
+(excitatory to inhibitory neurotransmitters) in
+humans\textsuperscript{54,55}. Unfortunately, MRS suffers from limited
+spatial and temporal resolution, with single-voxel spectrosopy sizes
+between 20 and 27 cm\textsuperscript{3}, and scan times between 5-10
+minutes\textsuperscript{12,53,54}. In addition, quantification of GABA
+at 3T necessitates the use of a specialized J-difference
+spectral-editing sequence (such as MEGA-PRESS), in order to isolate GABA
+(at 3 ppm, 2.3 ppm, and 1.9 ppm) from overlapping peaks (e.g.~creatine
+and glutamate)\textsuperscript{56}. The need for this additional
+sequence therefore reduces the temporal resolution further. If H could
+function as a substitute for E:I, it could simplify the estimation of
+E:I.
 
-Going beyond clinical observations that imply a link between H and E:I,
-several studies have attempted to explore this association directly.
-However, they have primarily relied on computational models or animal
-studies
-\citep{liangExcitationInhibitionBalance2024, poilCriticalStateDynamicsAvalanches2012, lombardiBalanceExcitationInhibition2017, baumgartenCriticalExcitationinhibitionBalance2019, bruiningMeasurementExcitationinhibitionRatio2020, trakoshisIntrinsicExcitationinhibitionImbalance, gaoInferringSynapticExcitation2017}.
-To date, no \emph{in vivo} study has validated this association in
-humans. Moreover, the existing research findings have so far been
-inconsistent, with some reporting positive-linear, negative-linear, or
-U-shaped relationships between the two variables. Despite these
-uncertainties, several clinical studies have used fMRI-derived H values
-as proxies for the E:I ratio
-\citep{linkeAlteredDevelopmentHurst2024, xiePharmacoresistantTemporalLobe2024, uscatescuUsingExcitationInhibition2023}.
-Therefore, further investigation is needed to establish the true nature
-of the potential E:I-Hurst relationship and to confirm its presence
-within the human brain. The current study aimed to explore the potential
-E:I-Hurst relationship \emph{in vivo}, specifically within the visual
-cortex during movie-watching and resting periods. We hypothesized that H
-would increase in the visual cortex during movie watching
-\citep{campbellFractalBasedAnalysisFMRI2022}, and that H would
-negatively correlate with E:I
-\citep{trakoshisIntrinsicExcitationinhibitionImbalance}.
+Beyond clinical observations suggesting that both H and E:I imbalance
+are altered in neuropsychiatric conditions, several studies have
+attempted to show that critical-state dynamics emerge when excitation
+and inhibition are balanced. Indirect evidence comes from
+pharmacological manipulation of GABAergic neurotransmission, which has
+been shown to change the strength of LRTC \emph{in
+vitro}\textsuperscript{57} and in the beta-frequency range in humans
+using EEG\textsuperscript{58}; and to eliminate the power-law scaling of
+neuronal avalanches in rats\textsuperscript{59--61}. More direct efforts
+linking H and E:I have mostly relied on computational models or animal
+studies\textsuperscript{6--12}, and the results remain inconsistent,
+ranging from positive to negative or even U-shaped associations. These
+discrepancies may reflect differences in model systems (e.g., animal
+vs.~computer simulations), methodological choices (such as how H or E:I
+are estimated), or may represent counter evidence against the theory
+that these measures are systematically related. Indeed, other theories
+for how the brain maintains criticality exist, such as neuromodulator
+regulation\textsuperscript{62--64} or synaptic
+plasticity\textsuperscript{65,66}, to name a few. Despite the lack of
+direct evidence, several recent human studies have used fMRI-derived H
+as a direct proxy for E:I balance\textsuperscript{43,44,67,68}; yet, no
+study to date has tested the empirical relationship between H and
+neurochemical estimates of E:I (e.g., Glu/GABA ratio) \emph{in vivo} in
+humans.
+
+The theory that E:I serves as the primary control parameter governing H
+--- and, by extension, brain criticality --- offers a framework with
+clear, falsifiable predictions that can be directly tested.
+Specifically, if this framework holds, E:I and H should covary
+systematically in the human brain across individuals, age, brain
+regions, and cognitive states. To empirically test this prediction, the
+present study examined the E:I--Hurst relationship in the human visual
+cortex during rest and naturalistic movie-watching. Although a single
+condition would be sufficient to test the correlation between E:I and H,
+we included two conditions to broaden the dynamic range of neural and
+neurochemical measures --- thereby increasing our sensitivity to detect
+a correlation --- and to provide validation that our metrics behave as
+expected across qualitatively different brain states. Naturalistic
+movie-watching is known to reliably engage the visual cortex with
+complex, temporally structured input, making it a useful condition for
+probing changes in the temporal dynamics of neural
+activity\textsuperscript{35,69}. Prior work from our group has shown
+that H values increased during movie-watching compared to
+rest\textsuperscript{35}, while work from others have found changes in
+Glu and GABA with sustained visual stimulation\textsuperscript{70--73}.
+We hypothesized that H and Glu would increase during
+movie-watching\textsuperscript{35,70,71}, that GABA would
+decrease\textsuperscript{72,73}, and that H would be negatively
+correlated with E:I in both conditions\textsuperscript{11}.
 
 \section{Methods}\label{methods}
 
@@ -386,9 +456,10 @@ negatively correlate with E:I
 Twenty-seven healthy adult participants were recruited to the study. One
 participant was not scanned due to claustrophobia while in the scanner.
 After our analysis and performing quality assurance (see below for
-details), a further seven participants were removed for having less than
-ideal MRI data quality, leaving nineteen final participants, between the
-ages of 21.3 and 53.4 (mean age ± sd: 30.1 ± 8.7 years; 9 males).
+details), a further eight participants were removed, leaving eighteen
+final participants, between the ages of 21.3 and 53.4 (mean age ± sd:
+29.6 ± 8.7 years; 8 males). Sex, handedness and date of birth were
+recorded on the day of the scan.
 
 \subsection{Ethics Statement}\label{ethics-statement}
 
@@ -403,25 +474,26 @@ After two anatomical sequences were acquired, participants were
 instructed to visually fixate on a cross-hair for 24 minutes (see
 Table~\ref{tbl-mriacq} and below for more details). During this period,
 an fMRI, single-voxel semi Localization by Adiabatic SElective
-Refocusing (sLASER) \citep{ozShortechoSingleshotFullintensity2011}, and
-single-voxel MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS)
-\citep{mescherSimultaneousVivoSpectral1998} sequences were acquired (see
+Refocusing (sLASER)\textsuperscript{74}, and single-voxel
+MEscher-Garwood Point-REsolved SpectroScopy
+(MEGA-PRESS)\textsuperscript{75} sequences were acquired (see
 Figure~\ref{fig-method} A and Section~\ref{sec-mriacq}). Next,
 participants were instructed to watch a nature documentary (Our Planet
-(2019), Episode 3, ``Jungles'' \citep{cordeyJungles2019}) for 24
-minutes. During this period, another set of fMRI, sLASER, and MEGA-PRESS
+(2019), Episode 3, ``Jungles''\textsuperscript{76}) for 24 minutes.
+During this period, another set of fMRI, sLASER, and MEGA-PRESS
 sequences were acquired. See Figure~\ref{fig-method} B for a visual
 representation of the scanning protocol. Total scan duration was
 approximately 1 hour of uninterrupted scanning (i.e.~subjects were not
 removed from the scanner). All participants followed the same order of
-rest than movie, and all participants saw the same movie segment,
-beginning at the same time during the scan.
+conditions: rest then movie; all participants saw the same movie
+segment, beginning at the same time during the scan.
 
-\begin{figure}
+\phantomsection\label{cell-fig-method}
+\begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-5-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-method-1.pdf}}
 
 }
 
@@ -429,11 +501,10 @@ beginning at the same time during the scan.
 protocol.} A) fMRI coverage was across the whole-brain (example coverage
 in red). MRS voxels were placed in the visual cortex (blue). Background
 image is of a T1w acquisition from a sample subject. Figure was inspired
-by Ip et al.~(2017) \citep{ipCombinedFMRIMRSAcquires2017}. B) fMRI,
-sLASER, and MEGA-PRESS were acquired first with participants looking at
-a white cross for 24 minutes. Next, the same sequences were acquired
-with the participants viewing a nature documentary for an identical
-period of time.}
+by Ip et al.~(2017)\textsuperscript{77}. B) fMRI, sLASER, and MEGA-PRESS
+were acquired first with participants looking at a white cross for 24
+minutes. Next, the same sequences were acquired with the participants
+viewing a nature documentary for an identical period of time.}
 
 \end{figure}%
 
@@ -445,26 +516,28 @@ DV26.0\_R03) with a Nova Medical 32 channel head coil. Participants
 changed into scrubs and were screened by an MRI technologist.
 Participants were given wax earplugs and a fiducial was placed on their
 left temple. Participants were provided with an audio headset and
-blanket once lying down on the scanner bed. Since visual stimuli were to
-be rear-projected, position and angle of mirror above patient eyes was
+blanket once lying down on the scanner bed. Since visual stimuli were
+rear-projected, position and angle of mirror above patient eyes was
 adjusted for optimal movie viewing.
 
 The following MRI scans were acquired. A 3D T1-weighted sagittal fast
 spoiled gradient echo (FSPGR) sequence; a 3D T2-weighted sagittal CUBE;
 a 2D echo-planar imaging (EPI) multi-echo gradient-echo fMRI sequence; a
-MEGA-PRESS sequence; and an sLASER sequence. Details are listed in
-Table~\ref{tbl-mriacq}.
+single-voxel MEGA-PRESS sequence with CHESS (CHEmical Shift Selective
+saturation) water suppression; and a single-voxel sLASER sequence with
+VAPOR (VAriable Power and Optimized Relaxations) water suppression.
+Details are listed in Table~\ref{tbl-mriacq}.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1844}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0838}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0670}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0670}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0894}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1229}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1564}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.2067}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0223}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1844}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0838}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0670}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0670}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0894}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1229}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1564}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2067}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0223}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Sequence
@@ -510,6 +583,15 @@ Time (mins)
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
+= repetition time; FOV = field of view; FSPGD = fast spoiled
+gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
+functional magnetic resonance imaging; sLASER = semi localization by
+adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
+point-resolved spectroscopy. *Note, the GE semi-LASER sequence averaged
+the 128 transients into groups of 4, each with 32 transients, before
+being saved as raw P-file.}\label{tbl-mriacq}\tabularnewline
 \endlastfoot
 3D T1-weighted FSPGR & 2.176 & 7.216 & 12 & 256 × 256 & 0.9 & 0.9375 ×
 0.9375 & - & 5 \\
@@ -517,22 +599,28 @@ Time (mins)
 0.9375 & - & 4 \\
 2D EPI Multi-Echo fMRI & 12.2, 35.352, 58.504 & 1,500 & 52 & 64 x 64 &
 3.6 & 3.5938 × 3.5938 & Acceleration factor = 6 & 12 \\
-sLASER & 35 & 2,000 & 90 & - & 28.0 & 28.0 x 28.0 & - & 4 \\
-MEGA-PRESS & 68 & 1,800 & 90 & - & 28.0 & 28.0 x 28.0 & - & 8 \\
-\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
-= repetition time; FOV = field of view; FSPGD = fast spoiled
-gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
-functional magnetic resonance imaging; sLASER = semi localization by
-adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
-point-resolved spectroscopy}\label{tbl-mriacq}\tabularnewline
+sLASER & 35 & 2,000 & 90 & - & 28.0 & 28.0 x 28.0 & Transients = 128*;
+Spectral width = 5,000 Hz; Data points = 4,096 & 4 \\
+MEGA-PRESS & 68 & 1,800 & 90 & - & 28.0 & 28.0 x 28.0 & Transients = 128
+ON, 128 OFF; Spectral width = 5,000 Hz; Data points = 4,096 & 8 \\
 \end{longtable}
 
 For both MRS sequences, the voxel size was set to 2.8 x 2.8 x 2.8
 cm\textsuperscript{3}. MRS voxels were rotated and placed in the
-occipital lobe, aligned along the calcarine fissure. Finally, blip-up
-and blip-down spin-echo versions of the fMRI sequence were acquired at
-the end to estimate the B0 non-uniformity map for fMRI phase distortion
-correction.
+occipital lobe, aligned along the calcarine fissure, using the high
+resolution T1w sequence as anatomical guide. Voxel placement was set
+once at the beginning and copied for the remaining MRS sequences.
+Glutamate was quantified from semi-LASER acquisitions as it offers the
+highest quality spectra for unedited metabolites\textsuperscript{78}.
+The GE semi-LASER sequence automatically aligned and averaged every 32
+transients, resulting in 4 averaged transients to process. GABA was
+measured using MEGA-PRESS, which applies frequency-selective editing
+pulses to isolate GABA from overlapping signals\textsuperscript{56}.
+This dual-sequence approach is standard in the field and reflects the
+differing spectral requirements of each metabolite\textsuperscript{79}.
+Finally, blip-up and blip-down spin-echo versions of the fMRI sequence
+were acquired at the end to estimate the B0 non-uniformity map for fMRI
+phase distortion correction.
 
 \subsection{Image Processing}\label{image-processing}
 
@@ -543,156 +631,143 @@ Github account page:
 Images were downloaded offline from the scanner in raw Digital Imaging
 and Communications in Medicine (DICOM) format. DICOM files were then
 converted to Neuroimaging Informatics Technology Initiative (NIfTI)
-using Chris Rorden's \texttt{dcm2niix}
-\citep{liFirstStepNeuroimaging2016} (v1.0.20211006) and then to Brain
-Imaging Data Structure (BIDS) \citep{gorgolewskiBrainImagingData2016}
-format using \texttt{dcm2bids} \citep{boreDcm2Bids2023} (v2.1.6).
+using Chris Rorden's \texttt{dcm2niix}\textsuperscript{80}
+(v1.0.20211006) and then to Brain Imaging Data Structure
+(BIDS)\textsuperscript{81} format using
+\texttt{dcm2bids}\textsuperscript{82} (v2.1.6). MRS files were
+downloaded as raw P files.
 
 \subsubsection{Structural Images}\label{structural-images}
 
 The T1w image was corrected for intensity non-uniformity with
-\texttt{N4BiasFieldCorrection} \citep{tustisonN4ITKImprovedN32010} and
-distributed using \texttt{ANTs}
-\citep{avantsSymmetricDiffeomorphicImage2008} (v2.3.335) to be used as a
+\texttt{N4BiasFieldCorrection}\textsuperscript{83}
+(\texttt{ANTs}\textsuperscript{84}; v2.3.335) to be used as a
 T1w-reference for the rest of the workflow. The T1w-reference was
-skull-stripped using a \texttt{Nipype}
-\citep{gorgolewskiNipypeFlexibleLightweight2016} implementation of
-\texttt{antsBrainExtraction.sh} from \texttt{ANTs}; \texttt{OASIS30ANTs}
-was used as a target template. \texttt{Fast}
-\citep{zhangSegmentationBrainMR2001} (\texttt{FSL}
-\citep{smithAdvancesFunctionalStructural2004} v.6.0.5.1:57b01774, RRID:
-SCR\_002823) was used for brain tissue segmentation into cerebrospinal
-fluid (CSF), white matter (WM), and gray matter (GM). Brain surfaces
-were reconstructed with \texttt{recon-all}
-\citep{daleCorticalSurfacebasedAnalysis1999} (\texttt{FreeSurfer}
-\citep{daleCorticalSurfacebasedAnalysis1999} 7.3.2, RRID: SCR\_001847).
-The previously-estimated brain mask was refined with \texttt{Mindboggle}
-\citep{kleinMindbogglingMorphometryHuman2017} (RRID:SCR\_002438) to
-reconcile ANTs-derived and FreeSurfer-derived segmentations of cortical
-GM. \texttt{AntsRegistration}
-\citep{avantsSymmetricDiffeomorphicImage2008} (\texttt{ANTs} 2.3.3) was
+skull-stripped using a \texttt{Nipype}\textsuperscript{85}
+implementation of \texttt{antsBrainExtraction.sh} from \texttt{ANTs};
+\texttt{OASIS30ANTs} was used as a target template.
+\texttt{Fast}\textsuperscript{86} (\texttt{FSL}\textsuperscript{87}
+v.6.0.5.1:57b01774, RRID: SCR\_002823) was used for brain tissue
+segmentation into cerebrospinal fluid (CSF), white matter (WM), and gray
+matter (GM). Brain surfaces were reconstructed with
+\texttt{recon-all}\textsuperscript{88}
+(\texttt{FreeSurfer}\textsuperscript{88} 7.3.2, RRID: SCR\_001847). The
+previously-estimated brain mask was refined with
+\texttt{Mindboggle}\textsuperscript{89} (RRID:SCR\_002438) to reconcile
+ANTs-derived and FreeSurfer-derived segmentations of cortical GM.
+\texttt{AntsRegistration}\textsuperscript{84} (\texttt{ANTs} 2.3.3) was
 used to perform volume-based spatial normalization to two standard
 spaces: MNI152NLin2009cAsym and MNI152NLin6Asym. Normalization used
 brain-extracted versions of both T1w reference and T1w template.
 
 \subsubsection{fMRI}\label{fmri}
 
-Using \texttt{fMRIPrep} \citep{estebanFMRIPrepRobustPreprocessing2019},
-the shortest echo of the BOLD run was used to generate a reference
-volume (both skull-stripped and skull-included). Head-motion parameters
-with respect to the BOLD reference (transformation matrices as well as
-six corresponding rotation and translation parameters) were estimated
-before spatiotemporal filtering using \texttt{mcflirt}
-\citep{jenkinsonImprovedOptimizationRobust2002} (\texttt{FSL}
+Using \texttt{fMRIPrep}\textsuperscript{90}, the shortest echo of the
+BOLD run was used to generate a reference volume (both skull-stripped
+and skull-included). Head-motion parameters with respect to the BOLD
+reference (transformation matrices as well as six corresponding rotation
+and translation parameters) were estimated before spatiotemporal
+filtering using \texttt{mcflirt}\textsuperscript{91} (\texttt{FSL}
 v6.0.5.1:57b01774). The fieldmap was aligned with rigid registration to
 the target EPI reference run. Field coefficients were mapped to the
 reference EPI using the transform. BOLD runs were slice-time corrected
 to 643 ms (half of slice acquisition range of 0-1290 ms) using
-\texttt{3dTshift} from \texttt{AFNI} \citep{coxAFNISoftwareAnalysis1996}
-(RRIS: SCR\_005927). To estimate T2* map from preprocessed EPI echoes, a
+\texttt{3dTshift} from \texttt{AFNI}\textsuperscript{92} (RRIS:
+SCR\_005927). To estimate T2* map from preprocessed EPI echoes, a
 voxel-wise fitting was performed by fitting the maximum number of echoes
 with reliable echoes in a particular voxel to a monoexponential signal
 decay model with nonlinear regression. Initial values were T2\emph{/S0
 estimates from a log-linear regression fit. This calculated T2} map was
 then used to optimally combine preprocessed BOLD across echoes using the
-method by Posse et al.~(1999)
-\citep{posseEnhancementBOLDcontrastSensitivity1999}. The generated BOLD
+method by Posse et al.~(1999)\textsuperscript{93}. The generated BOLD
 reference was then co-registered (6 degrees of freedom) to the T1w
-reference with \texttt{bbregister} (\texttt{FreeSurfer}
-\citep{daleCorticalSurfacebasedAnalysis1999}) using boundary-based
+reference with \texttt{bbregister}
+(\texttt{FreeSurfer}\textsuperscript{88}) using boundary-based
 registration. First, a reference volume and its skull-stripped
 equivalent were generated with \texttt{fMRIPrep}. Confounding time
 series were calculated from preprocessed BOLD: framewise displacement
-(FD), DVARS, and three region-wise global signals. \texttt{Tedana}
-\citep{dupreTEdependentAnalysisMultiecho2021} was then used to denoise
-the data by decomposing the multi-echo BOLD data via principal component
-analysis (PCA) and independent component analysis (ICA). The resulting
-components are automatically analyzed to determine whether they are
-TE-dependent or -independent. TE-dependent components were classified as
-BOLD, while TE-independent components were classified as non-BOLD and
-were discarded as part of data cleaning.
+(FD), DVARS, and three region-wise global signals.
+\texttt{Tedana}\textsuperscript{94} was then used to denoise the data by
+decomposing the multi-echo BOLD data via principal component analysis
+(PCA) and independent component analysis (ICA). The resulting components
+are automatically analyzed to determine whether they are TE-dependent or
+-independent. TE-dependent components were classified as BOLD, while
+TE-independent components were classified as non-BOLD and were discarded
+as part of data cleaning.
 
 Participants were excluded from further analysis if their mean FD was
 \textgreater{} 0.15 mm.
 
 \subsection{MRS}\label{mrs}
 
-sLASER data were processed and fit to a spectrum using \texttt{Osprey}
-\citep{oeltzschnerOspreyOpenSourceProcessing2020} (v2.4.0). Full width
-half-maximum (FWHM) of the single-Lorentzian fit of the
-N-acetylaspartate (NAA) peak were calculated for quality assurance
-purposes. The MRS voxel was co-registered to T1w reference image and
-segmented by \texttt{SPM12}
-\citep{fristonStatisticalParametricMapping2007} into CSF, GM, and WM.
-Metabolites were water-scaled as well as tissue- and
-relaxation-corrected by the Gasparovic et al.~(2006) method
-\citep{gasparovicUseTissueWater2006}. Glutamate is challenging to
-capture due to its signal overlaps with other metabolites
-\citep{pasantaFunctionalMRSStudies2023}. In particular, Glu shares a
-similar chemical structure with glutamine (Gln) which causes the
-spectral features of Glu to be contaminated with Gln
-\citep{ramadanGlutamateGlutamineReview2013}. As a result, we decided to
-report Glx values, which co-reports Glu and Gln to avoid errors in
-spectral assignment, especially since it is controversial whether Glu
-can reliably be separated from Gln at 3T
-\citep{zollnerComparisonDifferentLinearcombination2021, zollnerComparisonLinearCombination2022}.
+sLASER data were processed using \texttt{Osprey}\textsuperscript{95}
+(v2.9.5) and fit via the embedded \texttt{LCModel} (v6.3-1N)
+wrapper\textsuperscript{96}. Because of substantial overlap among Glu
+and Gln resonances\textsuperscript{97,98}, in order to avoid errors in
+spectral assignment --- especially since it is controversial whether Glu
+can reliably be separated from Gln at 3T\textsuperscript{99,100} --- we
+report Glx (Glu+ Glu) as the primary outcome measure. Individual Glu
+estimates are provided in Supplementary Materials
+Table~\ref{tbl-metabolites}, alongside all other quantified metabolites.
+Several Osprey functions were modified to accommodate scanner-specific
+features of the GE implementation, where individual transients had been
+averaged by the scanner into four sub-spectra prior to export. These
+changes primarily affected \texttt{GEload.m} to correct water-scaling
+inconsistencies. RF coil combination was performed using generalized
+least squares (GLS) weighting, following An et
+al.~(2013)\textsuperscript{101,102}.
 
-MEGA-PRESS data were processed and fit with \texttt{Osprey}, and were
-relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
-method \citep{harrisSpectralEditingMeasurementsGABA2015}. Due to the
-J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is
-macromolecule quantification
-\citep{harrisSpectralEditingMeasurementsGABA2015}. As a result, we
-report GABA+, a measure which co-reports GABA with macromolecules.
-Macromolecules (MM) are expected to account for approximately 45\% of
-the GABA+ signal \citep{harrisSpectralEditingMeasurementsGABA2015}.
-While a macromolecule-suppressed estimate of GABA seems ideal, a recent
-25-site and multi-vendor study conducted at 3T found that GABA+ showed
-much lower coefficient of variation than MM-suppressed GABA, meaning
-that GABA+ is more consistent across research sites and MRI vendors
-(i.e., Philips, GE, Siemens) \citep{mikkelsenBigGABAII2019}. Moreover,
-GABA+ shows greater reliability for both creatine-referenced and
-water-suppressed estimates
-\citep{mikkelsenBigGABAEdited2017, mikkelsenBigGABAII2019}.
-MM-suppressed GABA and GABA+ estimates are also correlated, albeit
-weakly- to moderately-so
-\citep{harrisSpectralEditingMeasurementsGABA2015, mikkelsenBigGABAII2019, mikkelsenBigGABAEdited2017}.
-Consequently, we report GABA+ to allow for easier comparison of our
-results to other studies as well as reproducibility.
+MEGA-PRESS data were processed with \texttt{Osprey}, and the difference
+of the ON and OFF sequences were fit the \texttt{LCModel} algorithm. Due
+to the J-editing sequence of MEGA-PRESS, a challenge of GABA
+quantification is macromolecule quantification\textsuperscript{103}. As
+a result, we report GABA+, a measure which co-reports GABA with
+macromolecules. Macromolecules (MM) are expected to account for
+approximately 45\% of the GABA+ signal\textsuperscript{103}. While a
+macromolecule-suppressed estimate of GABA seems ideal, a recent 25-site
+and multi-vendor study conducted at 3T found that GABA+ showed much
+lower coefficient of variation than MM-suppressed GABA, meaning that
+GABA+ is more consistent across research sites and MRI vendors (i.e.,
+Philips, GE, Siemens)\textsuperscript{104}. Moreover, GABA+ shows
+greater reliability for both creatine-referenced and water-suppressed
+estimates\textsuperscript{104,105}. MM-suppressed GABA and GABA+
+estimates are also correlated, albeit weakly- to
+moderately-so\textsuperscript{103--105}. Consequently, we report GABA+
+to allow for easier comparison of our results to other studies as well
+as reproducibility. All metabolite values, including GABA, are reported
+in the Supplementary Materials Table~\ref{tbl-megapressmetabs}.
 
-Basis sets were created using \texttt{MRSCloud}
-\citep{huiMRSCloudCloudbasedMRS2022, moriMRICloudDeliveringHighThroughput2016}.
-For sLASER, `localization' was set to `sLASER', `vendor' to `GE',
-`editing' to `UnEdited', and `TE' to 35. For MEGA-PRESS, `localization'
-was set to `PRESS', `editing' to `MEGA', `TE' to 68, `edit on' to `1.9',
-`edit off' to `7.5', and `pulse duration' to `14'. Metabolites included
-for both basis sets were: Asc, Asp, Cr, CrCH2, EA, GABA, GPC, GSH, Gln,
-Glu, Gly, H2O, Lac, NAA, NAAG, PCh, PCr, PE, Ser, Tau, mI, and sI.
-Excitatory-inhibitory ratio (E:I) was calculated as {[}Glx from sLASER
-in i.u.{]}/{[}GABA+ from MEGA-PRESS in i.u.{]}, a common practice to
-report E:I using MRS \citep{rideauxNoBalanceGlutamate+glutamine2021}.
+MRS voxels were co-registered to the T1w reference image and segmented
+by \texttt{SPM12}\textsuperscript{106} into CSF, GM, and WM. sLASER and
+MEGA-PRESS data were were water-scaled as well as tissue- and
+relaxation-corrected by the Gasparovic et al.~(2006)
+method\textsuperscript{107}. Concentrations are reported in millimoles.
+Full width half-maximum (FWHM) of the single-Lorentzian fit of the water
+peak, signal-to-noise (SNR) ratio of the creatine signal, frequency
+shift, and Cramer-Rao lower bounds (CRLB) were calculated for quality
+assurance purposes. \texttt{Osprey} basis sets were used for linear
+combination. Metabolites included for both basis sets were: Asc, Asp,
+Cr, CrCH2, EA, GABA, GPC, GSH, Gln, Glu, Gly, H2O, Lac, NAA, NAAG, PCh,
+PCr, PE, Ser, Tau, mI, and sI. Excitatory-inhibitory ratio (E:I) was
+calculated as {[}Glx from sLASER{]}/{[}GABA+ from MEGA-PRESS{]}, a
+common practice to report E:I using MRS\textsuperscript{108}.
 
 Participants were excluded from further analysis if any of their MRS
-scans had FWHM \textgreater{} 10. Originally we intended to calculate,
-report and analyze MRS as tissue-corrected quantitative values. However,
-the \texttt{Osprey} software was reporting Glx metabolite concentrations
-from the sLASER sequence that were an order of magnitude larger than
-reported values in the literature (i.e.~x10). Attempts to re-analyze the
-sLASER data using \texttt{fsl\_mrs}
-\citep{clarkeFSLMRSEndtoendSpectroscopy2021} resulted in similarly large
-concentrations. Despite several attempts, we were unable to locate the
-source of this error. Therefore we decided to analyze and report
-metabolite to creatine (tCr) ratios (i.e.~Glx / tCr and GABA+ / tCr),
-which agreed well with reported literature values
-\citep{boillatMetaboliteConcentrationChanges2020, dwyerSimultaneousMeasurementBOLD2021, martinez-maestroDynamicMetabolicChanges2019, mekleDetectionMetaboliteChanges2017, schallerNetIncreaseLactate2013}.
-In order to be confident in our results, however, we re-ran all MRS
-analyses, acquiring quantitative Glx and GABA+ values from the
-MEGA-PRESS sequence only using the software \texttt{Gannet}
-\citep{eddenGannetBatchprocessingTool2014} (v3.3.0). Values were
-relaxation-, tissue- and alpha-corrected using the Harris et al.~(2015)
-method \citep{harrisSpectralEditingMeasurementsGABA2015}. Results using
-Glx and GABA+ from the \texttt{Gannet} analysis of MEGA-PRESS only are
-reported in the Supplementary Material.
+scans had a water peak FWHM \textgreater{} 10\textsuperscript{109}.
+
+To quantify the inter-subject consistency across the MRS masks, we
+computed a consensus mask using majority voting and calculated the mean
+Dice coefficient between each individual mask and the consensus.
+
+\subsubsection{Re-analysis using Gannet}\label{re-analysis-using-gannet}
+
+Glutamate and GABA were acquired using different MRS sequences and in
+separate blocks during the same scan session. While acquisitions were
+closely timed and performed under similar conditions, we cannot fully
+exclude the possibility of session-related variability affecting E:I
+ratio estimates. Therefore, we re-ran our analysis using the Glx and
+GABA+ values from the MEGA-PRESS sequence alone using
+\texttt{Gannet}\textsuperscript{110} (v3.3.0).
 
 \subsection{Hurst Exponent
 Calculation}\label{hurst-exponent-calculation}
@@ -701,27 +776,26 @@ Hurst exponent was calculated from the power spectrum density (PSD) of
 the BOLD signal. A log-log plot was used, where log power was plotted
 against log frequency; generally, if a log-log plot results in a linear
 relationship, it is assumed that the mean slope of this line represents
-the power-law exponent \citep{zimmernWhyBrainCriticality2020}. A PSD
-shows the distribution of signal variance (`power') across frequencies.
-Complex signals are classified into two categories: fractional Gaussian
-noise (fGn) and fractional Brownian motion (fBm)
-\citep{duffPowerSpectralDensity2008, ekeFractalCharacterizationComplexity2002}.
-The former is a stationary signal (i.e., does not vary over time), while
-the latter is non-stationary with stationary increments
-\citep{ekeFractalCharacterizationComplexity2002}. Most physiological
-signals consist of fBm, but fMRI BOLD is typically conceptualized as fGn
-once motion-corrected; otherwise put, unprocessed BOLD signal is
-initially fBm which is converted to fGn with appropriate processing
-\citep{bullmoreWaveletsFunctionalMagnetic2004}. fBm and fGn require
-distinct H calculation methods
-\citep{ekeFractalCharacterizationComplexity2002}. PSD was estimated
-using Welch's method \citep{welchUseFastFourier1967} from the Python
-\texttt{Scipy.Signal} library \citep{virtanenSciPy10Fundamental2020}.
-Data were divided into 8 windows of 50\% overlap and averaged. The
+the power-law exponent\textsuperscript{5}. A PSD shows the distribution
+of signal variance (`power') across frequencies. Complex signals are
+classified into two categories: fractional Gaussian noise (fGn) and
+fractional Brownian motion (fBm)\textsuperscript{29,111}. The former is
+a stationary signal (i.e., does not vary over time), while the latter is
+non-stationary with stationary increments\textsuperscript{29}. Most
+physiological signals consist of fBm, but fMRI BOLD is typically
+conceptualized as fGn once motion-corrected; otherwise put, unprocessed
+BOLD signal is initially fBm which is converted to fGn with appropriate
+processing\textsuperscript{112}. fBm and fGn require distinct H
+calculation methods\textsuperscript{29}. PSD was estimated using Welch's
+method\textsuperscript{113} from the Python \texttt{Scipy.Signal}
+library\textsuperscript{114}. Data were divided into 8 windows of 50\%
+overlap and averaged within each window, as is
+standard\textsuperscript{115}. Welch's method was selected based on
+prior comparisons with other Hurst exponent algorithms, which found it
+to perform best across all evaluation criteria\textsuperscript{115}. The
 spectral index, \(\beta\), was calculated from the full frequency
 spectrum. The spectral index was then converted to H using the following
-equation
-\citep{ekeFractalCharacterizationComplexity2002, schaeferComparativeAnalysisSpectral2014}:
+equation\textsuperscript{29,116}:
 
 \[
 H = \frac{1 + \beta}{2}
@@ -730,26 +804,44 @@ H = \frac{1 + \beta}{2}
 Since it cannot be assumed that all fBm is removed from the signal, we
 employed the `extended Hurst' (H') concept in this study: for 0
 \textless{} H \textless{} 1, the signal is understood as fGn, while for
-1 \textless{} H \textless{} 2, the signal is understood to be fBm
-\citep{campbellFractalBasedAnalysisFMRI2022, hartmannRealtimeFractalSignal2013, ekePhysiologicalTimeSeries2000}.
-More generally, it is assumed that when 0.5 \textless{} H \textless{}
-1.5, the signal displays 1/f behaviour
-\citep{zimmernWhyBrainCriticality2020}. H was calculated for all voxels
-in the brain of each subject. A brain mask was then applied which
-included only GM and the region of the MRS voxel in the visual cortex. H
-was averaged across the brain mask area, using only non-zero voxels.
+1 \textless{} H \textless{} 2, the signal is understood to be
+fBm\textsuperscript{35,117,118}. More generally, it is assumed that when
+0.5 \textless{} H \textless{} 1.5, the signal displays 1/f
+behaviour\textsuperscript{5}. H was calculated for all voxels in the
+brain of each subject. A brain mask was then applied which included only
+GM and the region of the MRS voxel in the visual cortex. H was averaged
+across the brain mask area, using only non-zero voxels.
 
 \subsection{Statistics}\label{statistics}
 
-All statistical analyses were performed using \texttt{R}
-\citep{rcoreteamLanguageEnvironmentStatistical2021} and \texttt{RStudio}
-(v2023.06.0+421). Difference of means of H, Glx, and GABA+ between rest
-and movie conditions were calculated using paired Student's t-tests
-\citep{studentProbableErrorMean1908}. Correlations between H and Glx,
-GABA+ and E:I were calculated using Pearson's method
-\citep{freedmanStatistics2007}. Finally, a linear mixed-effect model was
-used to test for the correlation of H and E:I while controlling for
-possible confounding effects of MRS FWHM and fMRI motion (see Results).
+All statistical analyses were performed using
+\texttt{R}\textsuperscript{119} (v4.5.1) and \texttt{RStudio}.
+
+A linear mixed-effect model was used to test for the correlation of H
+and E:I, with H as the dependent variable, Glx/GABA+ as the primary
+predictor of interest, and Condition (rest vs.~movie) as a fixed effect.
+Mean FD, FWHM(sLASER), FWHM(MEGA-PRESS), Frequency Shift (sLASER),
+Frequency Shift (MEGA-PRESS) were included as covariates, and subjects
+were modeled as random effects:
+
+\[
+\begin{aligned}
+\mathrm{H} \sim\;& \frac{\mathrm{Glx}}{\mathrm{GABA\text{+}}} + \mathrm{Condition} +\mathrm{meanFD} \\ 
+& + \mathrm{FWHM_{sLASER}} + \mathrm{FWHM_{MEGA\text{-}PRESS}} \\
+& + \mathrm{FreqShift_{sLASER}} + \mathrm{FreqShift_{MEGA\text{-}PRESS}} \\
+& + (1 | \mathrm{Subject})
+\end{aligned}
+\]
+
+A post-hoc calculation of the power of the model was calculated using
+\texttt{powerSim} from the \texttt{simr} package using 1,000
+simulations.
+
+Exploratory post hoc analyses were then performed. Difference in the
+means of H, Glx, and GABA+ between rest and movie conditions were
+assessed using paired Student's t-tests\textsuperscript{120}.
+Correlations between H and Glx, GABA+ and E:I were calculated using
+Pearson's method\textsuperscript{121}.
 
 \section{Results}\label{results}
 
@@ -758,7 +850,7 @@ possible confounding effects of MRS FWHM and fMRI motion (see Results).
 Twenty-seven participants were originally recruited for the study.
 Twenty-six of these participants were successfully scanned, but one
 participant experienced claustrophobia and chose not to continue. Of the
-remaining 26 participants, 19 were included in the final analysis: two
+remaining 26 participants, 18 were included in the final analysis: three
 were removed due to low MRS quality (FWHM \textgreater{} 10) and five
 were removed due to low fMRI quality (mean FD \textgreater{} 0.15 mm).
 See Figure~\ref{fig-partflow}.
@@ -767,77 +859,71 @@ See Figure~\ref{fig-partflow}.
 
 \centering{
 
-\includegraphics{./images/ParticipantFlow.png}
+\pandocbounded{\includegraphics[keepaspectratio]{./images/ParticipantFlow.png}}
 
 }
 
 \caption{\label{fig-partflow}\textbf{Flowchart of participant,
 recruitment, scanning and exclusion}. The number of participants at each
 stage is indicated within each node. Participants were excluded based on
-MRS FWHM and fMRI Mean FD thresholds, resulting in 19 participants
+MRS FWHM and fMRI Mean FD thresholds, resulting in 18 participants
 included in the final analysis}
 
 \end{figure}%
 
-The final study sample included 9 males and 10 females between ages 21.3
-and 53.4, with a mean age and standard deviation of 30.1 ± 8.7 years.
+The final study sample included 8 males and 10 females between ages 21.3
+and 53.4, with a mean age and standard deviation of 29.6 ± 8.7 years.
 
-\subsection{Data Quality}\label{data-quality}
-
-After exclusion, FWHM (mean ± sd) at rest in sLASER and MEGA-PRESS were
-8.52 ± 0.7 and 7.02 ± 0.7, respectively. During movie watching, FWHM in
-sLASER and MEGA-PRESS were 8.37 ± 0.65 and 6.98 ± 0.86.
-
-Glx and GABA+ were tested for associations with FWHM values during rest
-and movie watching. Glx during rest was found to be negatively
-correlated with FWHM (r = -0.53, p = 0.02). No other correlations were
-significant.
+\subsection{Data Summary}\label{data-summary}
 
 An average of all MRS voxel placements can be seen in
 Figure~\ref{fig-mrsquality} A, and a sample of the \texttt{Osprey}
 sLASER and MEGA-PRESS spectrum fits at rest can be seen in
-Figure~\ref{fig-mrsquality} B and C, respectively.
+Figure~\ref{fig-mrsquality} B and C, respectively. The mean
+consensus-based inter-subject Dice score for MRS voxel placements was
+0.77 \(\pm\) 0.14 (range: {[}0.35, 0.95{]}).
 
 \phantomsection\label{cell-fig-mrsquality}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-mrsquality-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-mrsquality-1.pdf}}
 
 }
 
 \caption{\label{fig-mrsquality}\textbf{MRS data quality} A) Average MRS
-location. Overlay in red of the average voxel location across all
-nineteen participants, from 0 (white) to 1 (dark red). Darker red
-represents voxel locations shared by all participants, while white
-represents voxel locations unique to participants. MRS voxels were
-registered to MNI space and averaged. Underlay is T1w MNI152 at 0.5 mm
-resolution. B) Sample Osprey sLASER Spectrum. Yellow spectrum indicates
+location. Colored overlay of the average voxel location across all
+nineteen participants, from 0 (black) to 1 (white). Brighter yellow
+represents voxel locations shared by all participants, while darker
+purple represents voxel locations unique to participants. MRS voxels
+were registered to MNI space and averaged. Underlay is T1w MNI152 at 0.5
+mm resolution. B) Sample Osprey sLASER Spectrum. Red spectrum indicates
 overall model fit. Model fits for individual metabolites are shown in
 blue below overall fit. C) Sample Osprey MEGA-PRESS Spectrum. Yellow
 spectrum indicates overall model fit. Model fits for individual
-metabolites are shown in blue below overall fit. D) Correlation plots of
-Glx / tCr vs.~FWHM for rest (green) and movie (red). E) Correlation
-plots of GABA+ / tCr vs.~FWHM for rest (green) and movie (red).}
+metabolites are shown in blue below overall fit.}
 
 \end{figure}%
+
+Average water FWHM, creatine SNR, and frequency shift are reported in
+Supplementary Material Table~\ref{tbl-quality}.
+
+Average voxel rotation along the x-axis, along with average tissue
+fractions are reported in Supplementary Material
+Table~\ref{tbl-singlevoxel}.
 
 A sample of the combined grey-matter and MRS voxel mask used to average
 H values, along with a sample Hurst exponent map, and sample fits for H
 calculation during rest can be found in Figure~\ref{fig-hurstsamp} A, B,
 and C, respectively.
 
-Mean FD was not correlated with H during rest (r = -0.33, p = 0.16 but
-was moderately negatively correlated with H during movie watching (r =
--0.50, p = 0.03; see Figure~\ref{fig-hurstsamp} D).
-
 \phantomsection\label{cell-fig-hurstsamp}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-hurstsamp-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-hurstsamp-1.pdf}}
 
 }
 
@@ -852,19 +938,84 @@ white matter (light red), and cerebrospinal fluid (white)). C) Sample
 PSD spectrum. All participants' PSD spectrums during rest are plotted
 using light grey lines. Mean PSD is plotted in solid red Mean linear
 regression line is plotted in dashed blue. H for each participant was
-calculated from the slope of their mean linear regression line. D)
-Correlation plots of H vs.~mean FD for rest (green) and movie (orange).}
+calculated from the slope of their mean linear regression line.}
 
 \end{figure}%
 
-\subsection{H and E:I}\label{h-and-ei}
+Figure~\ref{fig-averagehurst} shows the average Hurst maps during rest
+and movie watching.
 
-Mean ± sd of metabolites, E:I, and H during rest and movie are reported
-in Table~\ref{tbl-results}. Boxplots between rest and movie can be seen
-in Figure~\ref{fig-results}. Neither Glx nor GABA+ were different
-between movie and rest conditions. E:I ratio did not change between
-conditions either. H was found to be greater during movie watching than
-rest.
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{./images/RestMovieHurstAverage.png}
+
+}
+
+\caption{\label{fig-averagehurst}\textbf{Average Hurst maps for rest and
+movie conditions} Group averaged maps of the Hurst exponent computed to
+visualize whole-brain patterns across sessions: rest (top) and movie
+watching (bottom.)}
+
+\end{figure}%
+
+\subsection{Linear-mixed effects model: H and
+E:I}\label{linear-mixed-effects-model-h-and-ei}
+
+To examine the relationship between H and E:I, we ran a linear
+mixed-effects model. The model's total explanatory power was substantial
+(conditional r\textsuperscript{2} = 0.79), with fixed effects (marginal
+r\textsuperscript{2}) equal to 0.22. The model's intercept,
+corresponding to EI = 0, Condition = Movie, FWHM\textsubscript{sLASER} =
+0, FWHM\textsubscript{MEGA-PRESS} = 0, FreqShift\textsubscript{sLASER} =
+0, FreqShift\textsubscript{MEGA-PRESS} = 0, and meanFD = 0, was 1.3
+(95\% CI {[}0.66, 1.95{]}, t(26) = 3.95, p \textless{} 0.01).
+
+Among the fixed effects, only the effect of Condition {[}Rest{]} (beta =
+-0.07, 95\% CI {[}-0.11, -0.02{]}, t(26) = -2.84, p = 0.02); and
+Frequency Shift (sLASER) (beta = 0.03, 95\% CI {[}0.01, 0.06{]}, t(26) =
+2.31, p = 0.05) were statistically significant. All other predictors ---
+including E:I (beta = 0.07, 95\% CI {[}-0.05, 0.19{]}, t(26) = 1.12, p =
+0.28); along with FWHM\textsubscript{MEGA-PRESS} (beta = 0.01, 95\% CI
+{[}-0.05, 0.07{]}, t(26) = 0.28, p = 0.78); FWHM\textsubscript{sLASER}
+(beta = -0.02, 95\% CI {[}-0.09, 0.05{]}, t(26) = -0.58, p = 0.57);
+FreqShift\textsubscript{MEGA-PRESS} (beta = 0.03, 95\% CI {[}-0.01,
+0.06{]}, t(26) = 1.56, p = 0.14); FreqShift\textsubscript{sLASER} (beta
+= 0.03, 95\% CI {[}0.01, 0.06{]}, t(26) = 2.31, p = 0.05); and meanFD
+(beta = -0.59, 95\% CI {[}-2.14, 0.96{]}, t(26) = -0.75, p = 0.46) ---
+were not statistically significant.
+
+\subsection{Post-hoc analyses}\label{post-hoc-analyses}
+
+Diagnostics of our linear-mixed effects model (check for normality) can
+be found in the Supplementary Materials (Figure~\ref{fig-lmemdiag})
+
+To calculate the post-hoc power of our model, we required an effect
+size. While \emph{in silico} and animal studies indicate that changes in
+E:I ratio influence the Hurst exponent\textsuperscript{11}, these models
+do not provide standardized effect sizes, and translation to human
+neuroimaging remains uncertain. Therefore, we used several effect sizes,
+and report here the power of each. The effect sizes we used to calculate
+power were: the value calculated from our model (beta = 0.07); and beta
+values two and three times that size: 0.14 and 0.21. As a reminder, beta
+represents the increase of H by that amount per every increase of E:I by
+1. The power for these effect sizes were 25\%, 62.7\%, and 92.9\%,
+respectively.
+
+Furthermore, as our spectroscopy quality metrics could be highly
+correlated with each other (e.g., FWHM measures from the two sequences,
+or frequency shifts), we checked variance inflation factors (VIFs) to
+ensure all values were \textless{} 5 (generally acceptable). VIFs were:
+EI = 1.24, Condition = 1.55, FWHMsLASER = 1.76, FWHMMEGA = 1.45,
+FreqShiftsLASER = 1.15, FreqShiftMEGA = 1.48, and MeanFD = 1.28.
+
+Mean ± sd of the main metabolites, their Cramer-Rao lower bounds, E:I,
+and H during rest and movie are reported in Table~\ref{tbl-results}.
+Boxplots between rest and movie can be seen in Figure~\ref{fig-results}.
+Neither Glx nor GABA+ were different between movie and rest conditions.
+E:I ratio did not change between conditions either. H was found to be
+greater during movie watching than rest.
 
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
@@ -876,13 +1027,14 @@ rest.
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of main measures} Glx and GABA+ values are in
+millimoles.}\label{tbl-results}\tabularnewline
 \endlastfoot
-\textbf{Glx / tCr} & 1.19 ± 0.11 & 1.14 ± 0.11 & 0.09 \\
-\textbf{GABA+ / tCr} & 0.45 ± 0.06 & 0.44 ± 0.06 & 0.50 \\
-\textbf{E:I Ratio} & 2.68 ± 0.49 & 2.65 ± 0.45 & 0.82 \\
+\textbf{Glx} & 9.84 ± 1.06 & 10.04 ± 0.79 & 0.26 \\
+\textbf{GABA+} & 5.48 ± 0.77 & 5.23 ± 0.71 & 0.17 \\
+\textbf{E:I Ratio} & 1.82 ± 0.25 & 1.94 ± 0.25 & 0.08 \\
 \textbf{H} & 0.98 ± 0.98 & 1.05 ± 1.05 & \textless{} 0.01 \\
-\caption{\textbf{Summary of main
-results}}\label{tbl-results}\tabularnewline
 \end{longtable}
 
 \phantomsection\label{cell-fig-results}
@@ -890,13 +1042,13 @@ results}}\label{tbl-results}\tabularnewline
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-results-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-results-1.pdf}}
 
 }
 
 \caption{\label{fig-results}\textbf{Paired comparison of metabolite
-values during rest (green) and movie (orange) conditions.} A) Glx / tCr;
-B) GABA+ / tCr; and C) E:I. Paired dots represent the same participant
+values during rest (green) and movie (orange) conditions.} A) Glx (mM);
+B) GABA+ (mM); and C) E:I. Paired dots represent the same participant
 across conditions. Mean difference with 95\% confidence intervals, and
 as Cohen's D are reported at the top of each plot.}
 
@@ -910,143 +1062,162 @@ movie (Figure~\ref{fig-correlations}).
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-correlations-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-correlations-1.pdf}}
 
 }
 
 \caption{\label{fig-correlations}\textbf{Scatter plots of H
-vs.~metabolites.} A) Glx / tCr; B) GABA+ / tCr; and C) E:I. Rest is in
+vs.~metabolites.} A) Glx (mM); B) GABA+ (mM); and C) E:I. Rest is in
 green, while movie is in orange. p-values are reported at the top of
 each plot.}
 
 \end{figure}%
 
-To ensure that mean FD and FWHM were not confounding our results, we
-also ran a linear mixed-effects model with H as dependent variable,
-Glx/GABA+ as primary predictor of interest, and mean FD, FWHM(Glx), and
-FWHM(GABA+) as covariates, Condition (rest vs.~movie) as fixed effects,
-and subjects as random effects:
+\subsubsection{Data quality}\label{data-quality}
 
-\[
-\mathrm{H} \sim \frac{\mathrm{Glx}}{\mathrm{GABA+}} + \mathrm{meanFD} + \mathrm{FWHM_{Glx}} + \mathrm{FWHM_{GABA+}} + \mathrm{Condition} + (1 | \mathrm{Subject})
-\]
+Mean FD was not correlated with H during rest (r = -0.33, p = 0.18) but
+was moderately negatively correlated with H during movie watching (r =
+-0.49, p = 0.04; see Supplementary Materials
+Figure~\ref{fig-dataquality} A).
 
-The model's total explanatory power was substantial (conditional
-r\textsuperscript{2} = 0.69), with fixed effects alone (marginal
-r\textsuperscript{2}) equal to 0.19. The model's intercept,
-corresponding to EI = 0, Condition = Movie, FWHMs\_Glx\_ = 0,
-FWHM\_GABA+\_ = 0 and meanFD = 0, was 0.98 (95\% CI {[}0.41, 1.56{]},
-t(30) = 3.34, p = 0.002). Within this model, only the effect of
-Condition {[}Rest{]} was statistically significant (beta = -0.09, 95\%
-CI {[}-0.13, -0.04{]}, t(30) = -3.99, p \textless{} 0.01).
+Glx and GABA+ were tested for associations with FWHM values during rest
+and movie watching. No significant correlations were found (see
+Supplementary Materials Figure~\ref{fig-dataquality} B and C). Glx and
+GABA+ were tested for associations with frequency shift during rest and
+movie watching. No significant correlations were found (see
+Supplementary Materials Figure~\ref{fig-dataquality} D and E).
 
-\subsection{Re-analysis using Gannet}\label{re-analysis-using-gannet}
+Furthermore, a group averaged plot of the frequency shift between rest
+and movie can be found in the Supplementary Materials
+(Figure~\ref{fig-frequencyshift}).
 
-Re-running our analysis using Glx and GABA+ values from \texttt{Gannet}
-did not result in any significant changes from the results reported
-above. We did, however, obtain quantitative Glx values much closer to
-what has been reported in the literature. We have included these results
-in the Supplementary Material.
+\subsection{Re-analysis using Gannet}\label{re-analysis-using-gannet-1}
+
+The re-analysis of our results using only the MEGA-PRESS sequence and
+\texttt{Gannet} did not result in any significant changes from the
+results reported above. We have included these results in the
+Supplementary Material.
 
 \section{Discussion}\label{discussion}
 
-We report here the first \emph{in vivo} human study of the E:I-H
-relationship. An increase in H was observed during movie-watching as
-compared to rest, indicating stronger long-range temporal dependencies
-in BOLD activity during visual stimulation. No difference was found in
-Glx, GABA+, nor Glx/GABA+ between rest and movie-watching. Furthermore,
-no association was found between H and Glx, GABA+, nor Glx/GABA+.
-Attempting to control for mean FD and FWHM using a linear mixed-effects
-model did not alter these results.
+This study provides the first \emph{in vivo} human investigation of the
+relationship between H and the E:I ratio, measured using fMRI and
+MRS-derived glutamate and GABA levels, respectively. No association was
+observed between H and E:I, suggesting that these indices may reflect
+distinct dimensions of neural dynamics. During movie-watching, H
+increased relative to rest, consistent with stronger long-range temporal
+dependencies in BOLD activity during visual stimulation. In contrast,
+Glx, GABA+, and their ratio (E:I) remained stable across conditions.
+These results indicate that functional signal complexity, as indexed by
+H, is sensitive to sensory engagement but does not appear to covary with
+MRS-derived estimates of excitatory--inhibitory balance under the
+current experimental conditions.
 
-Our finding that H increases during movie-watching compared to rest is
-consistent with a previous study from our lab
-\citep{campbellFractalBasedAnalysisFMRI2022}, which reported increased H
-in the visual network (from Yeo's seven resting-state networks
-\citep{thomasyeoOrganizationHumanCerebral2011}) during movie-watching
-using data from the Human Connectome Project
-\citep{vanessenHumanConnectomeProject2012}. While this increase in H is
-consistent with our prior findings, other studies have reported
-decreases in H during active tasks
-\citep{heScaleFreePropertiesFunctional2011, churchillSuppressionScalefreeFMRI2016, ciuciuInterplayFunctionalConnectivity2014, barnesEndogenousHumanBrain2009}.
-Our results suggest that the naturalistic, passive nature of
-movie-watching elicits a different effect on H compared to more active
-tasks. This is consistent with literature indicating distinct neural
-responses and BOLD signal characteristics between conventional active
-visual tasks and naturalistic passive visual stimuli
-\citep{campbellFractalBasedAnalysisFMRI2022, hassonReliabilityCorticalActivity2010}.
-Richer scaling properties (higher H) during movie-watching may support
-the continuous perception of visual stimuli
-\citep{campbellFractalBasedAnalysisFMRI2022}.
+An increase in H during movie-watching relative to rest aligns with
+previous work from our lab\textsuperscript{35}, which reported increased
+H in the visual network (as defined by Yeo's seven resting-state
+networks\textsuperscript{122}) during movie-watching using data from the
+Human Connectome Project\textsuperscript{123}. While this increase in H
+is consistent with our prior findings, other studies have reported
+decreases in H during active tasks\textsuperscript{33,34,36,124}. The
+current results therefore suggest that the naturalistic, passive nature
+of movie-watching elicits a different effect on H compared to more
+active tasks. This interpretation is consistent with evidence indicating
+distinct neural responses and BOLD signal characteristics between
+conventional active visual tasks and naturalistic passive visual
+stimuli\textsuperscript{35,125}. Higher H during movie-watching may
+reflect richer scaling properties that support the continuous
+integration of visual stimuli\textsuperscript{35}.
 
-We found no changes in either Glx or GABA+ between conditions. Given
-that no difference was observed for either metabolite, it is
-unsurprising that E:I did not change either. This was unfortunate as our
-study was designed to include two conditions in order to elicit changes
-in H, Glx, and GABA+, aiming to confirm that our experiment induced
-measurable alterations in these metrics. Establishing such changes would
-have provided a foundation for directly examining the correlation
-between H and the E/I ratio. However, because Glx and GABA+ did not show
-significant changes between conditions, our main results are likely to
-be met with doubt. Without evidence of condition-induced variations in
-Glx and GABA+, it remains unclear whether the absence of correlation
-reflects a true lack of association or insufficient sensitivity of our
-measurement approach to detect changes in these metabolites.
+No significant changes were observed in either Glx or GABA+ between
+conditions. Consequently, the E:I ratio remained stable. The
+experimental design included both resting and movie-watching conditions
+to induce measurable differences in H, Glx, and GABA+, providing a wider
+range of values to test for correlations between these metrics. However,
+the absence of condition-related differences in Glx and GABA+
+complicates interpretation of the null findings. Establishing such
+changes would have provided a foundation for directly examining the
+correlation between H and the E:I ratio. Without clear evidence that the
+paradigm elicited detectable neurochemical variation, it remains
+uncertain whether the lack of association between H and E:I reflects a
+genuine independence of these measures or limited sensitivity of the MRS
+protocol to capture subtle metabolic changes.
 
-A recent meta-analysis of Glu/Glx studies
-\citep{pasantaFunctionalMRSStudies2023} reported a minimal task-induced
-increase in Glu/Glx within the visual cortex; however, this finding was
-not linked to any visual stimuli task, but rather to pain, learning, and
-motor tasks. Additionally, many of the studies included in the review
-were conducted at 7T, offering increased sensitivity for detecting
-changes in Glu/Glx. Nonetheless, several studies have demonstrated
-changes in Glu/Glx at 3T (e.g.,
-\citep{gutzeitDifferentialNMRSpectroscopy2013, cleveAssessmentIntraInterregional2017, apsvalkaEventrelatedDynamicsGlutamate2015}).
-Regarding our GABA+ findings, the same meta-analysis
-\citep{pasantaFunctionalMRSStudies2023} reported no task-dependent
-change in GABA within the visual cortex. This may be attributable to
-technical difficulties associated with capturing GABA levels using MRS
-at 3T due to its low concentration and signal overlap with more abundant
-metabolites \citep{pasantaFunctionalMRSStudies2023}. Nevertheless, it is
-worth noting that several studies have successfully reported changes in
-GABA at 3T using different paradigms and/or regions of interest (e.g.,
-\citep{floyer-leaRapidModulationGABA2006, sampaio-baptistaChangesFunctionalConnectivity2015, staggRoleGABAHuman2011}).
+A recent meta-analysis of studies measuring Glu and
+Glx\textsuperscript{97} reported a minimal task-induced increase in Glu
+and Glx within the visual cortex, primarily in the context of pain,
+learning, or motor paradigms rather than visual stimulation.
+Additionally, many of the studies included were conducted at 7T,
+offering increased sensitivity for detecting changes in Glu and Glx.
+Nonetheless, several studies have demonstrated changes in Glu and Glx at
+3T\textsuperscript{126--128}. Regarding our GABA+ findings, the same
+meta-analysis\textsuperscript{97} reported no task-dependent change in
+GABA within the visual cortex. This may be attributable to technical
+difficulties associated with capturing GABA levels using MRS at 3T due
+to its low concentration and spectral overlap with more abundant
+metabolites\textsuperscript{97}. Although, several studies have
+successfully reported changes in GABA at 3T using different paradigms
+and/or regions of interest\textsuperscript{129--131}.
 
-Another reason we may not have found changes in Glx or GABA+ may be due
-to use of a block-design: collecting 24 minutes of rest data, then
-collecting 24 minutes of movie-watching data. While a block design has
-the advantage of a more robust metabolite quantification due to greater
-signal averaging, brain homeostatis during these long blocks may lead to
-an erasure of any real metabolic changes
-\citep{mangiaMetabolicPathwaysActivitydependent2012, apsvalkaEventrelatedDynamicsGlutamate2015}.
-Indeed, Pasanta et al.~(2023) \citet{pasantaFunctionalMRSStudies2023}
-found the magnitude of effect sizes were observed to be smaller for
-block designs than event-related designs.
+Another reason changes in Glx or GABA+ may not have been observed could
+be due to our use of a block-design: collecting 24 minutes of rest data,
+then collecting 24 minutes of movie-watching data. While a block design
+has the advantage of a more robust metabolite quantification due to
+greater signal averaging, brain homeostatis during these long blocks may
+lead to an erasure of any real metabolic
+changes\textsuperscript{128,132}. Indeed, Pasanta et
+al.~(2023)\textsuperscript{97} and Archibald et
+al.~(2020)\textsuperscript{133} reported larger metabolite changes
+during event-related paradigms compared to block designs, underscoring
+how task timing and structure can strongly influence the detectability
+of metabolic modulation with MRS.
 
-However, it may be possible that our results do support the idea that H
-and E:I are not directly linked; at least not in a simple manner. This
-is would perhaps not be surprising given the large disparity of findings
-in the literature, especially with regard to the directionality and
-linearity of the proposed E:I-Hurst relationship
-\citep{liangExcitationInhibitionBalance2024, poilCriticalStateDynamicsAvalanches2012, lombardiBalanceExcitationInhibition2017, baumgartenCriticalExcitationinhibitionBalance2019, bruiningMeasurementExcitationinhibitionRatio2020, trakoshisIntrinsicExcitationinhibitionImbalance, gaoInferringSynapticExcitation2017}
-(see Table~\ref{tbl-lit}). The heterogeneity across these E:I-Hurst
-studies highlights the challenges of studying this phenomenon as well as
-the complexity of any potential relationship between these two metrics.
-It may be that, given the mixed-findings of these studies in combination
-with our data, an E:I-Hurst relationship --- should it exist --- may
-depend in part on how the data is collected. This could include
-variables such as the experimental setup, sampling methods, or data
-analysis techniques used. Further research is needed to elucidate the
-true nature of any potential E:I-Hurst relationship and better
-understand the complexities involved in studying this phenomenon.
+The concept of E:I balance encompasses multiple biological scales and
+mechanisms beyond neurotransmitter concentrations, including the
+relative densities of excitatory and inhibitory neurons, synaptic
+properties, interneuron subtype interactions, and electrophysiological
+signatures such as 1/f spectral scaling. While the glutamate-to-GABA
+ratio measured via MRS provides a noninvasive --- albeit indirect ---
+estimate of neurochemical E:I balance in humans, it remains a
+simplification of the underlying complexity. MRS derived values reflect
+total glutamate and GABA metabolite pools, predominantly intracellular
+and metabolically active, rather than direct synaptic neurotransmitter
+release underlying real-time excitation and inhibition. Moreover,
+conventional MRS measures such as Glx and GABA+ include contributions
+from glutamine and macromolecules, respectively, limiting their chemical
+specificity. Therefore, while these metabolites serve as useful proxies
+related to excitatory and inhibitory neural systems, caution is
+warranted when interpreting them as direct indices of neurotransmission.
+Nonetheless, these metabolic pools provide valuable insight into the
+overall balance of excitation and inhibition within the brain's
+microenvironment and remain widely used in human \emph{in vivo} studies
+of neural function and dysfunction. Finally, few studies have directly
+quantified both glutamate and GABA in the same individuals, highlighting
+the novelty and importance of this approach. Our study acknowledges
+these limitations and aims to provide a step toward linking
+neurochemical measures with large-scale brain dynamics related to
+criticality.
+
+Alternatively, the present findings may in fact indicate that H and E:I
+are not directly coupled, or that their relationship is more complex
+than a simple linear association. This would perhaps not be surprising
+given the large disparity of findings in the literature, especially with
+regard to the directionality and linearity of the proposed E:I-Hurst
+relationship\textsuperscript{6--12} (see Table~\ref{tbl-lit}). The
+heterogeneity across these studies underscores the challenges of
+studying this phenomenon and suggests that any potential E:I-Hurst
+relationship may depend on experimental context, data acquisition
+methods, or analysis strategies. Further work is needed to clarify the
+true nature of this relationship and the conditions under which it might
+emerge.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1585}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1585}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1585}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1585}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Citation
@@ -1080,72 +1251,139 @@ E:I-Hurst Relationship
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
-\endlastfoot
-Poil et al.~(2012)\citet{poilCriticalStateDynamicsAvalanches2012} &
-Computational with in-house simulated model & Neuronal avalanche size &
-Detrendend fluctuation analysis (DFA) & Structural: number of E-to-I
-neurons & Inverse U \\
-Bruining et
-al.~(2020)\citet{bruiningMeasurementExcitationinhibitionRatio2020} &
-Computational with model by Poil et al.~(2012); modified in-house &
-Neuronal oscillation amplitude & DFA & Structural: number of E-to-I
-synapses & Inverse U \\
-Gao et al.~(2017)\citet{gaoInferringSynapticExcitation2017} &
-Computational; in vivo in rats and macaques & Local field potential
-(LFP) & PSD & Estimated from LFP & Positive linear \\
-Lombardi et al.~(2017)\citet{lombardiBalanceExcitationInhibition2017} &
-Computational with in-house model & Neuronal avalanche size & PSD &
-Structural: number of E-to-I neurons & Negative linear \\
-Trakoshis et
-al.~(2020)\citet{trakoshisIntrinsicExcitationinhibitionImbalance} &
-Computational with simulated data; in vivo in mice & fMRI BOLD signal &
-Wavelet-based maximum likelihood method & E-to-I synaptic conductance &
-Positive linear \\
+\tabularnewline
 \caption{\textbf{Summary of methods for existing E:I-Hurst
 studies}}\label{tbl-lit}\tabularnewline
+\endlastfoot
+Poil et al.~(2012)\textsuperscript{7} & Computational with in-house
+simulated model & Neuronal avalanche size & Detrendend fluctuation
+analysis (DFA) & Structural: number of E-to-I neurons & Inverse U \\
+Bruining et al.~(2020)\textsuperscript{10} & Computational with model by
+Poil et al.~(2012); modified in-house & Neuronal oscillation amplitude &
+DFA & Structural: number of E-to-I synapses & Inverse U \\
+Gao et al.~(2017)\textsuperscript{12} & Computational; in vivo in rats
+and macaques & Local field potential (LFP) & PSD & Estimated from LFP &
+Positive linear \\
+Lombardi et al.~(2017)\textsuperscript{8} & Computational with in-house
+model & Neuronal avalanche size & PSD & Structural: number of E-to-I
+neurons & Negative linear \\
+Trakoshis et al.~(2020)\textsuperscript{11} & Computational with
+simulated data; in vivo in mice & fMRI BOLD signal & Wavelet-based
+maximum likelihood method & E-to-I synaptic conductance & Positive
+linear \\
 \end{longtable}
+
+Our findings specifically show an absence of a robust association
+between the Hurst exponent and MRS-derived E:I ratio, challenging the
+assumption that these measures directly reflect a shared underlying
+mechanism, such as the brain's distance from criticality. One
+possibility is that while both H and E:I may independently vary with
+neural excitability, their relationship is nonlinear or not detectable
+at the temporal and spatial scales of fMRI and MRS. Additionally, the
+E:I balance estimated via glutamate and GABA concentrations may reflect
+metabolic rather than synaptic activity, limiting its correspondence
+with network dynamics captured by BOLD signal autocorrelation. These
+results have important implications for studies that use H as a proxy
+for E:I, particularly in neurodevelopmental or neurodegenerative
+contexts, and suggest caution in interpreting H as a stand-in for
+neurochemical balance without direct validation. Future research should
+investigate whether the relationship emerges under task-driven
+conditions, in specific brain regions, or in populations with pronounced
+E:I dysregulation.
 
 Finally, it is also possible that while an E:I-Hurst relationship
 exists, it is not observed within the visual cortex. This theory seems
 plausible given that MRS studies of disrupted E:I, mostly conducted
-within the context of adult autism spectrum disorder, have found changes
-in E:I within other brain regions such as the anterior cingulate cortex,
-frontal lobe, or temporal lobe \citep{ajramContribution1HMagnetic2019}.
-Moreover, findings with reference to changes in excitatory or inhibitory
-neurotransmitters within the visual cortex tend to be difficult to
-capture, perhaps indicating that E:I shows less changes in this region
-\citep{pasantaFunctionalMRSStudies2023}. However, this would suggest
-that the E:I-H relationship would be region dependent, and therefore not
-a generalizable theory as it is often portrayed.
+within the context of autistic adults, have found changes in E:I within
+other brain regions such as the anterior cingulate cortex, frontal lobe,
+or temporal lobe\textsuperscript{53}. Moreover, findings with reference
+to changes in excitatory or inhibitory neurotransmitters within the
+visual cortex tend to be difficult to capture, perhaps indicating that
+E:I shows less changes in this region\textsuperscript{97}. However, this
+would suggest that the E:I-H relationship would be region dependent, and
+therefore not a global theory as it is often portrayed.
+
+As both H and E:I have been known to change with age, we did not seek to
+limit our sample to any specific age range. Furthermore, other
+physiological details --- such as caffeine, nicotine, phase of the
+menstrual cycle, gender, and medication use --- were not collected, as
+the core E:I-Hurst theory posits a global relationship that should hold
+irrespective of specific brain states or transient physiological
+factors. Additionally, our within-subjects design strengthens this
+approach: our core analyses assessing changes between resting state and
+movie-watching were paired, with each participant serving as their own
+control. This reduces the influence of inter-individual variability,
+including age-related and other brain-state effects.
 
 \subsection{Limitations and Strengths}\label{limitations-and-strengths}
 
 Beyond the limitations already mentioned (field strength, visual cortex,
 passive task, block design), another limitation was our small sample
 size. As this was a pilot study, 26 participants were initially scanned.
-Once individuals were excluded for poor MRI quality, only 19
+Once individuals were excluded for poor MRI quality, only 18
 participants' data were analyzed. With this small sample size, it is
 difficult to make conclusions about a concept as complex as the
-E:I-Hurst relationship. We hope that by publishing our work, future
-researchers can use our reported effect sizes to calculate potential
-sample sizes. We would also like to list some of the strengths of our
-study, which include: using sLASER (as opposed to PRESS), which has been
-shown to have enhanced detection of complex multiplets such as Glu
-\citep{wilsonMethodologicalConsensusClinical2019}; using the J-editing
-sequence MEGA-PRESS for improved GABA detection
-\citep{peekComprehensiveGuideMEGAPRESS2023}; using a large MRS voxel
-size (\textasciitilde22 ml) as per consensus recommendations
-\citep{peekBrainGABAGlutamate2020, choiSpectralEditing1H2021, linMinimumReportingStandards2021};
-measuring H within the same region as our single-voxel MRS; and using
-multi-echo fMRI for improved motion artifact regression
-\citep{kunduMultiechoFMRIReview2017}.
+E:I-Hurst relationship.
+
+It is also important to note that MRS measures reflect total glutamate
+and GABA metabolite pools, predominantly intracellular and involved in
+metabolic processes, rather than direct synaptic neurotransmitter
+release. Furthermore, commonly used measures such as Glx and GABA+
+include signals from glutamine and macromolecules, respectively,
+limiting their chemical specificity. Therefore, while these metabolites
+serve as useful proxies related to excitatory and inhibitory neural
+systems, caution is warranted when interpreting them as direct indices
+of neurotransmission. Nonetheless, these metabolic pools provide
+valuable insight into the overall balance of excitation and inhibition
+within the brain's microenvironment and remain widely used in human
+\emph{in vivo} studies of neural function and dysfunction. Although
+voxel placement was guided by anatomical landmarks and performed by
+trained personnel, some variability in voxel location across subjects
+and sessions may have introduced noise in metabolite quantification.
+Future studies may benefit from automated alignment and formal voxel
+overlap analysis to reduce this source of variability. Furthermore, our
+MRS voxels were placed once for the first MRS sequence, and copied for
+the subsequent MRS runs. Future studies may also wish to acquire high
+resolution anatomical scans before each MRS run in order to re-align the
+MRS voxel. We did not explicitly monitor scanner frequency drift
+following the fMRI runs. Heating-related drift can affect the stability
+of MRS sequences, potentially introducing variability in glutamate and
+GABA quantification\textsuperscript{134}. While all MRS data were
+visually inspected for quality, we cannot rule out subtle effects of
+drift, which may have contributed to noise in the E:I measurements. We
+included frequency drift in our linear mixed-effects models in an
+attempt to control for these confounds. Finally, the order of scanning
+conditions (rest followed by movie-watching) was not pseudorandomized.
+This may introduce potential order-related confounds, such as
+physiological adaptation or scanner drift, which could influence the
+observed differences between conditions.
+
+An additional avenue for future research involves dynamic fMRS, which
+seeks to capture time-varying changes in metabolite levels during task
+performance. While promising, such approaches currently face substantial
+limitations in signal-to-noise ratio and temporal resolution,
+particularly for edited GABA measures. Our study was not optimized for
+dynamic fitting, but future work could explore how fluctuations in
+neurometabolites relate to moment-to-moment variations in BOLD signal
+complexity.
+
+We hope that by future researchers can use our reported effect sizes to
+calculate potential sample sizes. We would also like to list some of the
+strengths of our study, which include: using sLASER (as opposed to
+PRESS), which has been shown to have enhanced detection of complex
+multiplets such as Glx/Glu\textsuperscript{78}; using the J-editing
+sequence MEGA-PRESS for improved GABA detection\textsuperscript{56};
+using a large MRS voxel size (\textasciitilde22 ml) as per consensus
+recommendations\textsuperscript{135--137}; measuring H within the same
+region as our single-voxel MRS; and using multi-echo fMRI for improved
+motion artifact regression\textsuperscript{138}.
 
 \subsection{Lessons for Future
 Researchers}\label{lessons-for-future-researchers}
 
-Finally, we hope that by publishing our findings, we can provide some
-guidance to future researchers. The following is a non-exhaustive list
-of suggestions for future work:
+Finally, we hope that we can provide some guidance to future
+researchers. The following is a non-exhaustive list of suggestions for
+future work:
 
 \begin{itemize}
 \tightlist
@@ -1156,12 +1394,11 @@ of suggestions for future work:
 \item
   examining paradigms that have consistently demonstrated alterations in
   these metabolites, such as pain studies, may enhance the likelihood of
-  detecting changes in Glu and GABA
-  \citep{archibaldMetaboliteActivityAnterior2020, cleveAssessmentIntraInterregional2017, gutzeitDifferentialNMRSpectroscopy2013}.
+  detecting changes in Glu and GABA\textsuperscript{126,127,133}.
 \item
   exploring brain regions beyond the visual cortex, such as the anterior
-  cingulate cortex, which is commonly implicated in pain processing
-  \citep{archibaldMetaboliteActivityAnterior2020, mullinsNovelTechniqueStudy2005, gussewTimeresolvedFunctional1H2010, gutzeitInsulaspecificResponsesInduced2011};
+  cingulate cortex, which is commonly implicated in pain
+  processing\textsuperscript{133,139--141};
 \item
   including a more diverse participant sample --- beyond healthy
   controls --- may help capture a wider range of H and E:I values,
@@ -1172,13 +1409,13 @@ of suggestions for future work:
   using an event-related design, as opposed to the block design we used,
   may provide more sensitivity to detecting rapid and transient neural
   responses due to its ability to isolate specific events within the
-  scan session \citep{mullinsTheoryFunctionalMagnetic2018}. However, see
-  Pasanta et al.~(2023) \citet{pasantaFunctionalMRSStudies2023} for a
-  longer discussion and possible downsides to this approach;
+  scan session\textsuperscript{142}. However, see Pasanta et
+  al.~(2023)\textsuperscript{97} for a longer discussion and possible
+  downsides to this approach;
 \item
-  and finally, using a combined fMRI-MRS sequence
-  \citep{ipCombinedFMRIMRSAcquires2017, dwyerSimultaneousMeasurementBOLD2021}
-  to measure BOLD and Glu/GABA near-simultaneously.
+  and finally, using a combined fMRI-MRS
+  sequence\textsuperscript{77,143} to measure BOLD and Glu/GABA
+  near-simultaneously.
 \end{itemize}
 
 Together, these considerations may help in overcoming the limitations
@@ -1187,22 +1424,23 @@ of the potential relationship between E:I and H.
 
 \section{Conclusion}\label{conclusion}
 
-In conclusion, our findings do not support a relationship between H and
-E:I in the visual cortex either during rest or during movie-watching at
-3T in humans. In addition, while we found a task-related change in H, we
-did not find any changes in Glu, GABA, or E:I between movie and rest.
-Comparing our findings to the broader literature, E:I balance may be too
-subtle to be detected with conventional 3T MRS methods. With regards to
-the broader E:I-Hurst relationship, we similarly suggest that either
-this relationship is insufficiently captured with our methods, or that
-the relationship between these two variables may be more complex than
-originally envisaged --- perhaps they are not directly related, but
-rather connected through other mediating variables in a non-linear
-fashion. To our knowledge, this is the first \emph{in vivo} human study
-to test for this relationship. It is our hope that as the literature
-grows, more authors will examine this relationship with respect to other
-brain regions and using other methods, and will use the lessons learned
-in this study to inform their own. Hopefully then it will be possible to
+In conclusion, the results do not support a relationship between H and
+the E:I ratio in the visual cortex either during rest or during
+movie-watching at 3T in humans. Although a task-related increase in H
+was observed, no accompanying changes were detected in Glu, GABA, or E:I
+between movie and rest. Comparing our findings to the broader
+literature, E:I balance may be too subtle to be detected with
+conventional 3T MRS methods. With regards to the broader E:I-Hurst
+relationship, we similarly suggest that either this relationship is
+insufficiently captured with our methods, or that the relationship
+between these two variables may be more complex than originally
+envisaged --- perhaps they are not directly related, but rather
+connected through other mediating variables in a non-linear fashion. To
+our knowledge, this is the first \emph{in vivo} human study to test for
+this relationship. It is our hope that as the literature grows, more
+authors will examine this relationship with respect to other brain
+regions and using other methods, and will use the lessons learned in
+this study to inform their own. Hopefully then it will be possible to
 corroborate findings to probe the complex relationships that may exist
 with regards to H and E:I in the human brain.
 
@@ -1227,7 +1465,7 @@ The authors declare they have no known competing interests.
 \addcontentsline{toc}{section}{Author contributions}
 
 LS performed data curation, formal analysis, investigation, software,
-visualization, and wrote the original draft. JS helped with validation,
+visualization, and wrote the original draft. JA helped with validation,
 visualization, and reviewed and edited the manuscript. AMW was
 responsible for conceptualization, data curation, formal analysis,
 funding acquisition, investigation, methodology, project administration,
@@ -1241,8 +1479,1287 @@ The work presented in this paper was supported in part from funding from
 the British Columbia Children's Hospital Foundation, and an NSERC
 Discovery Grant.
 
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{0}{0}
+\bibitem[\citeproctext]{ref-decoRestingBrainsNever2013}
+\CSLLeftMargin{1. }%
+\CSLRightInline{Deco, G., Jirsa, V. K. \& McIntosh, A. R.
+\href{https://doi.org/10.1016/j.tins.2013.03.001}{Resting brains never
+rest: Computational insights into potential cognitive architectures}.
+\emph{Trends in Neurosciences} \textbf{36}, 268--274 (2013).}
+
+\bibitem[\citeproctext]{ref-beggsBeingCriticalCriticality2012}
+\CSLLeftMargin{2. }%
+\CSLRightInline{Beggs, J. \& Timme, N. Being {Critical} of {Criticality}
+in the {Brain}. \emph{Frontiers in Physiology} \textbf{3}, (2012).}
+
+\bibitem[\citeproctext]{ref-barangerChaosComplexityEntropy2000}
+\CSLLeftMargin{3. }%
+\CSLRightInline{Baranger, M. Chaos, {Complexity}, and {Entropy}: {A}
+physics talk for non-physicists. \emph{New England Complex Systems
+Institute} (2000).}
+
+\bibitem[\citeproctext]{ref-bassettUnderstandingComplexityHuman2011}
+\CSLLeftMargin{4. }%
+\CSLRightInline{Bassett, D. S. \& Gazzaniga, M. S.
+\href{https://doi.org/10.1016/j.tics.2011.03.006}{Understanding
+complexity in the human brain}. \emph{Trends in cognitive sciences}
+\textbf{15}, 200--209 (2011).}
+
+\bibitem[\citeproctext]{ref-zimmernWhyBrainCriticality2020}
+\CSLLeftMargin{5. }%
+\CSLRightInline{Zimmern, V. Why {Brain Criticality Is Clinically
+Relevant}: {A Scoping Review}. \emph{Frontiers in Neural Circuits}
+\textbf{14}, (2020).}
+
+\bibitem[\citeproctext]{ref-liangExcitationInhibitionBalance2024}
+\CSLLeftMargin{6. }%
+\CSLRightInline{Liang, J., Yang, Z. \& Zhou, C. Excitation--{Inhibition
+Balance}, {Neural Criticality}, and {Activities} in {Neuronal Circuits}.
+\emph{The Neuroscientist} 10738584231221766 (2024)
+doi:\href{https://doi.org/10.1177/10738584231221766}{10.1177/10738584231221766}.}
+
+\bibitem[\citeproctext]{ref-poilCriticalStateDynamicsAvalanches2012}
+\CSLLeftMargin{7. }%
+\CSLRightInline{Poil, S.-S., Hardstone, R., Mansvelder, H. D. \&
+Linkenkaer-Hansen, K.
+\href{https://doi.org/10.1523/JNEUROSCI.5990-11.2012}{Critical-{State
+Dynamics} of {Avalanches} and {Oscillations Jointly Emerge} from
+{Balanced Excitation}/{Inhibition} in {Neuronal Networks}}.
+\emph{Journal of Neuroscience} \textbf{32}, 9817--9823 (2012).}
+
+\bibitem[\citeproctext]{ref-lombardiBalanceExcitationInhibition2017}
+\CSLLeftMargin{8. }%
+\CSLRightInline{Lombardi, F., Herrmann, H. J. \& de Arcangelis, L.
+\href{https://doi.org/10.1063/1.4979043}{Balance of excitation and
+inhibition determines 1/f power spectrum in neuronal networks}.
+\emph{Chaos: An Interdisciplinary Journal of Nonlinear Science}
+\textbf{27}, 047402 (2017).}
+
+\bibitem[\citeproctext]{ref-baumgartenCriticalExcitationinhibitionBalance2019}
+\CSLLeftMargin{9. }%
+\CSLRightInline{Baumgarten, L. \& Bornholdt, S.
+\href{https://doi.org/10.1103/PhysRevE.100.010301}{Critical
+excitation-inhibition balance in dense neural networks}. \emph{Physical
+Review E} \textbf{100}, 010301 (2019).}
+
+\bibitem[\citeproctext]{ref-bruiningMeasurementExcitationinhibitionRatio2020}
+\CSLLeftMargin{10. }%
+\CSLRightInline{Bruining, H. \emph{et al.}
+\href{https://doi.org/10.1038/s41598-020-65500-4}{Measurement of
+excitation-inhibition ratio in autism spectrum disorder using critical
+brain dynamics}. \emph{Scientific Reports} \textbf{10}, 9195 (2020).}
+
+\bibitem[\citeproctext]{ref-trakoshisIntrinsicExcitationinhibitionImbalance}
+\CSLLeftMargin{11. }%
+\CSLRightInline{Trakoshis, S. \emph{et al.}
+\href{https://doi.org/10.7554/eLife.55684}{Intrinsic
+excitation-inhibition imbalance affects medial prefrontal cortex
+differently in autistic men versus women}. \emph{eLife} \textbf{9},
+e55684.}
+
+\bibitem[\citeproctext]{ref-gaoInferringSynapticExcitation2017}
+\CSLLeftMargin{12. }%
+\CSLRightInline{Gao, R., Peterson, E. J. \& Voytek, B.
+\href{https://doi.org/10.1016/j.neuroimage.2017.06.078}{Inferring
+synaptic excitation/inhibition balance from field potentials}.
+\emph{NeuroImage} \textbf{158}, 70--78 (2017).}
+
+\bibitem[\citeproctext]{ref-tianTheoreticalFoundationsStudying2022}
+\CSLLeftMargin{13. }%
+\CSLRightInline{Tian, Y. \emph{et al.}
+\href{https://doi.org/10.1162/netn_a_00269}{Theoretical foundations of
+studying criticality in the brain}. \emph{Network Neuroscience}
+\textbf{6}, 1148--1185 (2022).}
+
+\bibitem[\citeproctext]{ref-rubinovNeurobiologicallyRealisticDeterminants2011}
+\CSLLeftMargin{14. }%
+\CSLRightInline{Rubinov, M., Sporns, O., Thivierge, J.-P. \& Breakspear,
+M. \href{https://doi.org/10.1371/journal.pcbi.1002038}{Neurobiologically
+{Realistic Determinants} of {Self-Organized Criticality} in {Networks}
+of {Spiking Neurons}}. \emph{PLOS Computational Biology} \textbf{7},
+e1002038 (2011).}
+
+\bibitem[\citeproctext]{ref-langtonComputationEdgeChaos1990}
+\CSLLeftMargin{15. }%
+\CSLRightInline{Langton, C. G.
+\href{https://doi.org/10.1016/0167-2789(90)90064-V}{Computation at the
+edge of chaos: {Phase} transitions and emergent computation}.
+\emph{Physica D: Nonlinear Phenomena} \textbf{42}, 12--37 (1990).}
+
+\bibitem[\citeproctext]{ref-bakHowNatureWorks1996}
+\CSLLeftMargin{16. }%
+\CSLRightInline{Bak, P. \emph{How {Nature Works}}. (Springer, New York,
+NY, 1996).
+doi:\href{https://doi.org/10.1007/978-1-4757-5426-1}{10.1007/978-1-4757-5426-1}.}
+
+\bibitem[\citeproctext]{ref-rubensteinModelAutismIncreased2003}
+\CSLLeftMargin{17. }%
+\CSLRightInline{Rubenstein, J. L. R. \& Merzenich, M. M.
+\href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6748642}{Model of
+autism: Increased ratio of excitation/inhibition in key neural systems}.
+\emph{Genes, brain, and behavior} \textbf{2}, 255--267 (2003).}
+
+\bibitem[\citeproctext]{ref-lauterbornIncreasedExcitatoryInhibitory2021}
+\CSLLeftMargin{18. }%
+\CSLRightInline{Lauterborn, J. C. \emph{et al.}
+\href{https://doi.org/10.1038/s41467-021-22742-8}{Increased excitatory
+to inhibitory synaptic ratio in parietal cortex samples from individuals
+with {Alzheimer}'s disease}. \emph{Nature Communications} \textbf{12},
+2603 (2021).}
+
+\bibitem[\citeproctext]{ref-sohalExcitationinhibitionBalanceFramework2019}
+\CSLLeftMargin{19. }%
+\CSLRightInline{Sohal, V. S. \& Rubenstein, J. L. R.
+\href{https://doi.org/10.1038/s41380-019-0426-0}{Excitation-inhibition
+balance as a framework for investigating mechanisms in neuropsychiatric
+disorders}. \emph{Molecular Psychiatry} \textbf{24}, 1248--1257 (2019).}
+
+\bibitem[\citeproctext]{ref-munozColloquiumCriticalityDynamical2018}
+\CSLLeftMargin{20. }%
+\CSLRightInline{Muñoz, M. A.
+\href{https://doi.org/10.1103/RevModPhys.90.031001}{{\emph{Colloquium}}
+: {Criticality} and dynamical scaling in living systems}. \emph{Reviews
+of Modern Physics} \textbf{90}, 031001 (2018).}
+
+\bibitem[\citeproctext]{ref-casertaDeterminationFractalDimension1995}
+\CSLLeftMargin{21. }%
+\CSLRightInline{Caserta, F. \emph{et al.}
+\href{https://doi.org/10.1016/0165-0270(94)00115-W}{Determination of
+fractal dimension of physiologically characterized neurons in two and
+three dimensions}. \emph{Journal of Neuroscience Methods} \textbf{56},
+133--144 (1995).}
+
+\bibitem[\citeproctext]{ref-lowenQuantalNeurotransmitterSecretion1997}
+\CSLLeftMargin{22. }%
+\CSLRightInline{Lowen, S. B., Cash, S. S., Poo, M. \& Teich, M. C.
+\href{https://doi.org/10.1523/JNEUROSCI.17-15-05666.1997}{Quantal
+{Neurotransmitter Secretion Rate Exhibits Fractal Behavior}}. \emph{The
+Journal of Neuroscience} \textbf{17}, 5666--5677 (1997).}
+
+\bibitem[\citeproctext]{ref-mazzoniDynamicsSpontaneousActivity2007}
+\CSLLeftMargin{23. }%
+\CSLRightInline{Mazzoni, A. \emph{et al.}
+\href{https://doi.org/10.1371/journal.pone.0000439}{On the {Dynamics} of
+the {Spontaneous Activity} in {Neuronal Networks}}. \emph{PLoS ONE}
+\textbf{2}, e439 (2007).}
+
+\bibitem[\citeproctext]{ref-bedardMacroscopicModelsLocal2009}
+\CSLLeftMargin{24. }%
+\CSLRightInline{Bédard, C. \& Destexhe, A.
+\href{https://doi.org/10.1016/j.bpj.2008.12.3951}{Macroscopic {Models}
+of {Local Field Potentials} and the {Apparent} 1/f {Noise} in {Brain
+Activity}}. \emph{Biophysical Journal} \textbf{96}, 2589--2603 (2009).}
+
+\bibitem[\citeproctext]{ref-bullmoreFractalAnalysisElectroencephalographic1994}
+\CSLLeftMargin{25. }%
+\CSLRightInline{Bullmore, E. T. \emph{et al.}
+\href{https://doi.org/10.1016/0013-4694(94)00181-2}{Fractal analysis of
+electroencephalographic signals intracerebrally recorded during 35
+epileptic seizures: Evaluation of a new method for synoptic
+visualisation of ictal events}. \emph{Electroencephalography and
+Clinical Neurophysiology} \textbf{91}, 337--345 (1994).}
+
+\bibitem[\citeproctext]{ref-zarahnEmpiricalAnalysesBOLD1997}
+\CSLLeftMargin{26. }%
+\CSLRightInline{Zarahn, E., Aguirre, G. K. \& D'Esposito, M.
+\href{https://doi.org/10.1006/nimg.1997.0263}{Empirical {Analyses} of
+{BOLD fMRI Statistics}}. \emph{NeuroImage} \textbf{5}, 179--197 (1997).}
+
+\bibitem[\citeproctext]{ref-fadiliWaveletGeneralizedLeastSquares2002}
+\CSLLeftMargin{27. }%
+\CSLRightInline{Fadili, M. J. \& Bullmore, E. T.
+\href{https://doi.org/10.1006/nimg.2001.0955}{Wavelet-{Generalized Least
+Squares}: {A New BLU Estimator} of {Linear Regression Models} with 1/f
+{Errors}}. \emph{NeuroImage} \textbf{15}, 217--232 (2002).}
+
+\bibitem[\citeproctext]{ref-campbellMonofractalAnalysisFunctional2022}
+\CSLLeftMargin{28. }%
+\CSLRightInline{Campbell, O. L. \& Weber, A. M.
+\href{https://doi.org/10.1002/hbm.25801}{Monofractal analysis of
+functional magnetic resonance imaging: {An} introductory review}.
+\emph{Human Brain Mapping} \textbf{43}, 2693--2706 (2022).}
+
+\bibitem[\citeproctext]{ref-ekeFractalCharacterizationComplexity2002}
+\CSLLeftMargin{29. }%
+\CSLRightInline{Eke, A., Herman, P., Kocsis, L. \& Kozak, L. R.
+\href{https://doi.org/10.1088/0967-3334/23/1/201}{Fractal
+characterization of complexity in temporal physiological signals}.
+\emph{Physiological Measurement} \textbf{23}, R1--38 (2002).}
+
+\bibitem[\citeproctext]{ref-hurstLongTermStorageCapacity1951}
+\CSLLeftMargin{30. }%
+\CSLRightInline{Hurst, H. E.
+\href{https://doi.org/10.1061/TACEAT.0006518}{Long-{Term Storage
+Capacity} of {Reservoirs}}. \emph{Transactions of the American Society
+of Civil Engineers} \textbf{116}, 770--799 (1951).}
+
+\bibitem[\citeproctext]{ref-dongHurstExponentAnalysis2018}
+\CSLLeftMargin{31. }%
+\CSLRightInline{Dong, J. \emph{et al.} Hurst {Exponent Analysis} of
+{Resting-State fMRI Signal Complexity} across the {Adult Lifespan}.
+\emph{Frontiers in Neuroscience} \textbf{12}, (2018).}
+
+\bibitem[\citeproctext]{ref-winkMonofractalMultifractalDynamics2008}
+\CSLLeftMargin{32. }%
+\CSLRightInline{Wink, A.-M., Bullmore, E., Barnes, A., Bernard, F. \&
+Suckling, J. \href{https://doi.org/10.1002/hbm.20593}{Monofractal and
+multifractal dynamics of low frequency endogenous brain oscillations in
+functional {MRI}}. \emph{Human Brain Mapping} \textbf{29}, 791--801
+(2008).}
+
+\bibitem[\citeproctext]{ref-ciuciuInterplayFunctionalConnectivity2014}
+\CSLLeftMargin{33. }%
+\CSLRightInline{Ciuciu, P., Abry, P. \& He, B. J.
+\href{https://doi.org/10.1016/j.neuroimage.2014.03.047}{Interplay
+between functional connectivity and scale-free dynamics in intrinsic
+{fMRI} networks}. \emph{NeuroImage} \textbf{95}, 248--263 (2014).}
+
+\bibitem[\citeproctext]{ref-heScaleFreePropertiesFunctional2011}
+\CSLLeftMargin{34. }%
+\CSLRightInline{He, B. J.
+\href{https://doi.org/10.1523/JNEUROSCI.2111-11.2011}{Scale-{Free
+Properties} of the {Functional Magnetic Resonance Imaging Signal} during
+{Rest} and {Task}}. \emph{Journal of Neuroscience} \textbf{31},
+13786--13795 (2011).}
+
+\bibitem[\citeproctext]{ref-campbellFractalBasedAnalysisFMRI2022}
+\CSLLeftMargin{35. }%
+\CSLRightInline{Campbell, O., Vanderwal, T. \& Weber, A. M.
+Fractal-{Based Analysis} of {fMRI BOLD Signal During Naturalistic
+Viewing Conditions}. \emph{Frontiers in Physiology} \textbf{12},
+(2022).}
+
+\bibitem[\citeproctext]{ref-churchillSuppressionScalefreeFMRI2016}
+\CSLLeftMargin{36. }%
+\CSLRightInline{Churchill, N. W. \emph{et al.}
+\href{https://doi.org/10.1038/srep30895}{The suppression of scale-free
+{fMRI} brain dynamics across three different sources of effort: Aging,
+task novelty and task difficulty}. \emph{Scientific Reports} \textbf{6},
+30895 (2016).}
+
+\bibitem[\citeproctext]{ref-winkAgeCholinergicEffects2006}
+\CSLLeftMargin{37. }%
+\CSLRightInline{Wink, A. M., Bernard, F., Salvador, R., Bullmore, E. \&
+Suckling, J.
+\href{https://doi.org/10.1016/j.neurobiolaging.2005.08.011}{Age and
+cholinergic effects on hemodynamics and functional coherence of human
+hippocampus}. \emph{Neurobiology of Aging} \textbf{27}, 1395--1404
+(2006).}
+
+\bibitem[\citeproctext]{ref-mellaTemporalComplexityBOLDsignal2024}
+\CSLLeftMargin{38. }%
+\CSLRightInline{Mella, A. E., Vanderwal, T., Miller, S. P. \& Weber, A.
+M. \href{https://doi.org/10.1093/cercor/bhae426}{Temporal complexity of
+the {BOLD-signal} in preterm versus term infants}. \emph{Cerebral
+Cortex} \textbf{34}, bhae426 (2024).}
+
+\bibitem[\citeproctext]{ref-maximFractionalGaussianNoise2005}
+\CSLLeftMargin{39. }%
+\CSLRightInline{Maxim, V. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2004.10.044}{Fractional
+{Gaussian} noise, functional {MRI} and {Alzheimer}'s disease}.
+\emph{NeuroImage} \textbf{25}, 141--158 (2005).}
+
+\bibitem[\citeproctext]{ref-warsiCorrelatingBrainBlood2012}
+\CSLLeftMargin{40. }%
+\CSLRightInline{Warsi, M. A., Molloy, W. \& Noseworthy, M. D.
+\href{https://doi.org/10.1007/s10334-012-0312-0}{Correlating brain blood
+oxygenation level dependent ({BOLD}) fractal dimension mapping with
+magnetic resonance spectroscopy ({MRS}) in {Alzheimer}'s disease}.
+\emph{Magnetic Resonance Materials in Physics, Biology and Medicine}
+\textbf{25}, 335--344 (2012).}
+
+\bibitem[\citeproctext]{ref-donaTemporalFractalAnalysis2017}
+\CSLLeftMargin{41. }%
+\CSLRightInline{Dona, O., Hall, G. B. \& Noseworthy, M. D.
+\href{https://doi.org/10.1371/journal.pone.0190081}{Temporal fractal
+analysis of the rs-{BOLD} signal identifies brain abnormalities in
+autism spectrum disorder}. \emph{PLOS ONE} \textbf{12}, e0190081
+(2017).}
+
+\bibitem[\citeproctext]{ref-laiShiftRandomnessBrain2010}
+\CSLLeftMargin{42. }%
+\CSLRightInline{Lai, M.-C. \emph{et al.}
+\href{https://doi.org/10.1016/j.biopsych.2010.06.027}{A {Shift} to
+{Randomness} of {Brain Oscillations} in {People} with {Autism}}.
+\emph{Biological Psychiatry} \textbf{68}, 1092--1099 (2010).}
+
+\bibitem[\citeproctext]{ref-linkeAlteredDevelopmentHurst2024}
+\CSLLeftMargin{43. }%
+\CSLRightInline{Linke, A. C. \emph{et al.} Altered {Development} of the
+{Hurst Exponent} in the {Medial Prefrontal Cortex} in {Preschoolers With
+Autism}. \emph{Biological Psychiatry: Cognitive Neuroscience and
+Neuroimaging} S2451902224002714 (2024)
+doi:\href{https://doi.org/10.1016/j.bpsc.2024.09.003}{10.1016/j.bpsc.2024.09.003}.}
+
+\bibitem[\citeproctext]{ref-uscatescuUsingExcitationInhibition2023}
+\CSLLeftMargin{44. }%
+\CSLRightInline{Uscătescu, L. C. \emph{et al.} Using the
+{Excitation}/{Inhibition Ratio} to {Optimize} the {Classification} of
+{Autism} and {Schizophrenia}. 2022.05.24.22275531 (2023)
+doi:\href{https://doi.org/10.1101/2022.05.24.22275531}{10.1101/2022.05.24.22275531}.}
+
+\bibitem[\citeproctext]{ref-donaFractalAnalysisBrain2017}
+\CSLLeftMargin{45. }%
+\CSLRightInline{Dona, O., Noseworthy, M. D., DeMatteo, C. \& Connolly,
+J. F. \href{https://doi.org/10.1371/journal.pone.0169647}{Fractal
+{Analysis} of {Brain Blood Oxygenation Level Dependent} ({BOLD})
+{Signals} from {Children} with {Mild Traumatic Brain Injury} ({mTBI})}.
+\emph{PLOS ONE} \textbf{12}, e0169647 (2017).}
+
+\bibitem[\citeproctext]{ref-weiIdentifyingMajorDepressive2013}
+\CSLLeftMargin{46. }%
+\CSLRightInline{Wei, M. \emph{et al.}
+\href{https://doi.org/10.1016/j.pscychresns.2013.09.008}{Identifying
+major depressive disorder using {Hurst} exponent of resting-state brain
+networks}. \emph{Psychiatry Research: Neuroimaging} \textbf{214},
+306--312 (2013).}
+
+\bibitem[\citeproctext]{ref-jingIdentifyingCurrentRemitted2017}
+\CSLLeftMargin{47. }%
+\CSLRightInline{Jing, B. \emph{et al.}
+\href{https://doi.org/10.18632/oncotarget.19860}{Identifying current and
+remitted major depressive disorder with the {Hurst} exponent: A
+comparative study on two automated anatomical labeling atlases}.
+\emph{Oncotarget} \textbf{8}, 90452--90464 (2017).}
+
+\bibitem[\citeproctext]{ref-sokunbiNonlinearComplexityAnalysis2014}
+\CSLLeftMargin{48. }%
+\CSLRightInline{Sokunbi, M. O. \emph{et al.}
+\href{https://doi.org/10.1371/journal.pone.0095146}{Nonlinear
+{Complexity Analysis} of {Brain fMRI Signals} in {Schizophrenia}}.
+\emph{PLoS ONE} \textbf{9}, e95146 (2014).}
+
+\bibitem[\citeproctext]{ref-vicovarelaExcitatoryinhibitoryImbalanceAlzheimers2019}
+\CSLLeftMargin{49. }%
+\CSLRightInline{Vico Varela, E., Etter, G. \& Williams, S.
+\href{https://doi.org/10.1016/j.nbd.2019.04.010}{Excitatory-inhibitory
+imbalance in {Alzheimer}'s disease and therapeutic significance}.
+\emph{Neurobiology of Disease} \textbf{127}, 605--615 (2019).}
+
+\bibitem[\citeproctext]{ref-uzunovaExcitatoryInhibitoryImbalance2016}
+\CSLLeftMargin{50. }%
+\CSLRightInline{Uzunova, G., Pallanti, S. \& Hollander, E.
+\href{https://doi.org/10.3109/15622975.2015.1085597}{Excitatory/inhibitory
+imbalance in autism spectrum disorders: {Implications} for interventions
+and therapeutics}. \emph{The World Journal of Biological Psychiatry}
+\textbf{17}, 174--186 (2016).}
+
+\bibitem[\citeproctext]{ref-pagePrefrontalExcitatoryInhibitory2019}
+\CSLLeftMargin{51. }%
+\CSLRightInline{Page, C. E. \& Coutellier, L.
+\href{https://doi.org/10.1016/j.neubiorev.2019.07.024}{Prefrontal
+excitatory/inhibitory balance in stress and emotional disorders:
+{Evidence} for over-inhibition}. \emph{Neuroscience \& Biobehavioral
+Reviews} \textbf{105}, 39--51 (2019).}
+
+\bibitem[\citeproctext]{ref-kangInterplayMentalDisorder2019}
+\CSLLeftMargin{52. }%
+\CSLRightInline{Kang, E. \emph{et al.}
+\href{https://doi.org/10.1016/j.celrep.2019.07.024}{Interplay between a
+{Mental Disorder Risk Gene} and {Developmental Polarity Switch} of {GABA
+Action Leads} to {Excitation-Inhibition Imbalance}}. \emph{Cell Reports}
+\textbf{28}, 1419--1428.e3 (2019).}
+
+\bibitem[\citeproctext]{ref-ajramContribution1HMagnetic2019}
+\CSLLeftMargin{53. }%
+\CSLRightInline{Ajram, L. A. \emph{et al.}
+\href{https://doi.org/10.1016/j.pnpbp.2018.09.010}{The contribution of
+{[}{1H}{]} magnetic resonance spectroscopy to the study of
+excitation-inhibition in autism}. \emph{Progress in
+Neuro-Psychopharmacology and Biological Psychiatry} \textbf{89},
+236--244 (2019).}
+
+\bibitem[\citeproctext]{ref-stanleyFunctionalMagneticResonance2018}
+\CSLLeftMargin{54. }%
+\CSLRightInline{Stanley, J. A. \& Raz, N.
+\href{https://doi.org/10.3389/fpsyt.2018.00076}{Functional {Magnetic
+Resonance Spectroscopy}: {The} {`{New}'} {MRS} for {Cognitive
+Neuroscience} and {Psychiatry Research}}. \emph{Frontiers in Psychiatry}
+\textbf{9}, 76 (2018).}
+
+\bibitem[\citeproctext]{ref-harrisEdited1Magnetic2017}
+\CSLLeftMargin{55. }%
+\CSLRightInline{Harris, A. D., Saleh, M. G. \& Edden, R. A. E.
+\href{https://doi.org/10.1002/mrm.26619}{Edited 1 {H} magnetic resonance
+spectroscopy in vivo: {Methods} and metabolites}. \emph{Magnetic
+Resonance in Medicine} \textbf{77}, 1377--1389 (2017).}
+
+\bibitem[\citeproctext]{ref-peekComprehensiveGuideMEGAPRESS2023}
+\CSLLeftMargin{56. }%
+\CSLRightInline{Peek, A. L. \emph{et al.}
+\href{https://doi.org/10.1016/j.ab.2023.115113}{A comprehensive guide to
+{MEGA-PRESS} for {GABA} measurement}. \emph{Analytical Biochemistry}
+\textbf{669}, 115113 (2023).}
+
+\bibitem[\citeproctext]{ref-poilFastNetworkOscillations2011}
+\CSLLeftMargin{57. }%
+\CSLRightInline{Poil, S.-S. \emph{et al.}
+\href{https://doi.org/10.1111/j.1460-9568.2011.07748.x}{Fast network
+oscillations in vitro exhibit a slow decay of temporal
+auto-correlations: {Stability} of fast network oscillations}.
+\emph{European Journal of Neuroscience} \textbf{34}, 394--403 (2011).}
+
+\bibitem[\citeproctext]{ref-montoEpileptogenicNeocorticalNetworks2007}
+\CSLLeftMargin{58. }%
+\CSLRightInline{Monto, S., Vanhatalo, S., Holmes, M. D. \& Palva, J. M.
+\href{https://doi.org/10.1093/cercor/bhl049}{Epileptogenic {Neocortical
+Networks Are Revealed} by {Abnormal Temporal Dynamics} in {Seizure-Free
+Subdural EEG}}. \emph{Cerebral Cortex} \textbf{17}, 1386--1393 (2007).}
+
+\bibitem[\citeproctext]{ref-beggsNeuronalAvalanchesNeocortical2003}
+\CSLLeftMargin{59. }%
+\CSLRightInline{Beggs, J. M. \& Plenz, D.
+\href{https://doi.org/10.1523/JNEUROSCI.23-35-11167.2003}{Neuronal
+{Avalanches} in {Neocortical Circuits}}. \emph{The Journal of
+Neuroscience} \textbf{23}, 11167--11177 (2003).}
+
+\bibitem[\citeproctext]{ref-gireeshNeuronalAvalanchesOrganize2008}
+\CSLLeftMargin{60. }%
+\CSLRightInline{Gireesh, E. D. \& Plenz, D.
+\href{https://doi.org/10.1073/pnas.0800537105}{Neuronal avalanches
+organize as nested theta- and beta/gamma-oscillations during development
+of cortical layer 2/3}. \emph{Proceedings of the National Academy of
+Sciences} \textbf{105}, 7576--7581 (2008).}
+
+\bibitem[\citeproctext]{ref-yangMaximalVariabilityPhase2012}
+\CSLLeftMargin{61. }%
+\CSLRightInline{Yang, H., Shew, W. L., Roy, R. \& Plenz, D.
+\href{https://doi.org/10.1523/JNEUROSCI.2771-11.2012}{Maximal
+{Variability} of {Phase Synchrony} in {Cortical Networks} with {Neuronal
+Avalanches}}. \emph{The Journal of Neuroscience} \textbf{32}, 1061--1072
+(2012).}
+
+\bibitem[\citeproctext]{ref-obyrneHowCriticalBrain2022}
+\CSLLeftMargin{62. }%
+\CSLRightInline{O'Byrne, J. \& Jerbi, K.
+\href{https://doi.org/10.1016/j.tins.2022.08.007}{How critical is brain
+criticality?} \emph{Trends in Neurosciences} \textbf{45}, 820--837
+(2022).}
+
+\bibitem[\citeproctext]{ref-plenzSelfOrganizedCriticalityBrain2021}
+\CSLLeftMargin{63. }%
+\CSLRightInline{Plenz, D. \emph{et al.}
+\href{https://doi.org/10.3389/fphy.2021.639389}{Self-{Organized
+Criticality} in the {Brain}}. \emph{Frontiers in Physics} \textbf{9},
+639389 (2021).}
+
+\bibitem[\citeproctext]{ref-avramieaRegulationCriticalBrain2023}
+\CSLLeftMargin{64. }%
+\CSLRightInline{Avrămiea, A.-E. Regulation of critical brain dynamics
+and its functional implications. HFAAA72020230307 (Vrije Universiteit
+Amsterdam, 2023).
+doi:\href{https://doi.org/10.5463/thesis.144}{10.5463/thesis.144}.}
+
+\bibitem[\citeproctext]{ref-zeraatiSelfOrganizationCriticalitySynaptic2021}
+\CSLLeftMargin{65. }%
+\CSLRightInline{Zeraati, R., Priesemann, V. \& Levina, A.
+\href{https://doi.org/10.3389/fphy.2021.619661}{Self-{Organization
+Toward Criticality} by {Synaptic Plasticity}}. \emph{Frontiers in
+Physics} \textbf{9}, 619661 (2021).}
+
+\bibitem[\citeproctext]{ref-ikeda2025emergentfunctionsnoisedrivenspontaneous}
+\CSLLeftMargin{66. }%
+\CSLRightInline{Ikeda, N., Akita, D. \& Takahashi, H.
+\href{https://arxiv.org/abs/2502.10946}{Emergent functions of
+noise-driven spontaneous activity: {Homeostatic} maintenance of
+criticality and memory consolidation}. (2025).}
+
+\bibitem[\citeproctext]{ref-xiePharmacoresistantTemporalLobe2024}
+\CSLLeftMargin{67. }%
+\CSLRightInline{Xie, K. \emph{et al.} Pharmaco-resistant temporal lobe
+epilepsy gradually perturbs the cortex-wide excitation-inhibition
+balance. (2024)
+doi:\href{https://doi.org/10.1101/2024.04.22.590555}{10.1101/2024.04.22.590555}.}
+
+\bibitem[\citeproctext]{ref-fotiadisMyelinationExcitationinhibitionBalance2023}
+\CSLLeftMargin{68. }%
+\CSLRightInline{Fotiadis, P. \emph{et al.}
+\href{https://doi.org/10.1038/s41467-023-41686-9}{Myelination and
+excitation-inhibition balance synergistically shape structure-function
+coupling across the human cortex}. \emph{Nature Communications}
+\textbf{14}, 6115 (2023).}
+
+\bibitem[\citeproctext]{ref-vanderwalMoviesMagnetNaturalistic2019}
+\CSLLeftMargin{69. }%
+\CSLRightInline{Vanderwal, T., Eilbott, J. \& Castellanos, F. X.
+\href{https://doi.org/10.1016/j.dcn.2018.10.004}{Movies in the magnet:
+{Naturalistic} paradigms in developmental functional neuroimaging}.
+\emph{Developmental Cognitive Neuroscience} \textbf{36}, 100600 (2019).}
+
+\bibitem[\citeproctext]{ref-linInvestigatingMetabolicChanges2012}
+\CSLLeftMargin{70. }%
+\CSLRightInline{Lin, Y., Stephenson, M. C., Xin, L., Napolitano, A. \&
+Morris, P. G. \href{https://doi.org/10.1038/jcbfm.2012.33}{Investigating
+the {Metabolic Changes} due to {Visual Stimulation} using {Functional
+Proton Magnetic Resonance Spectroscopy} at 7 {T}}. \emph{Journal of
+Cerebral Blood Flow \& Metabolism} \textbf{32}, 1484--1495 (2012).}
+
+\bibitem[\citeproctext]{ref-martinez-maestroDynamicMetabolicChanges2019}
+\CSLLeftMargin{71. }%
+\CSLRightInline{Martínez-Maestro, M., Labadie, C. \& Möller, H. E.
+\href{https://doi.org/10.1177/0271678X18795426}{Dynamic metabolic
+changes in human visual cortex in regions with positive and negative
+blood oxygenation level-dependent response}. \emph{Journal of Cerebral
+Blood Flow and Metabolism: Official Journal of the International Society
+of Cerebral Blood Flow and Metabolism} \textbf{39}, 2295--2307 (2019).}
+
+\bibitem[\citeproctext]{ref-saucedoChangesGABAGlutamate}
+\CSLLeftMargin{72. }%
+\CSLRightInline{Saucedo, A., Guo, F., Pappas, I. \& Wang, D. Changes in
+{GABA} and {Glutamate} levels with peripheral and central visual
+stimulation using functional magnetic resonance spectroscopy at {7T}. in
+\emph{2024 {ISMRM} \& {ISMRT Annual Meeting}} 1922 (Toronto, ON,
+Canada).
+doi:\href{https://doi.org/10.58530/2024/1922}{10.58530/2024/1922}.}
+
+\bibitem[\citeproctext]{ref-kurcyusOppositeDynamicsGABA2018}
+\CSLLeftMargin{73. }%
+\CSLRightInline{Kurcyus, K. \emph{et al.}
+\href{https://doi.org/10.1523/JNEUROSCI.1214-18.2018}{Opposite
+{Dynamics} of {GABA} and {Glutamate Levels} in the {Occipital Cortex}
+during {Visual Processing}}. \emph{The Journal of Neuroscience}
+\textbf{38}, 9967--9976 (2018).}
+
+\bibitem[\citeproctext]{ref-ozShortechoSingleshotFullintensity2011}
+\CSLLeftMargin{74. }%
+\CSLRightInline{Oz, G. \& Tkáč, I.
+\href{https://doi.org/10.1002/mrm.22708}{Short-echo, single-shot,
+full-intensity proton magnetic resonance spectroscopy for neurochemical
+profiling at 4 {T}: Validation in the cerebellum and brainstem}.
+\emph{Magnetic Resonance in Medicine} \textbf{65}, 901--910 (2011).}
+
+\bibitem[\citeproctext]{ref-mescherSimultaneousVivoSpectral1998}
+\CSLLeftMargin{75. }%
+\CSLRightInline{Mescher, M., Merkle, H., Kirsch, J., Garwood, M. \&
+Gruetter, R.
+\href{https://doi.org/10.1002/(sici)1099-1492(199810)11:6\%3C266::aid-nbm530\%3E3.0.co;2-j}{Simultaneous
+in vivo spectral editing and water suppression}. \emph{NMR in
+biomedicine} \textbf{11}, 266--272 (1998).}
+
+\bibitem[\citeproctext]{ref-cordeyJungles2019}
+\CSLLeftMargin{76. }%
+\CSLRightInline{Cordey, H. Jungles. \emph{Our Planet} (2019).}
+
+\bibitem[\citeproctext]{ref-ipCombinedFMRIMRSAcquires2017}
+\CSLLeftMargin{77. }%
+\CSLRightInline{Ip, I. B. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2017.04.030}{Combined
+{fMRI-MRS} acquires simultaneous glutamate and {BOLD-fMRI} signals in
+the human brain}. \emph{NeuroImage} \textbf{155}, 113--119 (2017).}
+
+\bibitem[\citeproctext]{ref-wilsonMethodologicalConsensusClinical2019}
+\CSLLeftMargin{78. }%
+\CSLRightInline{Wilson, M. \emph{et al.}
+\href{https://doi.org/10.1002/mrm.27742}{Methodological consensus on
+clinical proton {MRS} of the brain: {Review} and recommendations}.
+\emph{Magnetic Resonance in Medicine} \textbf{82}, 527--550 (2019).}
+
+\bibitem[\citeproctext]{ref-vanveenendaalGlutamateQuantificationPRESS2018}
+\CSLLeftMargin{79. }%
+\CSLRightInline{Van Veenendaal, T. M. \emph{et al.}
+\href{https://doi.org/10.1016/j.mri.2017.12.029}{Glutamate
+quantification by {PRESS} or {MEGA-PRESS}: {Validation}, repeatability,
+and concordance}. \emph{Magnetic Resonance Imaging} \textbf{48},
+107--114 (2018).}
+
+\bibitem[\citeproctext]{ref-liFirstStepNeuroimaging2016}
+\CSLLeftMargin{80. }%
+\CSLRightInline{Li, X., Morgan, P. S., Ashburner, J., Smith, J. \&
+Rorden, C. \href{https://doi.org/10.1016/j.jneumeth.2016.03.001}{The
+first step for neuroimaging data analysis: {DICOM} to {NIfTI}
+conversion}. \emph{Journal of Neuroscience Methods} \textbf{264}, 47--56
+(2016).}
+
+\bibitem[\citeproctext]{ref-gorgolewskiBrainImagingData2016}
+\CSLLeftMargin{81. }%
+\CSLRightInline{Gorgolewski, K. J. \emph{et al.}
+\href{https://doi.org/10.1038/sdata.2016.44}{The brain imaging data
+structure, a format for organizing and describing outputs of
+neuroimaging experiments}. \emph{Scientific Data} \textbf{3}, 160044
+(2016).}
+
+\bibitem[\citeproctext]{ref-boreDcm2Bids2023}
+\CSLLeftMargin{82. }%
+\CSLRightInline{Boré, A., Guay, S., Bedetti, C., Meisler, S. \&
+GuenTher, N. {Dcm2Bids}. (2023)
+doi:\href{https://doi.org/10.5281/zenodo.8436509}{10.5281/zenodo.8436509}.}
+
+\bibitem[\citeproctext]{ref-tustisonN4ITKImprovedN32010}
+\CSLLeftMargin{83. }%
+\CSLRightInline{Tustison, N. J. \emph{et al.}
+\href{https://doi.org/10.1109/TMI.2010.2046908}{{N4ITK}: {Improved N3
+Bias Correction}}. \emph{IEEE Transactions on Medical Imaging}
+\textbf{29}, 1310--1320 (2010).}
+
+\bibitem[\citeproctext]{ref-avantsSymmetricDiffeomorphicImage2008}
+\CSLLeftMargin{84. }%
+\CSLRightInline{Avants, B. B., Epstein, C. L., Grossman, M. \& Gee, J.
+C. \href{https://doi.org/10.1016/j.media.2007.06.004}{Symmetric
+diffeomorphic image registration with cross-correlation: Evaluating
+automated labeling of elderly and neurodegenerative brain}.
+\emph{Medical Image Analysis} \textbf{12}, 26--41 (2008).}
+
+\bibitem[\citeproctext]{ref-gorgolewskiNipypeFlexibleLightweight2016}
+\CSLLeftMargin{85. }%
+\CSLRightInline{Gorgolewski, K. J. \emph{et al.} Nipype: A flexible,
+lightweight and extensible neuroimaging data processing framework in
+{Python}. 0.12.0-Rc1. (2016)
+doi:\href{https://doi.org/10.5281/zenodo.50186}{10.5281/zenodo.50186}.}
+
+\bibitem[\citeproctext]{ref-zhangSegmentationBrainMR2001}
+\CSLLeftMargin{86. }%
+\CSLRightInline{Zhang, Y., Brady, M. \& Smith, S.
+\href{https://doi.org/10.1109/42.906424}{Segmentation of brain {MR}
+images through a hidden {Markov} random field model and the
+expectation-maximization algorithm}. \emph{IEEE Transactions on Medical
+Imaging} \textbf{20}, 45--57 (2001).}
+
+\bibitem[\citeproctext]{ref-smithAdvancesFunctionalStructural2004}
+\CSLLeftMargin{87. }%
+\CSLRightInline{Smith, S. M. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2004.07.051}{Advances in
+functional and structural {MR} image analysis and implementation as
+{FSL}}. \emph{NeuroImage} \textbf{23 Suppl 1}, S208--219 (2004).}
+
+\bibitem[\citeproctext]{ref-daleCorticalSurfacebasedAnalysis1999}
+\CSLLeftMargin{88. }%
+\CSLRightInline{Dale, A. M., Fischl, B. \& Sereno, M. I.
+\href{https://doi.org/10.1006/nimg.1998.0395}{Cortical surface-based
+analysis. {I}. {Segmentation} and surface reconstruction}.
+\emph{NeuroImage} \textbf{9}, 179--194 (1999).}
+
+\bibitem[\citeproctext]{ref-kleinMindbogglingMorphometryHuman2017}
+\CSLLeftMargin{89. }%
+\CSLRightInline{Klein, A. \emph{et al.}
+\href{https://doi.org/10.1371/journal.pcbi.1005350}{Mindboggling
+morphometry of human brains}. \emph{PLoS computational biology}
+\textbf{13}, e1005350 (2017).}
+
+\bibitem[\citeproctext]{ref-estebanFMRIPrepRobustPreprocessing2019}
+\CSLLeftMargin{90. }%
+\CSLRightInline{Esteban, O. \emph{et al.}
+\href{https://doi.org/10.1038/s41592-018-0235-4}{{fMRIPrep}: A robust
+preprocessing pipeline for functional {MRI}}. \emph{Nature Methods}
+\textbf{16}, 111--116 (2019).}
+
+\bibitem[\citeproctext]{ref-jenkinsonImprovedOptimizationRobust2002}
+\CSLLeftMargin{91. }%
+\CSLRightInline{Jenkinson, M., Bannister, P., Brady, M. \& Smith, S.
+\href{https://doi.org/10.1016/s1053-8119(02)91132-8}{Improved
+optimization for the robust and accurate linear registration and motion
+correction of brain images}. \emph{NeuroImage} \textbf{17}, 825--841
+(2002).}
+
+\bibitem[\citeproctext]{ref-coxAFNISoftwareAnalysis1996}
+\CSLLeftMargin{92. }%
+\CSLRightInline{Cox, R. W.
+\href{https://doi.org/10.1006/cbmr.1996.0014}{{AFNI}: {Software} for
+{Analysis} and {Visualization} of {Functional Magnetic Resonance
+Neuroimages}}. \emph{Computers and Biomedical Research} \textbf{29},
+162--173 (1996).}
+
+\bibitem[\citeproctext]{ref-posseEnhancementBOLDcontrastSensitivity1999}
+\CSLLeftMargin{93. }%
+\CSLRightInline{Posse, S. \emph{et al.}
+\href{https://doi.org/10.1002/(sici)1522-2594(199907)42:1\%3C87::aid-mrm13\%3E3.0.co;2-o}{Enhancement
+of {BOLD-contrast} sensitivity by single-shot multi-echo functional {MR}
+imaging}. \emph{Magnetic Resonance in Medicine} \textbf{42}, 87--97
+(1999).}
+
+\bibitem[\citeproctext]{ref-dupreTEdependentAnalysisMultiecho2021}
+\CSLLeftMargin{94. }%
+\CSLRightInline{DuPre, E. \emph{et al.}
+\href{https://doi.org/10.21105/joss.03669}{{TE-dependent} analysis of
+multi-echo {fMRI} with *tedana*}. \emph{Journal of Open Source Software}
+\textbf{6}, 3669 (2021).}
+
+\bibitem[\citeproctext]{ref-oeltzschnerOspreyOpenSourceProcessing2020}
+\CSLLeftMargin{95. }%
+\CSLRightInline{Oeltzschner, G. \emph{et al.}
+\href{https://doi.org/10.1016/j.jneumeth.2020.108827}{Osprey:
+{Open-Source Processing}, {Reconstruction} \& {Estimation} of {Magnetic
+Resonance Spectroscopy Data}}. \emph{Journal of neuroscience methods}
+\textbf{343}, 108827 (2020).}
+
+\bibitem[\citeproctext]{ref-provencherAutomaticQuantitationLocalized2001}
+\CSLLeftMargin{96. }%
+\CSLRightInline{Provencher, S. W.
+\href{https://doi.org/10.1002/nbm.698}{Automatic quantitation of
+localized in vivo {1H} spectra with {LCModel}}. \emph{NMR in
+biomedicine} \textbf{14}, 260--264 (2001).}
+
+\bibitem[\citeproctext]{ref-pasantaFunctionalMRSStudies2023}
+\CSLLeftMargin{97. }%
+\CSLRightInline{Pasanta, D. \emph{et al.}
+\href{https://doi.org/10.1016/j.neubiorev.2022.104940}{Functional {MRS}
+studies of {GABA} and glutamate/{Glx} -- {A} systematic review and
+meta-analysis}. \emph{Neuroscience \& Biobehavioral Reviews}
+\textbf{144}, 104940 (2023).}
+
+\bibitem[\citeproctext]{ref-ramadanGlutamateGlutamineReview2013}
+\CSLLeftMargin{98. }%
+\CSLRightInline{Ramadan, S., Lin, A. \& Stanwell, P.
+\href{https://doi.org/10.1002/nbm.3045}{Glutamate and {Glutamine}: {A
+Review} of {In Vivo MRS} in the {Human Brain}}. \emph{NMR in
+biomedicine} \textbf{26}, 10.1002/nbm.3045 (2013).}
+
+\bibitem[\citeproctext]{ref-zollnerComparisonDifferentLinearcombination2021}
+\CSLLeftMargin{99. }%
+\CSLRightInline{Zöllner, H. J. \emph{et al.}
+\href{https://doi.org/10.1002/nbm.4482}{Comparison of different
+linear-combination modeling algorithms for short-{TE} proton spectra}.
+\emph{NMR in biomedicine} \textbf{34}, e4482 (2021).}
+
+\bibitem[\citeproctext]{ref-zollnerComparisonLinearCombination2022}
+\CSLLeftMargin{100. }%
+\CSLRightInline{Zöllner, H. J. \emph{et al.}
+\href{https://doi.org/10.1002/nbm.4618}{Comparison of linear combination
+modeling strategies for edited magnetic resonance spectroscopy at
+3~{T}}. \emph{NMR in biomedicine} \textbf{35}, e4618 (2022).}
+
+\bibitem[\citeproctext]{ref-anCombinationMultichannelSinglevoxel2013}
+\CSLLeftMargin{101. }%
+\CSLRightInline{An, L., Willem Van Der Veen, J., Li, S., Thomasson, D.
+M. \& Shen, J. \href{https://doi.org/10.1002/jmri.23941}{Combination of
+multichannel single-voxel {MRS} signals using generalized least
+squares}. \emph{Journal of Magnetic Resonance Imaging} \textbf{37},
+1445--1450 (2013).}
+
+\bibitem[\citeproctext]{ref-bouchardNoiseDecorrelationCoil2025}
+\CSLLeftMargin{102. }%
+\CSLRightInline{Bouchard, A. E. \& Mikkelsen, M.
+\href{https://doi.org/10.1016/j.mri.2025.110452}{Noise decorrelation
+coil combination optimizes {SNR} of edited {1H MRS} data}.
+\emph{Magnetic Resonance Imaging} \textbf{122}, 110452 (2025).}
+
+\bibitem[\citeproctext]{ref-harrisSpectralEditingMeasurementsGABA2015}
+\CSLLeftMargin{103. }%
+\CSLRightInline{Harris, A. D., Puts, N. A. J., Barker, P. B. \& Edden,
+R. A. E. \href{https://doi.org/10.1002/mrm.25549}{Spectral-{Editing
+Measurements} of {GABA} in the {Human Brain} with and without
+{Macromolecule Suppression}}. \emph{Magnetic resonance in medicine}
+\textbf{74}, 1523--1529 (2015).}
+
+\bibitem[\citeproctext]{ref-mikkelsenBigGABAII2019}
+\CSLLeftMargin{104. }%
+\CSLRightInline{Mikkelsen, M. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2019.02.059}{Big {GABA II}:
+{Water-referenced} edited {MR} spectroscopy at 25 research sites}.
+\emph{NeuroImage} \textbf{191}, 537--548 (2019).}
+
+\bibitem[\citeproctext]{ref-mikkelsenBigGABAEdited2017}
+\CSLLeftMargin{105. }%
+\CSLRightInline{Mikkelsen, M. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2017.07.021}{Big {GABA}:
+{Edited MR} spectroscopy at 24 research sites}. \emph{NeuroImage}
+\textbf{159}, 32--45 (2017).}
+
+\bibitem[\citeproctext]{ref-fristonStatisticalParametricMapping2007}
+\CSLLeftMargin{106. }%
+\CSLRightInline{Friston, K., Ashburner, J., Kiebel, S., Nichols, T. \&
+Penny, W. \emph{Statistical {Parametric Mapping}: {The Analysis} of
+{Functional Brain Images}}. (Elsevier Ltd., 2007).}
+
+\bibitem[\citeproctext]{ref-gasparovicUseTissueWater2006}
+\CSLLeftMargin{107. }%
+\CSLRightInline{Gasparovic, C. \emph{et al.}
+\href{https://doi.org/10.1002/mrm.20901}{Use of tissue water as a
+concentration reference for proton spectroscopic imaging}.
+\emph{Magnetic Resonance in Medicine} \textbf{55}, 1219--1226 (2006).}
+
+\bibitem[\citeproctext]{ref-rideauxNoBalanceGlutamate+glutamine2021}
+\CSLLeftMargin{108. }%
+\CSLRightInline{Rideaux, R.
+\href{https://doi.org/10.1016/j.neuroimage.2021.118191}{No balance
+between glutamate+glutamine and {GABA}+ in visual or motor cortices of
+the human brain: {A} magnetic resonance spectroscopy study}.
+\emph{NeuroImage} \textbf{237}, 118191 (2021).}
+
+\bibitem[\citeproctext]{ref-juchemB0ShimmingVivo2021}
+\CSLLeftMargin{109. }%
+\CSLRightInline{Juchem, C. \emph{et al.}
+\href{https://doi.org/10.1002/nbm.4350}{B{\textsubscript{0}} shimming
+for in vivo magnetic resonance spectroscopy: {Experts}' consensus
+recommendations}. \emph{NMR in Biomedicine} \textbf{34}, e4350 (2021).}
+
+\bibitem[\citeproctext]{ref-eddenGannetBatchprocessingTool2014}
+\CSLLeftMargin{110. }%
+\CSLRightInline{Edden, R. A. E., Puts, N. A. J., Harris, A. D., Barker,
+P. B. \& Evans, C. J. \href{https://doi.org/10.1002/jmri.24478}{Gannet:
+{A} batch-processing tool for the quantitative analysis of
+gamma-aminobutyric acid--edited {MR} spectroscopy spectra}.
+\emph{Journal of Magnetic Resonance Imaging} \textbf{40}, 1445--1452
+(2014).}
+
+\bibitem[\citeproctext]{ref-duffPowerSpectralDensity2008}
+\CSLLeftMargin{111. }%
+\CSLRightInline{Duff, E. P. \emph{et al.}
+\href{https://doi.org/10.1002/hbm.20601}{The power of spectral density
+analysis for mapping endogenous {BOLD} signal fluctuations}. \emph{Human
+Brain Mapping} \textbf{29}, 778--790 (2008).}
+
+\bibitem[\citeproctext]{ref-bullmoreWaveletsFunctionalMagnetic2004}
+\CSLLeftMargin{112. }%
+\CSLRightInline{Bullmore, E. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2004.07.012}{Wavelets and
+functional magnetic resonance imaging of the human brain}.
+\emph{NeuroImage} \textbf{23}, S234--S249 (2004).}
+
+\bibitem[\citeproctext]{ref-welchUseFastFourier1967}
+\CSLLeftMargin{113. }%
+\CSLRightInline{Welch, P.
+\href{https://doi.org/10.1109/TAU.1967.1161901}{The use of fast
+{Fourier} transform for the estimation of power spectra: {A} method
+based on time averaging over short, modified periodograms}. \emph{IEEE
+Transactions on Audio and Electroacoustics} \textbf{15}, 70--73 (1967).}
+
+\bibitem[\citeproctext]{ref-virtanenSciPy10Fundamental2020}
+\CSLLeftMargin{114. }%
+\CSLRightInline{Virtanen, P. \emph{et al.}
+\href{https://doi.org/10.1038/s41592-019-0686-2}{{SciPy} 1.0:
+Fundamental algorithms for scientific computing in {Python}}.
+\emph{Nature Methods} \textbf{17}, 261--272 (2020).}
+
+\bibitem[\citeproctext]{ref-rubinOptimizingComplexityMeasures2013}
+\CSLLeftMargin{115. }%
+\CSLRightInline{Rubin, D., Fekete, T. \& Mujica-Parodi, L. R.
+\href{https://doi.org/10.1371/journal.pone.0063448}{Optimizing
+{Complexity Measures} for {fMRI Data}: {Algorithm}, {Artifact}, and
+{Sensitivity}}. \emph{PLoS ONE} \textbf{8}, e63448 (2013).}
+
+\bibitem[\citeproctext]{ref-schaeferComparativeAnalysisSpectral2014}
+\CSLLeftMargin{116. }%
+\CSLRightInline{Schaefer, A., Brach, J. S., Perera, S. \& Sejdić, E.
+\href{https://doi.org/10.1016/j.jneumeth.2013.10.017}{A comparative
+analysis of spectral exponent estimation techniques for 1/f{\(\beta\)}
+processes with applications to the analysis of stride interval time
+series}. \emph{Journal of neuroscience methods} \textbf{222}, 118--130
+(2014).}
+
+\bibitem[\citeproctext]{ref-hartmannRealtimeFractalSignal2013}
+\CSLLeftMargin{117. }%
+\CSLRightInline{Hartmann, A. \emph{et al.}
+\href{https://doi.org/10.1016/j.physa.2012.08.002}{Real-time fractal
+signal processing in the time domain}. \emph{Physica A: Statistical
+Mechanics and its Applications} \textbf{392}, 89--102 (2013).}
+
+\bibitem[\citeproctext]{ref-ekePhysiologicalTimeSeries2000}
+\CSLLeftMargin{118. }%
+\CSLRightInline{Eke, A. \emph{et al.}
+\href{https://doi.org/10.1007/s004249900135}{Physiological time series:
+Distinguishing fractal noises from motions}. \emph{Pflügers Archiv -
+European Journal of Physiology} \textbf{439}, 403--415 (2000).}
+
+\bibitem[\citeproctext]{ref-rcoreteamLanguageEnvironmentStatistical2021}
+\CSLLeftMargin{119. }%
+\CSLRightInline{Team, R. C. R: {A} language and environment for
+statistical computing. (2021).}
+
+\bibitem[\citeproctext]{ref-studentProbableErrorMean1908}
+\CSLLeftMargin{120. }%
+\CSLRightInline{Student. \href{https://doi.org/10.2307/2331554}{The
+{Probable Error} of a {Mean}}. \emph{Biometrika} \textbf{6}, 1--25
+(1908).}
+
+\bibitem[\citeproctext]{ref-freedmanStatistics2007}
+\CSLLeftMargin{121. }%
+\CSLRightInline{Freedman, D., Pisani, R. \& Purves, R.
+\emph{Statistics}. vol. 4 (W. W. Norton \& Company, New York, 2007).}
+
+\bibitem[\citeproctext]{ref-thomasyeoOrganizationHumanCerebral2011}
+\CSLLeftMargin{122. }%
+\CSLRightInline{Thomas Yeo, B. T. \emph{et al.}
+\href{https://doi.org/10.1152/jn.00338.2011}{The organization of the
+human cerebral cortex estimated by intrinsic functional connectivity}.
+\emph{Journal of Neurophysiology} \textbf{106}, 1125--1165 (2011).}
+
+\bibitem[\citeproctext]{ref-vanessenHumanConnectomeProject2012}
+\CSLLeftMargin{123. }%
+\CSLRightInline{Van Essen, D. C. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2012.02.018}{The {Human
+Connectome Project}: {A} data acquisition perspective}.
+\emph{NeuroImage} \textbf{62}, 2222--2231 (2012).}
+
+\bibitem[\citeproctext]{ref-barnesEndogenousHumanBrain2009}
+\CSLLeftMargin{124. }%
+\CSLRightInline{Barnes, A., Bullmore, E. T. \& Suckling, J.
+\href{https://doi.org/10.1371/journal.pone.0006626}{Endogenous {Human
+Brain Dynamics Recover Slowly Following Cognitive Effort}}. \emph{PLoS
+ONE} \textbf{4}, e6626 (2009).}
+
+\bibitem[\citeproctext]{ref-hassonReliabilityCorticalActivity2010}
+\CSLLeftMargin{125. }%
+\CSLRightInline{Hasson, U., Malach, R. \& Heeger, D. J.
+\href{https://doi.org/10.1016/j.tics.2009.10.011}{Reliability of
+cortical activity during natural stimulation}. \emph{Trends in Cognitive
+Sciences} \textbf{14}, 40--48 (2010).}
+
+\bibitem[\citeproctext]{ref-gutzeitDifferentialNMRSpectroscopy2013}
+\CSLLeftMargin{126. }%
+\CSLRightInline{Gutzeit, A. \emph{et al.}
+\href{https://doi.org/10.1007/s00330-012-2621-0}{Differential {NMR}
+spectroscopy reactions of anterior/posterior and right/left insular
+subdivisions due to acute dental pain}. \emph{European Radiology}
+\textbf{23}, 450--460 (2013).}
+
+\bibitem[\citeproctext]{ref-cleveAssessmentIntraInterregional2017}
+\CSLLeftMargin{127. }%
+\CSLRightInline{Cleve, M., Gussew, A., Wagner, G., Bär, K.-J. \&
+Reichenbach, J. R.
+\href{https://doi.org/10.1016/j.neuroscience.2017.09.037}{Assessment of
+intra- and inter-regional interrelations between {GABA}+, {Glx} and
+{BOLD} during pain perception in the human brain - {A} combined {1H
+fMRS} and {fMRI} study}. \emph{Neuroscience} \textbf{365}, 125--136
+(2017).}
+
+\bibitem[\citeproctext]{ref-apsvalkaEventrelatedDynamicsGlutamate2015}
+\CSLLeftMargin{128. }%
+\CSLRightInline{Apšvalka, D., Gadie, A., Clemence, M. \& Mullins, P. G.
+\href{https://doi.org/10.1016/j.neuroimage.2015.06.015}{Event-related
+dynamics of glutamate and {BOLD} effects measured using functional
+magnetic resonance spectroscopy ({fMRS}) at {3T} in a repetition
+suppression paradigm}. \emph{NeuroImage} \textbf{118}, 292--300 (2015).}
+
+\bibitem[\citeproctext]{ref-floyer-leaRapidModulationGABA2006}
+\CSLLeftMargin{129. }%
+\CSLRightInline{Floyer-Lea, A., Wylezinska, M., Kincses, T. \& Matthews,
+P. M. \href{https://doi.org/10.1152/jn.00346.2005}{Rapid {Modulation} of
+{GABA Concentration} in {Human Sensorimotor Cortex During Motor
+Learning}}. \emph{Journal of Neurophysiology} \textbf{95}, 1639--1644
+(2006).}
+
+\bibitem[\citeproctext]{ref-sampaio-baptistaChangesFunctionalConnectivity2015}
+\CSLLeftMargin{130. }%
+\CSLRightInline{Sampaio-Baptista, C. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2014.11.032}{Changes in
+functional connectivity and {GABA} levels with long-term motor
+learning}. \emph{NeuroImage} \textbf{106}, 15--20 (2015).}
+
+\bibitem[\citeproctext]{ref-staggRoleGABAHuman2011}
+\CSLLeftMargin{131. }%
+\CSLRightInline{Stagg, C. J., Bachtiar, V. \& Johansen-Berg, H.
+\href{https://doi.org/10.1016/j.cub.2011.01.069}{The {Role} of {GABA} in
+{Human Motor Learning}}. \emph{Current Biology} \textbf{21}, 480--484
+(2011).}
+
+\bibitem[\citeproctext]{ref-mangiaMetabolicPathwaysActivitydependent2012}
+\CSLLeftMargin{132. }%
+\CSLRightInline{Mangia, S., Giove, F. \& Dinuzzo, M.
+\href{https://doi.org/10.1007/s11064-012-0848-4}{Metabolic pathways and
+activity-dependent modulation of glutamate concentration in the human
+brain}. \emph{Neurochemical Research} \textbf{37}, 2554--2561 (2012).}
+
+\bibitem[\citeproctext]{ref-archibaldMetaboliteActivityAnterior2020}
+\CSLLeftMargin{133. }%
+\CSLRightInline{Archibald, J. \emph{et al.}
+\href{https://doi.org/10.1038/s41598-020-76263-3}{Metabolite activity in
+the anterior cingulate cortex during a painful stimulus using functional
+{MRS}}. \emph{Scientific Reports} \textbf{10}, 19218 (2020).}
+
+\bibitem[\citeproctext]{ref-huiFrequencyDriftMR2021}
+\CSLLeftMargin{134. }%
+\CSLRightInline{Hui, S. C. N. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2021.118430}{Frequency drift
+in {MR} spectroscopy at {3T}}. \emph{NeuroImage} \textbf{241}, 118430
+(2021).}
+
+\bibitem[\citeproctext]{ref-peekBrainGABAGlutamate2020}
+\CSLLeftMargin{135. }%
+\CSLRightInline{Peek, A. L. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2020.116532}{Brain {GABA} and
+glutamate levels across pain conditions: {A} systematic literature
+review and meta-analysis of {1H-MRS} studies using the {MRS-Q} quality
+assessment tool}. \emph{NeuroImage} \textbf{210}, 116532 (2020).}
+
+\bibitem[\citeproctext]{ref-choiSpectralEditing1H2021}
+\CSLLeftMargin{136. }%
+\CSLRightInline{Choi, I.-Y. \emph{et al.}
+\href{https://doi.org/10.1002/nbm.4411}{Spectral editing in {1H}
+magnetic resonance spectroscopy: {Experts}' consensus recommendations}.
+\emph{NMR in Biomedicine} \textbf{34}, e4411 (2021).}
+
+\bibitem[\citeproctext]{ref-linMinimumReportingStandards2021}
+\CSLLeftMargin{137. }%
+\CSLRightInline{Lin, A. \emph{et al.}
+\href{https://doi.org/10.1002/nbm.4484}{Minimum {Reporting Standards}
+for in vivo {Magnetic Resonance Spectroscopy} ({MRSinMRS}): {Experts}'
+consensus recommendations}. \emph{NMR in biomedicine} \textbf{34}, e4484
+(2021).}
+
+\bibitem[\citeproctext]{ref-kunduMultiechoFMRIReview2017}
+\CSLLeftMargin{138. }%
+\CSLRightInline{Kundu, P. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2017.03.033}{Multi-echo
+{fMRI}: {A} review of applications in {fMRI} denoising and analysis of
+{BOLD} signals}. \emph{NeuroImage} \textbf{154}, 59--80 (2017).}
+
+\bibitem[\citeproctext]{ref-mullinsNovelTechniqueStudy2005}
+\CSLLeftMargin{139. }%
+\CSLRightInline{Mullins, P. G., Rowland, L. M., Jung, R. E. \& Sibbitt,
+W. L. \href{https://doi.org/10.1016/j.neuroimage.2005.02.001}{A novel
+technique to study the brain's response to pain: Proton magnetic
+resonance spectroscopy}. \emph{NeuroImage} \textbf{26}, 642--646
+(2005).}
+
+\bibitem[\citeproctext]{ref-gussewTimeresolvedFunctional1H2010}
+\CSLLeftMargin{140. }%
+\CSLRightInline{Gussew, A. \emph{et al.}
+\href{https://doi.org/10.1016/j.neuroimage.2009.09.007}{Time-resolved
+functional {1H MR} spectroscopic detection of glutamate concentration
+changes in the brain during acute heat pain stimulation}.
+\emph{NeuroImage} \textbf{49}, 1895--1902 (2010).}
+
+\bibitem[\citeproctext]{ref-gutzeitInsulaspecificResponsesInduced2011}
+\CSLLeftMargin{141. }%
+\CSLRightInline{Gutzeit, A. \emph{et al.}
+\href{https://doi.org/10.1007/s00330-010-1971-8}{Insula-specific
+responses induced by dental pain. {A} proton magnetic resonance
+spectroscopy study}. \emph{European Radiology} \textbf{21}, 807--815
+(2011).}
+
+\bibitem[\citeproctext]{ref-mullinsTheoryFunctionalMagnetic2018}
+\CSLLeftMargin{142. }%
+\CSLRightInline{Mullins, P. G.
+\href{https://doi.org/10.1111/sjop.12411}{Towards a theory of functional
+magnetic resonance spectroscopy ({fMRS}): {A} meta-analysis and
+discussion of using {MRS} to measure changes in neurotransmitters in
+real time}. \emph{Scandinavian Journal of Psychology} \textbf{59},
+91--103 (2018).}
+
+\bibitem[\citeproctext]{ref-dwyerSimultaneousMeasurementBOLD2021}
+\CSLLeftMargin{143. }%
+\CSLRightInline{Dwyer, G. E. \emph{et al.}
+\href{https://doi.org/10.3389/fnhum.2021.644079}{Simultaneous
+{Measurement} of the {BOLD Effect} and {Metabolic Changes} in {Response}
+to {Visual Stimulation Using} the {MEGA-PRESS Sequence} at 3 {T}}.
+\emph{Frontiers in Human Neuroscience} \textbf{15}, 644079 (2021).}
+
+\end{CSLReferences}
+
 \section*{Supplementary Material}\label{supplementary-material}
 \addcontentsline{toc}{section}{Supplementary Material}
+
+\subsection*{MRS quality}\label{mrs-quality}
+\addcontentsline{toc}{subsection}{MRS quality}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Measure
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rest sLASER
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rest MEGA-PRESS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Movie sLASER
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Movie MEGA-PRESS
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Measure
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rest sLASER
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Rest MEGA-PRESS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Movie sLASER
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Movie MEGA-PRESS
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of spectroscopy quality measures.} FWHM =
+full-width half-maximum; Cr = creatine; SNR = signal-to-noise
+ratio.}\label{tbl-quality}\tabularnewline
+\endlastfoot
+water FWHM (Hz) & 8.47 ± 0.66 & 7.86 ± 0.8 & 8.32 ± 0.72 & 7.95 ±
+0.82 \\
+Cr SNR & 147.61 ± 20.46 & 101.05 ± 21.42 & 140.6 ± 26 & 98.75 ± 20.01 \\
+Frequency Shift (ppm) & -3.08 ± 0.81 & -3.98 ± 0.94 & -3.12 ± 0.76 &
+-3.85 ± 1.05 \\
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Measure & Amount \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Measure & Amount \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of spectroscopy voxel placement values} GM =
+grey matter; WM = white matter; CSF = cerebrospinal
+fluid.}\label{tbl-singlevoxel}\tabularnewline
+\endlastfoot
+Voxel Rotation (degrees) & -39 ± 8.13 \\
+GM Tissue Fraction & 0.64 ± 0.04 \\
+WM Tissue Fraction & 0.24 ± 0.04 \\
+CSF Tissue Fraction & 0.12 ± 0.03 \\
+\end{longtable}
+
+\subsection*{Linear-mixed effects model
+diagnostics}\label{linear-mixed-effects-model-diagnostics}
+\addcontentsline{toc}{subsection}{Linear-mixed effects model
+diagnostics}
+
+\phantomsection\label{cell-fig-lmemdiag}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-lmemdiag-1.pdf}}
+
+}
+
+\caption{\label{fig-lmemdiag}\textbf{Linear-mixed effects model tests
+for normality.} Model diagnostics for the linear mixed effects model
+predicting Hurst exponent from the EI ratio. A) Residuals vs.~fitted
+values showing homoscedasticity. B) Histogram of residuals. C) Q-Q plot
+indicating normally distributed residuals.}
+
+\end{figure}%
+
+\subsection*{Metabolites}\label{metabolites}
+\addcontentsline{toc}{subsection}{Metabolites}
+
+\subsubsection*{sLASER}\label{slaser}
+\addcontentsline{toc}{subsubsection}{sLASER}
+
+\begin{longtable}[]{@{}lllll@{}}
+
+\toprule\noalign{}
+& Rest Conc & Rest CRLB & Movie Conc & Movie CRLB \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Asc & 0.34 ± 0.29 & 239.72 ± 364.52 & 0.34 ± 0.24 & 194.39 ± 307.8 \\
+Asp & 3.49 ± 0.44 & 9.56 ± 1.34 & 3.39 ± 0.43 & 9.72 ± 1.81 \\
+Cr & 2.04 ± 0.62 & 16.33 ± 7.65 & 2.1 ± 0.49 & 15.22 ± 5.25 \\
+GABA & 0.69 ± 0.41 & 52.78 ± 30.69 & 0.67 ± 0.32 & 49.06 ± 28.51 \\
+GPC & 0.92 ± 0.11 & 12.11 ± 4.83 & 0.9 ± 0.11 & 13.56 ± 4.23 \\
+GSH & 1.3 ± 0.18 & 7.61 ± 1.38 & 1.32 ± 0.13 & 7.44 ± 1.04 \\
+Gln & 2.82 ± 0.58 & 10.11 ± 1.78 & 2.93 ± 0.47 & 9.72 ± 1.02 \\
+Glu & 7.02 ± 0.71 & 4.33 ± 0.49 & 7.11 ± 0.62 & 4.17 ± 0.51 \\
+mI & 4.77 ± 0.34 & 3 ± 0 & 4.8 ± 0.29 & 3 ± 0 \\
+Lac & 0.32 ± 0.13 & 62.78 ± 38.94 & 0.28 ± 0.16 & 182.33 ± 311.77 \\
+NAA & 11.88 ± 1.11 & 1.94 ± 0.24 & 11.83 ± 1.03 & 1.83 ± 0.38 \\
+NAAG & 0 ± 0 & 999 ± 0 & 0.07 ± 0.22 & 890.78 ± 314.99 \\
+PCh & 0.16 ± 0.12 & 292.5 ± 394.55 & 0.18 ± 0.1 & 179.89 ± 299.51 \\
+PCr & 5.68 ± 0.84 & 5.83 ± 1.04 & 5.7 ± 0.69 & 6.11 ± 1.23 \\
+PE & 1.67 ± 0.49 & 31.28 ± 11.85 & 1.71 ± 0.53 & 29.5 ± 8.58 \\
+sI & 0.13 ± 0.12 & 198.61 ± 369.4 & 0.13 ± 0.11 & 127.56 ± 244.45 \\
+Tau & 1.63 ± 0.35 & 15.44 ± 3.2 & 1.65 ± 0.3 & 15.06 ± 3.23 \\
+CrCH2 & 0.26 ± 0.28 & 433.94 ± 469.27 & 0.24 ± 0.2 & 285.11 ± 397.57 \\
+tCho & 1.07 ± 0.09 & 3.72 ± 0.46 & 1.07 ± 0.09 & 3.56 ± 0.62 \\
+tCr & 7.72 ± 0.41 & 1.44 ± 0.51 & 7.8 ± 0.37 & 1.39 ± 0.5 \\
+tNAA & 11.88 ± 1.11 & 1.94 ± 0.24 & 11.91 ± 1.04 & 1.83 ± 0.38 \\
+Glx & 9.84 ± 1.06 & 4.39 ± 0.5 & 10.04 ± 0.79 & 4.17 ± 0.51 \\
+Lip13a & 18.63 ± 7.85 & 76.06 ± 230.43 & 20 ± 7.47 & 21.78 ± 6.48 \\
+Lip13b & 0.07 ± 0.3 & 944.39 ± 231.7 & 0 ± 0 & 999 ± 0 \\
+Lip09 & 4.91 ± 2.05 & 25 ± 9.44 & 5.22 ± 2.04 & 27 ± 10.96 \\
+MM09 & 3.1 ± 2.15 & 112.67 ± 226.41 & 3.03 ± 1.5 & 103.56 ± 227.35 \\
+Lip20 & 3.64 ± 1.34 & 15.5 ± 4.26 & 4.05 ± 1 & 14.44 ± 3.07 \\
+MM20 & 3.88 ± 3.43 & 242.11 ± 383.63 & 3.41 ± 2.16 & 143 ± 262.51 \\
+MM12 & 0.95 ± 0.93 & 316.28 ± 389.01 & 0.99 ± 0.97 & 333.78 ± 425.72 \\
+MM14 & 4.45 ± 2.14 & 34.39 ± 21.5 & 5.11 ± 2.63 & 35.67 ± 25.59 \\
+MM17 & 2.56 ± 1.84 & 246.39 ± 414.02 & 2.69 ± 1.1 & 39.89 ± 31.22 \\
+
+
+\caption{\label{tbl-metabolites}\textbf{All metabolite concentrations
+and Cramer-Rao lower bounds from semi-LASER.} Concentration values are
+in millimoles; Cramer-Rao lower bounds are in percentages. Conc =
+concentration; CRLB = Cramer-Rao lower bounds.}
+
+\tabularnewline
+\end{longtable}
+
+\subsubsection*{MEGA-PRESS}\label{mega-press}
+\addcontentsline{toc}{subsubsection}{MEGA-PRESS}
+
+\begin{longtable}[]{@{}lllll@{}}
+
+\toprule\noalign{}
+& Rest Conc & Rest CRLB & Movie Conc & Movie CRLB \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+GABA & 1.64 ± 0.36 & 16.61 ± 5.51 & 1.55 ± 0.43 & 18.5 ± 5.86 \\
+GSH & 2.41 ± 0.6 & 4.72 ± 0.57 & 2.17 ± 0.62 & 5.06 ± 0.94 \\
+Gln & 2.59 ± 0.95 & 74.56 ± 230.78 & 2.4 ± 0.56 & 24.11 ± 9.54 \\
+Glu & 12.41 ± 1.76 & 4.06 ± 0.64 & 12.11 ± 1.65 & 4.33 ± 0.77 \\
+NAA & 16.47 ± 1.49 & 9.94 ± 2.21 & 16.29 ± 2.01 & 10.39 ± 1.5 \\
+NAAG & 1.8 ± 0.57 & 16.61 ± 5.51 & 2.02 ± 1.07 & 18.5 ± 5.86 \\
+tNAA & 18.27 ± 1.41 & 4.72 ± 0.57 & 18.31 ± 1.65 & 5.06 ± 0.94 \\
+Glx & 15 ± 1.51 & 74.56 ± 230.78 & 14.51 ± 1.57 & 24.11 ± 9.54 \\
+MM09 & 3.84 ± 0.77 & 4.06 ± 0.64 & 3.69 ± 0.49 & 4.33 ± 0.77 \\
+GABAplus & 5.48 ± 0.77 & 9.94 ± 2.21 & 5.23 ± 0.71 & 10.39 ± 1.5 \\
+
+
+\caption{\label{tbl-megapressmetabs}\textbf{All metabolite
+concentrations and Cramer-Rao lower bounds from J-edited MEGA-PRESS.}
+Concentration values are in millimoles; Cramer-Rao lower bounds are in
+percentages. Conc = concentration; CRLB = Cramer-Rao lower bounds.}
+
+\tabularnewline
+\end{longtable}
+
+\subsection*{Data quality}\label{data-quality-1}
+\addcontentsline{toc}{subsection}{Data quality}
+
+\phantomsection\label{cell-fig-dataquality}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-dataquality-1.pdf}}
+
+}
+
+\caption{\label{fig-dataquality}\textbf{Data quality correlations.} A)
+Correlation plots of H vs.~mean FD (mm) for rest (green) and movie
+(orange). B) and C) Correlation plots of Glx (B) and GABA+ (C) vs.~water
+FWHM (Hz) for rest (green) and movie (orange). D) and E) Correlation
+plots of Glx (B) and GABA+ (C) vs.~frequency shift (ppm) for rest
+(green) and movie (orange).}
+
+\end{figure}%
+
+\phantomsection\label{cell-fig-frequencyshift}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-frequencyshift-1.pdf}}
+
+}
+
+\caption{\label{fig-frequencyshift}\textbf{Frequency shift between rest
+and movie.} Overlay of all participants' frequency drift (ppm) plots
+during rest (blue) and movie (red) for A) semi-LASER and B) MEGA-PRESS.
+Note, the GE semi-LASER sequence averaged all transients (128) into
+groups of 4, each with 32 transients, before being saved as raw P-file.}
+
+\end{figure}%
 
 \subsection*{Gannet Results}\label{gannet-results}
 \addcontentsline{toc}{subsection}{Gannet Results}
@@ -1254,7 +2771,7 @@ Figure~\ref{fig-gannet}.
 
 \centering{
 
-\includegraphics{./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png}
+\pandocbounded{\includegraphics[keepaspectratio]{./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png}}
 
 }
 
@@ -1262,9 +2779,26 @@ Figure~\ref{fig-gannet}.
 from a subject a rest. Glx (3.75ppm) and GABA (3) data (blue) and model
 fit (red) are shown top left. Water and creatine reference signals are
 shown bottom left. Table on right shows GABA+ and Glx values before
-tissue and tissue- and alpha-correction.}
+tissue-correction.}
 
 \end{figure}%
+
+To examine the relationship between H and E:I, we ran a linear
+mixed-effects model. The model's total explanatory power was substantial
+(conditional r\textsuperscript{2} = 0.64), with fixed effects (marginal
+r\textsuperscript{2}) equal to 0.23. The model's intercept,
+corresponding to EI = 0, Condition = Movie,
+FWHM\textsubscript{MEGA-PRESS} = 0, FreqShift\textsubscript{MEGA-PRESS}
+= 0, and meanFD = 0, was 1.2 (95\% CI {[}0.66, 1.7{]}, t(26) = 4.64, p
+\textless{} 0.01). Within this model, only the effect of Condition
+{[}Rest{]} was statistically significant (beta = -0.08, 95\% CI
+{[}-0.13, -0.03{]}, t(26) = -3.32, p \textless{} 0.01). The effect of
+E:I was statistically non-significant (beta = -0.07, 95\% CI {[}-0.21,
+0.06{]}, t(26) = -1.04, p = 0.31); along with
+FWHM\textsubscript{MEGA-PRESS} (beta = 0.03, 95\% CI {[}-0.03, 0.08{]},
+t(26) = 0.96, p = 0.35); FreqShift\textsubscript{MEGA-PRESS} (beta =
+0.01, 95\% CI {[}-0.02, 0.05{]}, t(26) = 0.63, p = 0.53); and meanFD
+(beta = -0.76, 95\% CI {[}-2.34, 0.82{]}, t(26) = -0.95, p = 0.35).
 
 Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest
 and movie, are reported in Table~\ref{tbl-gannetresults}. Boxplots
@@ -1282,12 +2816,13 @@ E:I ratio did not change between conditions either.
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
-\endlastfoot
-\textbf{Glx} & 9.32 ± 0.85 & 9.19 ± 0.6 & 0.30 \\
-\textbf{GABA+} & 3.09 ± 0.32 & 3.03 ± 0.33 & 0.22 \\
-\textbf{E:I Ratio} & 3.04 ± 0.3 & 3.06 ± 0.26 & 0.68 \\
+\tabularnewline
 \caption{\textbf{Summary of main metabolite results using
 Gannet}}\label{tbl-gannetresults}\tabularnewline
+\endlastfoot
+\textbf{Glx} & 10.84 ± 1.06 & 10.72 ± 0.68 & 0.43 \\
+\textbf{GABA+} & 3.59 ± 0.38 & 3.53 ± 0.36 & 0.33 \\
+\textbf{E:I Ratio} & 1.82 ± 0.25 & 1.94 ± 0.25 & 0.08 \\
 \end{longtable}
 
 \phantomsection\label{cell-fig-gannetresults}
@@ -1295,43 +2830,39 @@ Gannet}}\label{tbl-gannetresults}\tabularnewline
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-gannetresults-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-gannetresults-1.pdf}}
 
 }
 
 \caption{\label{fig-gannetresults}\textbf{Paired comparison of
 metabolite values analyzed using Gannet during rest (green) and movie
-(orange) conditions.} A) Glx; B) GABA+; and C) E:I. Paired dots
-represent the same participant across conditions. Mean difference with
-95\% confidence intervals, and as Cohen's D are reported at the top of
-each plot.}
+(orange) conditions.} A) Glx (mM); B) GABA+ (mM); and C) E:I. Paired
+dots represent the same participant across conditions. Mean difference
+with 95\% confidence intervals, and as Cohen's D are reported at the top
+of each plot.}
 
 \end{figure}%
 
-H was not found to correlate with Glx, GABA+, or E:I, during rest or
-movie (Figure~\ref{fig-gannetcorrelations}).
+H was not found to correlate with Glx (Rest: r = 0, p = 0.99; Movie: r =
+-0.27, p = 0.28), GABA+ (Rest: r = 0.02, p = 0.93; Movie: r = 0.11, p =
+0.67), or E:I (Rest: r = -0.04, p = 0.89; Movie: r = -0.32, p = 0.2)
+(Figure~\ref{fig-gannetcorrelations}).
 
 \phantomsection\label{cell-fig-gannetcorrelations}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-gannetcorrelations-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-gannetcorrelations-1.pdf}}
 
 }
 
 \caption{\label{fig-gannetcorrelations}\textbf{Scatter plots of H
-vs.~metabolites when analyzed using Gannet.} A) Glx; B) GABA+; and C)
-E:I. Rest is in green, while movie is in orange. p-values are reported
-at the top of each plot.}
+vs.~metabolites when analyzed using Gannet.} A) Glx (mM); B) GABA+ (mM);
+and C) E:I. Rest is in green, while movie is in orange. P-values are
+reported at the top of each plot.}
 
 \end{figure}%
-
-\section*{References}\label{references}
-\addcontentsline{toc}{section}{References}
-
-\renewcommand{\bibsection}{}
-\bibliography{EIHurst.bib}
 
 
 
