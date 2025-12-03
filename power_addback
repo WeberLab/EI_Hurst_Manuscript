@@ -1,0 +1,3 @@
+<!-- To calculate the post-hoc power of our model, we required an effect size. While *in silico* and animal studies indicate that changes in E:I ratio influence the Hurst exponent [@trakoshisIntrinsicExcitationinhibitionImbalance], these models do not provide standardized effect sizes, and translation to human neuroimaging remains uncertain. Therefore, we used several effect sizes, and report here the power of each. The effect sizes we therefore used to calculate power are the one calculated above (beta = `r round(model_summary$coefficients["EI","Estimate"],2)`), and 0.1 and 0.15: `r modelpower*100`%, `r modelpower0.1*100`%, and `r modelpower0.15*100`%, respectively. -->
+
+
