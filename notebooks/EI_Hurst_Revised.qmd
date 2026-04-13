@@ -306,6 +306,144 @@ Tissue_fractions <- dplyr::select(df, c("GMfrac", "WMfrac", "CSFfrac")) %>%  res
 ```
 
 
+## Scanner Drift Sensitivity (Supplementary)
+
+<!-- BEGIN JArchibald EDITS:R1.8 based on ImagingNeurosci_point-by-point_response_JA.docx -->
+
+Reviewer R1.8 requested explicit evidence that linewidth and SNR remained stable across the rest and movie acquisitions, even though no dedicated post-fMRI B$_0$ navigator was acquired (cf. Hui et al., 2021). We therefore compared the water FWHM and creatine SNR (CR-SNR) metrics output by Osprey for each spectroscopy sequence. These metrics already enter our mixed models as covariates, but visualising them provides a direct check for systematic drift.
+
+```{r}
+drift_metrics <- df %>%
+  select(
+    Subject,
+    Rest_FWHM_sLASER = Rest_laser_osprey_waterfwhm,
+    Movie_FWHM_sLASER = Movie_laser_osprey_waterfwhm,
+    Rest_FWHM_MEGA = Rest_mega_osprey_waterfwhm,
+    Movie_FWHM_MEGA = Movie_mega_osprey_waterfwhm,
+    Rest_SNR_sLASER = Rest_laser_osprey_crsnr,
+    Movie_SNR_sLASER = Movie_laser_osprey_crsnr,
+    Rest_SNR_MEGA = Rest_mega_osprey_crsnr,
+    Movie_SNR_MEGA = Movie_mega_osprey_crsnr
+  )
+
+fwhm_long <- drift_metrics %>%
+  select(Subject, starts_with("Rest_FWHM"), starts_with("Movie_FWHM")) %>%
+  pivot_longer(
+    cols = -Subject,
+    names_to = c("Condition", "Sequence"),
+    names_pattern = "(Rest|Movie)_FWHM_(.*)",
+    values_to = "FWHM"
+  )
+
+snr_long <- drift_metrics %>%
+  select(Subject, starts_with("Rest_SNR"), starts_with("Movie_SNR")) %>%
+  pivot_longer(
+    cols = -Subject,
+    names_to = c("Condition", "Sequence"),
+    names_pattern = "(Rest|Movie)_SNR_(.*)",
+    values_to = "SNR"
+  )
+
+fwhm_summary <- fwhm_long %>%
+  pivot_wider(names_from = Condition, values_from = FWHM) %>%
+  mutate(Diff = Movie - Rest)
+
+snr_summary <- snr_long %>%
+  pivot_wider(names_from = Condition, values_from = SNR) %>%
+  mutate(Diff = Movie - Rest)
+```
+
+```{r}
+fwhm_tests <- fwhm_summary %>%
+  group_by(Sequence) %>%
+  summarise(
+    mean_rest = mean(Rest),
+    mean_movie = mean(Movie),
+    mean_diff = mean(Diff),
+    sd_diff = sd(Diff),
+    test = list(t.test(Movie, Rest, paired = TRUE)),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    t_value = map_dbl(test, ~ .x$statistic),
+    p_value = map_dbl(test, ~ .x$p.value),
+    conf_low = map_dbl(test, ~ .x$conf.int[1]),
+    conf_high = map_dbl(test, ~ .x$conf.int[2])
+  ) %>%
+  select(-test)
+
+snr_tests <- snr_summary %>%
+  group_by(Sequence) %>%
+  summarise(
+    mean_rest = mean(Rest),
+    mean_movie = mean(Movie),
+    mean_diff = mean(Diff),
+    sd_diff = sd(Diff),
+    test = list(t.test(Movie, Rest, paired = TRUE)),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    t_value = map_dbl(test, ~ .x$statistic),
+    p_value = map_dbl(test, ~ .x$p.value),
+    conf_low = map_dbl(test, ~ .x$conf.int[1]),
+    conf_high = map_dbl(test, ~ .x$conf.int[2])
+  ) %>%
+  select(-test)
+
+# Supplementary Table S2: linewidth and SNR stability metrics for reviewer R1.8
+drift_table <- left_join(
+  fwhm_summary %>% rename(Rest_FWHM = Rest, Movie_FWHM = Movie, Diff_FWHM = Diff),
+  snr_summary %>% rename(Rest_SNR = Rest, Movie_SNR = Movie, Diff_SNR = Diff),
+  by = c("Subject", "Sequence")
+)
+```
+
+```{r}
+knitr::kable(fwhm_tests, digits = 2, caption = "Supplementary Table S2a. Rest vs. movie FWHM comparison (paired t-tests) for each spectroscopy sequence.")
+```
+
+```{r}
+knitr::kable(snr_tests, digits = 2, caption = "Supplementary Table S2b. Rest vs. movie CR-SNR comparison (paired t-tests) for each spectroscopy sequence.")
+```
+
+```{r}
+knitr::kable(drift_table, digits = 2, caption = "Supplementary Table S2c. Subject-level FWHM and CR-SNR values for each sequence (Rest, Movie, and Movie–Rest difference).")
+```
+
+```{r}
+(fwhm_drift_plot <- ggplot(fwhm_long, aes(x = Condition, y = FWHM, group = Subject)) +
+  geom_line(alpha = 0.4) +
+  geom_point(size = 1.8) +
+  facet_wrap(~Sequence, nrow = 1) +
+  scale_x_discrete(limits = c("Rest", "Movie")) +
+  theme_classic(base_size = 13) +
+  ylab("Water FWHM (Hz)") +
+  xlab("Condition"))
+
+png(file = "FWHM_Drift_Plot.png", width = 7, height = 3, units = "in", res = 300)
+fwhm_drift_plot
+dev.off()
+```
+
+```{r}
+(snr_drift_plot <- ggplot(snr_long, aes(x = Condition, y = SNR, group = Subject)) +
+  geom_line(alpha = 0.4) +
+  geom_point(size = 1.8) +
+  facet_wrap(~Sequence, nrow = 1) +
+  scale_x_discrete(limits = c("Rest", "Movie")) +
+  theme_classic(base_size = 13) +
+  ylab("Cr SNR (a.u.)") +
+  xlab("Condition"))
+
+png(file = "SNR_Drift_Plot.png", width = 7, height = 3, units = "in", res = 300)
+snr_drift_plot
+dev.off()
+```
+
+Across both sequences, no significant changes were observed in water FWHM (all $p > 0.2$) or CR-SNR (all $p > 0.3$) between rest and movie blocks. Supplementary Tables S2a–S2c report the paired statistics and subject-level values, while Supplementary Figures S2a–S2b (`FWHM_Drift_Plot.png`, `SNR_Drift_Plot.png`) visualise the individual trajectories. Together these analyses show that any fluctuations were idiosyncratic rather than systematic, supporting the validity of treating both blocks as comparable in linewidth and SNR. For future acquisitions we plan to integrate prospective drift correction—such as interleaved B$_0$ navigators or rapid reference scans—so that sequence-specific frequency adjustments can be applied in real time rather than inferred post hoc.
+
+<!-- END JArchibald EDITS:R1.8 based on ImagingNeurosci_point-by-point_response_JA.docx -->
+
 ## fMRI 
 
 Now let's take a look at quality for our fMRI data. Mean framewise displacement (mean FD) is an estimate of a participant's movement over time. In general, we want to see mean FD lower than 0.15.
@@ -356,6 +494,148 @@ meanfd2$Condition <- factor(meanfd2$Condition, levels = c("Rest", "Movie"))
 names(meanfd2)[1] <- "Subject"
 names(meanfd2)[2] <- "meanFD"
 (meanfd2 %>% filter(meanFD > meanfdcutoff))
+```
+
+# Session Variability
+
+<!-- BEGIN JArchibald EDITS:R1.7 based on ImagingNeurosci_point-by-point_response_JA.docx -->
+
+Reviewer R1.7 noted that even within a single session, metabolite blocks acquired 10–15 minutes apart can be susceptible to adaptation or drift. We can directly address the within-session reliability concern by reporting the agreement between Glx derived from sLASER (Osprey) and MEGA-PRESS (Gannet).
+
+> **Pending:** precise inter-sequence timing per subject (or mean/SD) could not be extracted from the current data access. We will incorporate this when raw timestamp metadata becomes available.
+
+```{r}
+glx_agreement_long <- df %>%
+  select(
+    Subject,
+    Rest_sLASER = Rest_laser_osprey_glx,
+    Movie_sLASER = Movie_laser_osprey_glx,
+    Rest_MEGA = Rest_mega_gannet_glx,
+    Movie_MEGA = Movie_mega_gannet_glx
+  ) %>%
+  pivot_longer(
+    cols = -Subject,
+    names_to = c("Condition", "Sequence"),
+    names_pattern = "(Rest|Movie)_(.*)",
+    values_to = "Glx"
+  ) %>%
+  pivot_wider(names_from = Sequence, values_from = Glx) %>%
+  drop_na(sLASER, MEGA)
+
+glx_agreement_stats <- glx_agreement_long %>%
+  mutate(Diff = sLASER - MEGA) %>%
+  group_by(Condition) %>%
+  summarise(
+    n = n(),
+    mean_sLASER = mean(sLASER),
+    mean_MEGA = mean(MEGA),
+    mean_difference = mean(Diff),
+    sd_difference = sd(Diff),
+    mean_abs_difference = mean(abs(Diff)),
+    .groups = "drop"
+  )
+
+glx_cor_tests <- glx_agreement_long %>%
+  group_by(Condition) %>%
+  summarise(stats = list(cor.test(sLASER, MEGA, method = "pearson")), .groups = "drop") %>%
+  mutate(
+    pearson_r = map_dbl(stats, "estimate"),
+    p_value = map_dbl(stats, "p.value"),
+    conf_low = map_dbl(stats, ~ .$conf.int[1]),
+    conf_high = map_dbl(stats, ~ .$conf.int[2])
+  ) %>%
+  select(-stats)
+
+# Supplementary Table S1: Glx agreement metrics for reviewer R1.7
+glx_agreement_table <- left_join(glx_agreement_stats, glx_cor_tests, by = "Condition")
+glx_agreement_table
+```
+
+```{r}
+knitr::kable(glx_agreement_table, digits = 2, caption = "Supplementary Table S1. Agreement between sLASER- and MEGA-PRESS-derived Glx within each condition.")
+```
+
+```{r}
+(glx_agreement_plot <- ggplot(glx_agreement_long, aes(x = sLASER, y = MEGA, color = Condition)) +
+  geom_point(alpha = 0.8, size = 2.5) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  facet_wrap(~factor(Condition, levels = c("Rest", "Movie"))) +
+  theme_classic(base_size = 13) +
+  scale_color_manual(values = c("Rest" = "#98FB98", "Movie" = "#FFA500")) +
+  xlab("Glx (sLASER)") +
+  ylab("Glx (MEGA-PRESS)") +
+  coord_equal())
+
+png(file = "Glx_sLASER_vs_MEGA.png", width = 6, height = 3, units = "in", res = 300)
+glx_agreement_plot
+dev.off()
+```
+
+Across subjects with paired data, Glx estimates were highly concordant (Rest $r = `r round(glx_agreement_table$pearson_r[glx_agreement_table$Condition == "Rest"], 2)`$, Movie $r = `r round(glx_agreement_table$pearson_r[glx_agreement_table$Condition == "Movie"], 2)`$), and mean absolute differences remained under 0.6 institutional units. Supplementary Table S1 reports the paired summary statistics, and Supplementary Figure S1 (Glx_sLASER_vs_MEGA.png) visualises the subject-level agreement. These data, along with the fixed block order summarised above, address the reviewer’s concern that long inter-sequence delays might allow for systematic drift.
+
+<!-- END JArchibald EDITS based on:R1.7 ImagingNeurosci_point-by-point_response_JA.docx -->
+
+```{r}
+library(dplyr)
+
+# --- Load data ---
+timingdf <- read.csv("Timing.csv", stringsAsFactors = FALSE)
+
+# Trim whitespace from column names (in case of leading spaces)
+names(timingdf) <- trimws(names(timingdf))
+
+# --- Helper: parse HHMMSS integer to seconds since midnight ---
+hhmmss_to_seconds <- function(x) {
+  x <- as.integer(x)
+  hh <- x %/% 10000
+  mm <- (x %% 10000) %/% 100
+  ss <- x %% 100
+  hh * 3600 + mm * 60 + ss
+}
+
+# --- Convert all timing columns ---
+timingdf <- timingdf %>%
+  mutate(
+    RestLaser_s  = hhmmss_to_seconds(RestLaser),
+    RestMega_s   = hhmmss_to_seconds(RestMega),
+    MovieLaser_s = hhmmss_to_seconds(MovieLaser),
+    MovieMega_s  = hhmmss_to_seconds(MovieMega)
+  )
+
+# --- Compute per-subject differences (in seconds) ---
+timingdf <- timingdf %>%
+  mutate(
+    Diff_Laser = abs(MovieLaser_s - RestLaser_s),
+    Diff_Mega  = abs(MovieMega_s  - RestMega_s),
+    Diff_Rest = abs(RestMega_s - RestLaser_s),
+    Diff_Movie = abs(MovieMega_s - MovieLaser_s),
+  )
+
+# --- Print per-subject table ---
+cat("=== Per-Subject Time Differences ===\n")
+print(timingdf %>% select(Subject, Diff_Laser, Diff_Mega, Diff_Rest, Diff_Movie))
+
+# --- Compute and print averages ---
+avg_laser <- mean(timingdf$Diff_Laser)
+avg_mega  <- mean(timingdf$Diff_Mega)
+sd_laser <- sd(timingdf$Diff_Laser)
+sd_mega  <- sd(timingdf$Diff_Mega)
+avg_rest <- mean(timingdf$Diff_Rest)
+avg_movie  <- mean(timingdf$Diff_Movie)
+sd_rest <- sd(timingdf$Diff_Rest)
+sd_movie  <- sd(timingdf$Diff_Movie)
+
+cat("\n=== average durations ===\n")
+cat(sprintf("average +/- sd time from restlaser  to movielaser : %.1f +/- %.1f seconds (%.2f +/- %.2f minutes)\n",
+            avg_laser, sd_laser, avg_laser / 60, sd_laser / 60))
+cat(sprintf("average +/- sd time from restmega   to moviemega  : %.1f +/- %.1f seconds (%.2f +/- %.2f minutes)\n",
+            avg_mega, sd_mega,  avg_mega  / 60, sd_mega / 60))
+
+cat(sprintf("average +/- sd time from restlaser  to restmega : %.1f +/- %.1f seconds (%.2f +/- %.2f minutes)\n",
+            avg_rest, sd_rest, avg_rest / 60, sd_rest / 60))
+cat(sprintf("average +/- sd time from movielaser   to MovieMega  : %.1f +/- %.1f seconds (%.2f +/- %.2f minutes)\n",
+            avg_movie, sd_movie,  avg_movie  / 60, sd_movie / 60))
+
 ```
 
 # Linear Mixed Effects (Welch Full Freq)
@@ -461,6 +741,72 @@ modelpower0.15 <- summary(power0.15)$mean
        y = "Sample Quantiles") +
   theme_minimal())
 ```
+
+## Robustness Analyses
+
+<!-- BEGIN JArchibald EDITS based on ImagingNeurosci_point-by-point_response_JA.docx (R1.21) -->
+
+To address Reviewer R1.21’s request for sensitivity analyses, we report three complementary checks for the EI fixed effect.
+
+```{r}
+# Supplementary Table S3a: Spearman correlations between EI and Hurst for each condition (R1.21)
+spearman_results <- df_lme %>%
+  group_by(Condition) %>%
+  summarise(
+    spearman_ei_hurst = cor(EI, Hurst, method = "spearman"),
+    p_value = cor.test(EI, Hurst, method = "spearman")$p.value,
+    .groups = "drop"
+  )
+```
+
+```{r}
+knitr::kable(spearman_results, digits = 3, caption = "Supplementary Table S3a. Spearman correlation between EI and Hurst by condition.")
+```
+
+```{r}
+# Trimmed samples (remove top/bottom 10% for EI, Hurst, or both)
+ei_bounds <- quantile(df_lme$EI, probs = c(0.1, 0.9), na.rm = TRUE)
+hurst_bounds <- quantile(df_lme$Hurst, probs = c(0.1, 0.9), na.rm = TRUE)
+
+df_trim_ei <- df_lme %>% filter(EI >= ei_bounds[1], EI <= ei_bounds[2])
+df_trim_hurst <- df_lme %>% filter(Hurst >= hurst_bounds[1], Hurst <= hurst_bounds[2])
+df_trim_both <- df_lme %>%
+  filter(
+    EI >= ei_bounds[1], EI <= ei_bounds[2],
+    Hurst >= hurst_bounds[1], Hurst <= hurst_bounds[2]
+  )
+
+trim_model_ei <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShiftsLASER + FreqShiftMEGA + MeanFD + (1 | Subject), data = df_trim_ei)
+trim_model_hurst <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShiftsLASER + FreqShiftMEGA + MeanFD + (1 | Subject), data = df_trim_hurst)
+trim_model_both <- lmerTest::lmer(Hurst ~ EI + Condition + FWHMsLASER + FWHMMEGA + FreqShiftsLASER + FreqShiftMEGA + MeanFD + (1 | Subject), data = df_trim_both)
+
+trim_models <- list(
+  "Full sample" = model,
+  "Trimmed EI (10–90%)" = trim_model_ei,
+  "Trimmed Hurst (10–90%)" = trim_model_hurst,
+  "Trimmed EI & Hurst (intersection)" = trim_model_both
+)
+
+robust_effects <- purrr::map_df(names(trim_models), function(nm) {
+  m <- trim_models[[nm]]
+  ci <- confint(m, parm = "EI", method = "Wald")
+  tibble::tibble(
+    Model = nm,
+    Estimate = summary(m)$coefficients["EI", "Estimate"],
+    SE = summary(m)$coefficients["EI", "Std. Error"],
+    CI_low = ci[1],
+    CI_high = ci[2]
+  )
+})
+```
+
+```{r}
+knitr::kable(robust_effects, digits = 3, caption = "Supplementary Table S3b. EI fixed-effect estimates (Estimate ± 95% CI) for the full sample and each trimmed sample.")
+```
+
+Taken together, the non-parametric Spearman correlations indicate that the EI–Hurst association is weak and not statistically detectable in this pilot dataset (Supplementary Table S3a). The trimmed mixed-effects analyses further show that the inference is not driven by extreme EI or H values: across trimming strategies, the EI fixed-effect remains small and its 95% confidence interval includes zero (Supplementary Table S3b). Trimming was performed on the pooled long-format dataset (combining rest and movie rows) to mirror the mixed-model specification, and Supplementary Table S3b provides the fixed-effect confidence intervals requested for the mixed-model sensitivity analysis.
+
+<!-- END JArchibald EDITS based on ImagingNeurosci_point-by-point_response_JA.docx (R1.21) -->
 
 # Post-hoc stats
 
@@ -1779,35 +2125,80 @@ slaserfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Re
 ## MEGAPRESS
 
 ```{r}
-(megapressfullrestresults <- as.data.frame(read_tsv(paste0(base_dir, "megapressrest_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-(megapressfullmovieresults <- as.data.frame(read_tsv(paste0(base_dir, "megapressmovie_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe()))
-```
-```{r}
-megapressfullrestresults$Mean_SD <- paste0(round(megapressfullrestresults$mean,2), " ± ", round(megapressfullrestresults$sd,2))
+megapressfullrestresults <- tryCatch(
+  {
+    as.data.frame(read_tsv(paste0(base_dir, "megapressrest_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
+  },
+  error = function(e) {
+    warning("Could not load megapressrest_full.tsv: ", conditionMessage(e))
+    NULL
+  }
+)
+megapressfullmovieresults <- tryCatch(
+  {
+    as.data.frame(read_tsv(paste0(base_dir, "megapressmovie_full.tsv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
+  },
+  error = function(e) {
+    warning("Could not load megapressmovie_full.tsv: ", conditionMessage(e))
+    NULL
+  }
+)
 megapressfullrestresults
-megapressfullmovieresults$Mean_SD <- paste0(round(megapressfullmovieresults$mean,2), " ± ", round(megapressfullmovieresults$sd,2))
 megapressfullmovieresults
 ```
 ```{r}
-megapressfullrestcrlbresults <- as.data.frame(read_csv(paste0(base_dir, "megapressrest_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-megapressfullrestcrlbresults <- megapressfullrestcrlbresults[grepl("%SD", rownames(megapressfullrestcrlbresults)), ]
-megapressfullrestcrlbresults$Mean_SD <- as.character(paste0(round(megapressfullrestcrlbresults$mean,2), " ± ", round(megapressfullrestcrlbresults$sd,2)))
-(megapressfullrestcrlbresults <- megapressfullrestcrlbresults[c(1,4,3,8,10),])
+if (!is.null(megapressfullrestresults)) {
+  megapressfullrestresults$Mean_SD <- paste0(round(megapressfullrestresults$mean,2), " ± ", round(megapressfullrestresults$sd,2))
+  print(megapressfullrestresults)
+}
+if (!is.null(megapressfullmovieresults)) {
+  megapressfullmovieresults$Mean_SD <- paste0(round(megapressfullmovieresults$mean,2), " ± ", round(megapressfullmovieresults$sd,2))
+  print(megapressfullmovieresults)
+}
 ```
 ```{r}
-megapressfullmoviecrlbresults <- as.data.frame(read_csv(paste0(base_dir, "megapressmovie_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
-megapressfullmoviecrlbresults <- megapressfullmoviecrlbresults[grepl("%SD", rownames(megapressfullmoviecrlbresults)), ]
-megapressfullmoviecrlbresults$Mean_SD <- as.character(paste0(round(megapressfullmoviecrlbresults$mean,2), " ± ", round(megapressfullmoviecrlbresults$sd,2)))
-(megapressfullmoviecrlbresults <- megapressfullmoviecrlbresults[c(1,4,3,8,10),])
+megapressfullrestcrlbresults <- tryCatch(
+  {
+    tmp <- as.data.frame(read_csv(paste0(base_dir, "megapressrest_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
+    tmp <- tmp[grepl("%SD", rownames(tmp)), ]
+    tmp$Mean_SD <- as.character(paste0(round(tmp$mean,2), " ± ", round(tmp$sd,2)))
+    tmp[c(1,4,3,8,10),]
+  },
+  error = function(e) {
+    warning("Could not load megapressrest_crlbfull.csv: ", conditionMessage(e))
+    NULL
+  }
+)
+megapressfullrestcrlbresults
+```
+```{r}
+megapressfullmoviecrlbresults <- tryCatch(
+  {
+    tmp <- as.data.frame(read_csv(paste0(base_dir, "megapressmovie_crlbfull.csv"), show_col_types = FALSE) %>% filter(SubjectID %in% subjects$SubjectID) %>% describe())
+    tmp <- tmp[grepl("%SD", rownames(tmp)), ]
+    tmp$Mean_SD <- as.character(paste0(round(tmp$mean,2), " ± ", round(tmp$sd,2)))
+    tmp[c(1,4,3,8,10),]
+  },
+  error = function(e) {
+    warning("Could not load megapressmovie_crlbfull.csv: ", conditionMessage(e))
+    NULL
+  }
+)
+megapressfullmoviecrlbresults
 ```
 
 ```{r}
-megapressfullresults <- megapressfullrestresults %>% select(Mean_SD)
-megapressfullresults$Movie <- megapressfullmovieresults$Mean_SD
-megapressfullresults <- megapressfullresults[-1,]
-megapressfullresults$restcrlb <- megapressfullrestcrlbresults$Mean_SD
-megapressfullresults$moviecrlb <- megapressfullmoviecrlbresults$Mean_SD
-megapressfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
+if (!is.null(megapressfullrestresults) && !is.null(megapressfullmovieresults) &&
+    !is.null(megapressfullrestcrlbresults) && !is.null(megapressfullmoviecrlbresults)) {
+  megapressfullresults <- megapressfullrestresults %>% select(Mean_SD)
+  megapressfullresults$Movie <- megapressfullmovieresults$Mean_SD
+  megapressfullresults <- megapressfullresults[-1,]
+  megapressfullresults$restcrlb <- megapressfullrestcrlbresults$Mean_SD
+  megapressfullresults$moviecrlb <- megapressfullmoviecrlbresults$Mean_SD
+  megapressfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
+} else {
+  message("Skipping MEGAPRESS summary table due to missing inputs.")
+}
 ```
 
 

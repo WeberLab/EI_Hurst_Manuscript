@@ -1,9 +1,10 @@
 project:
   type: manuscript
-  render: 
+  render:
     - "!notes.md"
+    - "!ImagingNeuroscience/"
     - "*.qmd"
-  #   - "!pyvenv_csvo/"
+    #   - "!pyvenv_csvo/"
     - "*.ipynb"
 
 manuscript:
@@ -35,7 +36,7 @@ format:
     # include-in-header:
     #   - text: |
     #       \usepackage{breqn}
-    journal: 
+    journal:
       cite-style: sn-nature
       keep-tex: true
       colorlinks: true

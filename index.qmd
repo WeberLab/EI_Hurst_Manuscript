@@ -90,6 +90,19 @@ crossref:
   fig-title: '**Figure**'
   tbl-title: '**Table**'
   title-delim: "**.**"
+  custom:
+    - kind: float
+      key: suppfig
+      latex-env: suppfig
+      reference-prefix: '**Figure S**'
+      space-before-numbering: false
+      latex-list-of-description: Supplementary Figure
+    - kind: float
+      key: supptbl
+      latex-env: supptbl
+      reference-prefix: '**Table S**'
+      space-before-numbering: false
+      latex-list-of-description: Supplementary Table 
 ---
 
 ```{r}
@@ -160,14 +173,14 @@ H has emerged as a valuable tool in neuroscience and clinical research. Typicall
 In addition to its implications for the critical brain hypothesis, establishing a connection between E:I and H could facilitate simpler estimation of excitatory and inhibitory neurotransmitters, as precise measurement of E:I is technically challenging [@ajramContribution1HMagnetic2019]. Currently, magnetic resonance spectroscopy (MRS) is the only non-invasive method for *in vivo* assessment of the Glu/GABA ratio (excitatory to inhibitory neurotransmitters) in humans [@stanleyFunctionalMagneticResonance2018; @harrisEdited1Magnetic2017]. Unfortunately, MRS suffers from limited spatial and temporal resolution, with single-voxel spectrosopy sizes between 20 and 27 cm^3^, and scan times between 5-10 minutes [@gaoInferringSynapticExcitation2017; @ajramContribution1HMagnetic2019; @stanleyFunctionalMagneticResonance2018]. In addition, quantification of GABA at 3T necessitates the use of a specialized J-difference spectral-editing sequence (such as MEGA-PRESS), in order to isolate GABA (at 3 ppm, 2.3 ppm, and 1.9 ppm) from overlapping peaks (e.g. creatine and glutamate) [@peekComprehensiveGuideMEGAPRESS2023]. The need for this additional sequence therefore reduces the temporal resolution further. If H could function as a substitute for E:I, it could simplify the estimation of E:I.
 
 Beyond clinical observations suggesting that both H and E:I imbalance are altered in neuropsychiatric conditions, several studies have attempted to show that critical-state dynamics emerge when excitation and inhibition are balanced. Indirect evidence comes from pharmacological manipulation of GABAergic neurotransmission, which has been shown to change the strength of LRTC *in vitro* [@poilFastNetworkOscillations2011] and in the beta-frequency range in humans using EEG [@montoEpileptogenicNeocorticalNetworks2007]; and to eliminate the power-law scaling of neuronal avalanches in rats [@beggsNeuronalAvalanchesNeocortical2003; @gireeshNeuronalAvalanchesOrganize2008; @yangMaximalVariabilityPhase2012].
-More direct efforts linking H and E:I have mostly relied on computational models or animal studies [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017], and the results remain inconsistent, ranging from positive to negative or even U-shaped associations. These discrepancies may reflect differences in model systems (e.g., animal vs. computer simulations), methodological choices (such as how H or E:I are estimated), or may represent counter evidence against the theory that these measures are systematically related. Indeed, other theories for how the brain maintains criticality exist, such as neuromodulator regulation [@obyrneHowCriticalBrain2022; @plenzSelfOrganizedCriticalityBrain2021; @avramieaRegulationCriticalBrain2023] or synaptic plasticity [@zeraatiSelfOrganizationCriticalitySynaptic2021; @ikeda2025emergentfunctionsnoisedrivenspontaneous], to name a few. 
+More direct efforts linking H and E:I have mostly relied on computational models or animal studies [@liangExcitationInhibitionBalance2024; @poilCriticalStateDynamicsAvalanches2012; @lombardiBalanceExcitationInhibition2017; @baumgartenCriticalExcitationinhibitionBalance2019; @bruiningMeasurementExcitationinhibitionRatio2020; @trakoshisIntrinsicExcitationinhibitionImbalance; @gaoInferringSynapticExcitation2017], and the results remain inconsistent, ranging from positive to negative or even U-shaped associations. These discrepancies may reflect differences in model systems (e.g., animal vs. computer simulations), methodological choices (such as how H or E:I are estimated), or may represent counter evidence against the theory that these measures are systematically related. Indeed, other theories for how the brain maintains criticality exist, such as neuromodulator regulation [@obyrneHowCriticalBrain2022; @plenzSelfOrganizedCriticalityBrain2021; @avramieaRegulationCriticalBrain2023] or synaptic plasticity [@zeraatiSelfOrganizationCriticalitySynaptic2021; @ikedaEmergentFunctionsNoisedriven2025], to name a few. 
 Despite the lack of direct evidence, several recent human studies have used fMRI-derived H as a direct proxy for E:I balance [@linkeAlteredDevelopmentHurst2024; @xiePharmacoresistantTemporalLobe2024; @uscatescuUsingExcitationInhibition2023; @fotiadisMyelinationExcitationinhibitionBalance2023]; yet, no study to date has tested the empirical relationship between H and neurochemical estimates of E:I (e.g., Glu/GABA ratio) *in vivo* in humans. 
 
 The theory that E:I serves as the primary control parameter governing H --- and, by extension, brain criticality --- offers a framework with clear, falsifiable predictions that can be directly tested.
 Specifically, if this framework holds, E:I and H should covary systematically in the human brain across individuals, age, brain regions, and cognitive states. 
 To empirically test this prediction, the present study examined the E:I–Hurst relationship in the human visual cortex during rest and naturalistic movie-watching. 
 Although a single condition would be sufficient to test the correlation between E:I and H, we included two conditions to broaden the dynamic range of neural and neurochemical measures --- thereby increasing our sensitivity to detect a correlation --- and to provide validation that our metrics behave as expected across qualitatively different brain states.
-Naturalistic movie-watching is known to reliably engage the visual cortex with complex, temporally structured input, making it a useful condition for probing changes in the temporal dynamics of neural activity [@vanderwalMoviesMagnetNaturalistic2019; @campbellFractalBasedAnalysisFMRI2022]. Prior work from our group has shown that H values increased during movie-watching compared to rest [@campbellFractalBasedAnalysisFMRI2022], while work from others have found changes in Glu and GABA with sustained visual stimulation [@linInvestigatingMetabolicChanges2012; @martinez-maestroDynamicMetabolicChanges2019; @saucedoChangesGABAGlutamate; @kurcyusOppositeDynamicsGABA2018]. We hypothesized that H and Glu would increase during movie-watching [@campbellFractalBasedAnalysisFMRI2022; @linInvestigatingMetabolicChanges2012; @martinez-maestroDynamicMetabolicChanges2019], that GABA would decrease [@saucedoChangesGABAGlutamate; @kurcyusOppositeDynamicsGABA2018], and that H would be negatively correlated with E:I in both conditions [@trakoshisIntrinsicExcitationinhibitionImbalance].
+Naturalistic movie-watching is known to reliably engage the visual cortex with complex, temporally structured input, making it a useful condition for probing changes in the temporal dynamics of neural activity [@vanderwalMoviesMagnetNaturalistic2019; @campbellFractalBasedAnalysisFMRI2022]. Prior work from our group has shown that H values increased during movie-watching compared to rest [@campbellFractalBasedAnalysisFMRI2022], while work from others have found changes in Glu and GABA with sustained visual stimulation [@linInvestigatingMetabolicChanges2012; @martinez-maestroDynamicMetabolicChanges2019; @saucedoChangesGABAGlutamate; @kurcyusOppositeDynamicsGABA2018]. We hypothesized that H and Glu would increase during movie-watching [@campbellFractalBasedAnalysisFMRI2022; @linInvestigatingMetabolicChanges2012; @martinez-maestroDynamicMetabolicChanges2019], that GABA would decrease [@saucedoChangesGABAGlutamate; @kurcyusOppositeDynamicsGABA2018], and that H would be positively correlated with E:I in both conditions [@gaoInferringSynapticExcitation2017].
 
 # Methods
 
@@ -245,11 +258,11 @@ Participants were excluded from further analysis if their mean FD was > 0.15 mm.
 ## MRS
 
 sLASER data were processed using `Osprey` [@oeltzschnerOspreyOpenSourceProcessing2020] (v2.9.5) and fit via the embedded `LCModel` (v6.3-1N) wrapper [@provencherAutomaticQuantitationLocalized2001]. 
-Because of substantial overlap among Glu and Gln resonances [@pasantaFunctionalMRSStudies2023; @ramadanGlutamateGlutamineReview2013], in order to avoid errors in spectral assignment --- especially since it is controversial whether Glu can reliably be separated from Gln at 3T [@zollnerComparisonDifferentLinearcombination2021; @zollnerComparisonLinearCombination2022] --- we report Glx (Glu+ Glu) as the primary outcome measure.  Individual Glu estimates are provided in Supplementary Materials @tbl-metabolites, alongside all other quantified metabolites.
+Because of substantial overlap among Glu and Gln resonances [@pasantaFunctionalMRSStudies2023; @ramadanGlutamateGlutamineReview2013], in order to avoid errors in spectral assignment --- especially since it is controversial whether Glu can reliably be separated from Gln at 3T [@zollnerComparisonDifferentLinearcombination2021; @zollnerComparisonLinearCombination2022] --- we report Glx (Glu+ Glu) as the primary outcome measure.  Individual Glu estimates are provided in Supplementary Materials @supptbl-metabolites, alongside all other quantified metabolites.
 Several Osprey functions were modified to accommodate scanner-specific features of the GE implementation, where individual transients had been averaged by the scanner into four sub-spectra prior to export. These changes primarily affected `GEload.m` to correct water-scaling inconsistencies. RF coil combination was performed using generalized least squares (GLS) weighting, following An et al. (2013) [@anCombinationMultichannelSinglevoxel2013; @bouchardNoiseDecorrelationCoil2025].
 
 MEGA-PRESS data were processed with `Osprey`, and the difference of the ON and OFF sequences were fit the `LCModel` algorithm. 
-Due to the J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is macromolecule quantification [@harrisSpectralEditingMeasurementsGABA2015]. As a result, we report GABA+, a measure which co-reports GABA with macromolecules. Macromolecules (MM) are expected to account for approximately 45% of the GABA+ signal [@harrisSpectralEditingMeasurementsGABA2015]. While a macromolecule-suppressed estimate of GABA seems ideal, a recent 25-site and multi-vendor study conducted at 3T found that GABA+ showed much lower coefficient of variation than MM-suppressed GABA, meaning that GABA+ is more consistent across research sites and MRI vendors (i.e., Philips, GE, Siemens) [@mikkelsenBigGABAII2019]. Moreover, GABA+ shows greater reliability for both creatine-referenced and water-suppressed estimates [@mikkelsenBigGABAEdited2017; @mikkelsenBigGABAII2019]. MM-suppressed GABA and GABA+ estimates are also correlated, albeit weakly- to moderately-so [@harrisSpectralEditingMeasurementsGABA2015; @mikkelsenBigGABAII2019; @mikkelsenBigGABAEdited2017]. Consequently, we report GABA+ to allow for easier comparison of our results to other studies as well as reproducibility. All metabolite values, including GABA, are reported in the Supplementary Materials @tbl-megapressmetabs.
+Due to the J-editing sequence of MEGA-PRESS, a challenge of GABA quantification is macromolecule quantification [@harrisSpectralEditingMeasurementsGABA2015]. As a result, we report GABA+, a measure which co-reports GABA with macromolecules. Macromolecules (MM) are expected to account for approximately 45% of the GABA+ signal [@harrisSpectralEditingMeasurementsGABA2015]. While a macromolecule-suppressed estimate of GABA seems ideal, a recent 25-site and multi-vendor study conducted at 3T found that GABA+ showed much lower coefficient of variation than MM-suppressed GABA, meaning that GABA+ is more consistent across research sites and MRI vendors (i.e., Philips, GE, Siemens) [@mikkelsenBigGABAII2019]. Moreover, GABA+ shows greater reliability for both creatine-referenced and water-suppressed estimates [@mikkelsenBigGABAEdited2017; @mikkelsenBigGABAII2019]. MM-suppressed GABA and GABA+ estimates are also correlated, albeit weakly- to moderately-so [@harrisSpectralEditingMeasurementsGABA2015; @mikkelsenBigGABAII2019; @mikkelsenBigGABAEdited2017]. Consequently, we report GABA+ to allow for easier comparison of our results to other studies as well as reproducibility. All metabolite values, including GABA, are reported in the Supplementary Materials @supptbl-megapressmetabs.
 
 MRS voxels were co-registered to the T1w reference image and segmented by `SPM12` [@fristonStatisticalParametricMapping2007] into CSF, GM, and WM.
 sLASER and MEGA-PRESS data were were water-scaled as well as tissue- and relaxation-corrected by the Gasparovic et al. (2006) method [@gasparovicUseTissueWater2006]. Concentrations are reported in millimoles.
@@ -343,9 +356,9 @@ p1 <- free(mrsvoxel) + free(ospreyslaser) + free(ospreymegapress) +
 p1 + plot_annotation(tag_levels = "A") + theme(plot.tag = element_text(size = 11))
 ```
 
-Average water FWHM, creatine SNR, and frequency shift are reported in Supplementary Material @tbl-quality.
+Average water FWHM, creatine SNR, and frequency shift are reported in Supplementary Material @supptbl-quality.
 
-Average voxel rotation along the x-axis, along with average tissue fractions are reported in Supplementary Material @tbl-singlevoxel.
+Average voxel rotation along the x-axis, along with average tissue fractions are reported in Supplementary Material @supptbl-singlevoxel.
 
 A sample of the combined grey-matter and MRS voxel mask used to average H values, along with a sample Hurst exponent map, and sample fits for H calculation during rest can be found in @fig-hurstsamp A, B, and C, respectively.
 
@@ -399,7 +412,7 @@ and meanFD (beta = `r round(model_summary$coefficients["MeanFD","Estimate"],2)`,
 
 ## Post-hoc analyses
 
-Diagnostics of our linear-mixed effects model (check for normality) can be found in the Supplementary Materials (@fig-lmemdiag)
+Diagnostics of our linear-mixed effects model can be found in the Supplementary Materials (@suppfig-lmemdiag; @supptbl-spearmanresults; and @supptbl-robusteffects)
 
 To calculate the post-hoc power of our model, we required an effect size. While *in silico* and animal studies indicate that changes in E:I ratio influence the Hurst exponent [@trakoshisIntrinsicExcitationinhibitionImbalance], these models do not provide standardized effect sizes, and translation to human neuroimaging remains uncertain. Therefore, we used several effect sizes, and report here the power of each. The effect sizes we used to calculate power were: the value calculated from our model (beta = `r round(model_summary$coefficients["EI","Estimate"],2)`); and beta values two and three times that size: 0.14 and 0.21. 
 As a reminder, beta represents the increase of H by that amount per every increase of E:I by 1.
@@ -448,11 +461,13 @@ glx_hurst_plot + gabaplus_hurst_plot + ei_hurst_plot + plot_layout(design=layout
 
 ### Data quality
 
-Mean FD was not correlated with H during rest (r = `r round(meanfd_rest.model$estimate,2)`, p = `r round(meanfd_rest.model$p.value,2)`) but was moderately negatively correlated with H during movie watching (r = `r format(round(meanfd_movie.model$estimate,2), nsmall=2)`, p = `r round(meanfd_movie.model$p.value,2)`; see Supplementary Materials @fig-dataquality A).
+Mean FD was not correlated with H during rest (r = `r round(meanfd_rest.model$estimate,2)`, p = `r round(meanfd_rest.model$p.value,2)`) but was moderately negatively correlated with H during movie watching (r = `r format(round(meanfd_movie.model$estimate,2), nsmall=2)`, p = `r round(meanfd_movie.model$p.value,2)`; see Supplementary Materials @suppfig-dataquality A).
 
-Glx and GABA+ were tested for associations with FWHM values during rest and movie watching. No significant correlations were found (see Supplementary Materials @fig-dataquality B and C). Glx and GABA+ were tested for associations with frequency shift during rest and movie watching. No significant correlations were found (see Supplementary Materials @fig-dataquality D and E).
+Glx and GABA+ were tested for associations with FWHM values during rest and movie watching. No significant correlations were found (see Supplementary Materials @suppfig-dataquality B and C). Glx and GABA+ were tested for associations with frequency shift during rest and movie watching. No significant correlations were found (see Supplementary Materials @suppfig-dataquality D and E).
 
-Furthermore, a group averaged plot of the frequency shift between rest and movie can be found in the Supplementary Materials (@fig-frequencyshift).
+Water FWHM and creatine SNR (CR-SNR) for both sLASER and MEGA-PRESS were analyzed pre- vs. post-fMRI. Supplementary @supptbl-FWHMprepost, @supptbl-CRSNR, and @supptbl-FWHMCRSNR present the paired t-tests and subject-level rest/movie values, while Supplementary @suppfig-fwhmdriftplot show the individual trajectories. No systematic drifts were detected (all p > 0.2 for FWHM; p > 0.3 for SNR).
+<!-- TODO: fix table and figure reference -->
+Furthermore, a group averaged plot of the frequency shift between rest and movie can be found in the Supplementary Materials (@suppfig-frequencyshift).
 
 ## Re-analysis using Gannet
 
@@ -481,7 +496,7 @@ The heterogeneity across these studies underscores the challenges of studying th
 | Bruining et al. (2020)@bruiningMeasurementExcitationinhibitionRatio2020 | Computational with model by Poil et al. (2012); modified in-house | Neuronal oscillation amplitude | DFA | Structural: number of E-to-I synapses | Inverse U |
 | Gao et al. (2017)@gaoInferringSynapticExcitation2017 | Computational; in vivo in rats and macaques | Local field potential (LFP) | PSD | Estimated from LFP | Positive linear |
 | Lombardi et al. (2017)@lombardiBalanceExcitationInhibition2017 | Computational with in-house model | Neuronal avalanche size | PSD | Structural: number of E-to-I neurons | Negative linear |
-| Trakoshis et al. (2020)@trakoshisIntrinsicExcitationinhibitionImbalance | Computational with simulated data; in vivo in mice | fMRI BOLD signal | Wavelet-based maximum likelihood method | E-to-I synaptic conductance | Positive linear |
+| Trakoshis et al. (2020)@trakoshisIntrinsicExcitationinhibitionImbalance | Computational with simulated data; in vivo in mice | fMRI BOLD signal | Wavelet-based maximum likelihood method | E-to-I synaptic conductance | Negative linear |
 
 : **Summary of methods for existing E:I-Hurst studies** {#tbl-lit}
 
@@ -496,8 +511,9 @@ As both H and E:I have been known to change with age, we did not seek to limit o
 Beyond the limitations already mentioned (field strength, visual cortex, passive task, block design), another limitation was our small sample size. As this was a pilot study, `r as.numeric(count(orig_subjects))` participants were initially scanned. Once individuals were excluded for poor MRI quality, only `r as.numeric(count(subjects))` participants' data were analyzed. With this small sample size, it is difficult to make conclusions about a concept as complex as the E:I-Hurst relationship. 
 
 <!-- TODO: the next three sentences are a repeat from above... don't need twice... -->
-It is also important to note that MRS measures reflect total glutamate and GABA metabolite pools, predominantly intracellular and involved in metabolic processes, rather than direct synaptic neurotransmitter release. Furthermore, commonly used measures such as Glx and GABA+ include signals from glutamine and macromolecules, respectively, limiting their chemical specificity. Therefore, while these metabolites serve as useful proxies related to excitatory and inhibitory neural systems, caution is warranted when interpreting them as direct indices of neurotransmission. Nonetheless, these metabolic pools provide valuable insight into the overall balance of excitation and inhibition within the brain's microenvironment and remain widely used in human *in vivo* studies of neural function and dysfunction. Although voxel placement was guided by anatomical landmarks and performed by trained personnel, some variability in voxel location across subjects and sessions may have introduced noise in metabolite quantification. Future studies may benefit from automated alignment and formal voxel overlap analysis to reduce this source of variability. Furthermore, our MRS voxels were placed once for the first MRS sequence, and copied for the subsequent MRS runs. Future studies may also wish to acquire high resolution anatomical scans before each MRS run in order to re-align the MRS voxel. 
-We did not explicitly monitor scanner frequency drift following the fMRI runs. Heating-related drift can affect the stability of MRS sequences, potentially introducing variability in glutamate and GABA quantification [@huiFrequencyDriftMR2021]. While all MRS data were visually inspected for quality, we cannot rule out subtle effects of drift, which may have contributed to noise in the E:I measurements. We included frequency drift in our linear mixed-effects models in an attempt to control for these confounds.
+It is also important to note that MRS measures reflect total glutamate and GABA metabolite pools, predominantly intracellular and involved in metabolic processes, rather than direct synaptic neurotransmitter release. Furthermore, commonly used measures such as Glx and GABA+ include signals from glutamine and macromolecules, respectively, limiting their chemical specificity. Therefore, while these metabolites serve as useful proxies related to excitatory and inhibitory neural systems, caution is warranted when interpreting them as direct indices of neurotransmission. Nonetheless, these metabolic pools provide valuable insight into the overall balance of excitation and inhibition within the brain's microenvironment and remain widely used in human *in vivo* studies of neural function and dysfunction. Although voxel placement was guided by anatomical landmarks and performed by trained personnel, some variability in voxel location across subjects and sessions may have introduced noise in metabolite quantification. Future studies may benefit from automated alignment and formal voxel overlap analysis to reduce this source of variability. Furthermore, our MRS voxels were placed once for the first MRS sequence, and copied for the subsequent MRS runs. This 'cloning' assumes nominal stability and does not capture any potential effective sampling differences due to head motion or shim-related changes.
+Future studies may also wish to acquire high resolution anatomical scans before each MRS run in order to re-align the MRS voxel and to quantify: intra-subject voxel movement; voxel dice coefficient: overlap of runs (ideally >0.90); center-of-mass distance: Euclidean shift (mm) between runs (e.g. threshold >5mm outlier). 
+We did not explicitly monitor scanner frequency drift following the fMRI runs. Heating-related drift can affect the stability of MRS sequences, potentially introducing variability in glutamate and GABA quantification [@huiFrequencyDriftMR2021]. While all MRS data were visually inspected for quality, we cannot rule out subtle effects of drift, which may have contributed to noise in the E:I measurements. We included frequency drift in our linear mixed-effects models in an attempt to control for these confounds. For future research, we highly recommend prospective drift corrections to address these issues.
 Finally, the order of scanning conditions (rest followed by movie-watching) was not pseudorandomized. This may introduce potential order-related confounds, such as physiological adaptation or scanner drift, which could influence the observed differences between conditions.
 
 An additional avenue for future research involves dynamic fMRS, which seeks to capture time-varying changes in metabolite levels during task performance. While promising, such approaches currently face substantial limitations in signal-to-noise ratio and temporal resolution, particularly for edited GABA measures. Our study was not optimized for dynamic fitting, but future work could explore how fluctuations in neurometabolites relate to moment-to-moment variations in BOLD signal complexity.
@@ -508,7 +524,7 @@ We hope that by future researchers can use our reported effect sizes to calculat
 
 Finally, we hope that we can provide some guidance to future researchers. The following is a non-exhaustive list of suggestions for future work: 
 
-- future studies should consider using ultra-high-field 7T MRI, which provides improved spectral resolution and more reliable detection of Glu and GABA compared to conventional 3T MRI; 
+- future studies should consider using ultra-high-field 7T MRI, which provides improved spectral resolution and more reliable detection of Glu and GABA compared to conventional 3T MRI [@terpstraTestretestReproducibilityNeurochemical2016]; 
 - examining paradigms that have consistently demonstrated alterations in these metabolites, such as pain studies, may enhance the likelihood of detecting changes in Glu and GABA [@archibaldMetaboliteActivityAnterior2020; @cleveAssessmentIntraInterregional2017; @gutzeitDifferentialNMRSpectroscopy2013].
 - exploring brain regions beyond the visual cortex, such as the anterior cingulate cortex, which is commonly implicated in pain processing [@archibaldMetaboliteActivityAnterior2020; @mullinsNovelTechniqueStudy2005; @gussewTimeresolvedFunctional1H2010; @gutzeitInsulaspecificResponsesInduced2011];
 - including a more diverse participant sample --- beyond healthy controls --- may help capture a wider range of H and E:I values, potentially improving sensitivity to metabolite-related changes;
@@ -520,7 +536,7 @@ Together, these considerations may help in overcoming the limitations observed i
 
 # Conclusion
 
-In conclusion, the results do not support a relationship between H and the E:I ratio in the visual cortex either during rest or during movie-watching at 3T in humans. Although a task-related increase in H was observed, no accompanying changes were detected in Glu, GABA, or E:I between movie and rest. Comparing our findings to the broader literature, E:I balance may be too subtle to be detected with conventional 3T MRS methods. With regards to the broader E:I-Hurst relationship, we similarly suggest that either this relationship is insufficiently captured with our methods, or that the relationship between these two variables may be more complex than originally envisaged --- perhaps they are not directly related, but rather connected through other mediating variables in a non-linear fashion. To our knowledge, this is the first *in vivo* human study to test for this relationship. It is our hope that as the literature grows, more authors will examine this relationship with respect to other brain regions and using other methods, and will use the lessons learned in this study to inform their own. Hopefully then it will be possible to corroborate findings to probe the complex relationships that may exist with regards to H and E:I in the human brain.
+In conclusion, the results do not support a relationship between H and the E:I ratio in the visual cortex either during rest or during movie-watching at 3T in humans. Although a task-related increase in H was observed, no accompanying changes were detected in Glu, GABA, or E:I between movie and rest. Comparing our findings to the broader literature, E:I balance may be too subtle to be detected with conventional 3T MRS methods [@terpstraTestretestReproducibilityNeurochemical2016]. Therefore, higher-field (7T) or multi-voxel fMRS studies would be needed to confirm. With regards to the broader E:I-Hurst relationship, we similarly suggest that either this relationship is insufficiently captured with our methods, or that the relationship between these two variables may be more complex than originally envisaged --- perhaps they are not directly related, but rather connected through other mediating variables in a non-linear fashion. To our knowledge, this is the first *in vivo* human study to test for this relationship. It is our hope that as the literature grows, more authors will examine this relationship with respect to other brain regions and using other methods, and will use the lessons learned in this study to inform their own. Hopefully then it will be possible to corroborate findings to probe the complex relationships that may exist with regards to H and E:I in the human brain.
 
 # Data availability statement {.unnumbered}
 
@@ -545,18 +561,27 @@ The work presented in this paper was supported in part from funding from the Bri
 ::: {#refs}
 :::
 
+\newpage
+
 # Supplementary Material {.appendix .unnumbered}
 
 ## MRS quality {.unnumbered}
 
+A summary of MRS quality, such as water FWHM, Cr SNR, and frequency shift are provided in @supptbl-quality.
+
+::: {#supptbl-quality}
 | Measure | Rest sLASER | Rest MEGA-PRESS | Movie sLASER | Movie MEGA-PRESS |
 |---|---|---|---|---|
 | water FWHM (Hz) | `r as.numeric(fwhm_stats[2,3, drop = T])` ± `r as.numeric(fwhm_stats[2,4, drop = T])` | `r as.numeric(fwhm_stats[1,3, drop = T])` ± `r as.numeric(fwhm_stats[1,4, drop = T])` | `r as.numeric(fwhm_stats[4,3, drop = T])` ± `r as.numeric(fwhm_stats[4,4, drop = T])` | `r as.numeric(fwhm_stats[3,3, drop = T])` ± `r as.numeric(fwhm_stats[3,4, drop = T])` |
 | Cr SNR | `r as.numeric(crsnr_stats[2,3, drop = T])` ± `r as.numeric(crsnr_stats[2,4, drop = T])` | `r as.numeric(crsnr_stats[1,3, drop = T])` ± `r as.numeric(crsnr_stats[1,4, drop = T])` | `r as.numeric(crsnr_stats[4,3, drop = T])` ± `r as.numeric(crsnr_stats[4,4, drop = T])` | `r as.numeric(crsnr_stats[3,3, drop = T])` ± `r as.numeric(crsnr_stats[3,4, drop = T])` |
 | Frequency Shift (ppm) | `r as.numeric(freqshift_stats[2,3, drop = T])` ± `r as.numeric(freqshift_stats[2,4, drop = T])` | `r as.numeric(freqshift_stats[1,3, drop = T])` ± `r as.numeric(freqshift_stats[1,4, drop = T])` | `r as.numeric(freqshift_stats[4,3, drop = T])` ± `r as.numeric(freqshift_stats[4,4, drop = T])` | `r as.numeric(freqshift_stats[3,3, drop = T])` ± `r as.numeric(freqshift_stats[3,4, drop = T])` |
 
-: **Summary of spectroscopy quality measures.** FWHM = full-width half-maximum; Cr = creatine; SNR = signal-to-noise ratio. {#tbl-quality}
+**Summary of spectroscopy quality measures.** FWHM = full-width half-maximum; Cr = creatine; SNR = signal-to-noise ratio.
+:::
 
+A summary of voxel placement statistics are provided in @supptbl-singlevoxel.
+
+::: {#supptbl-singlevoxel}
 | Measure | Amount |
 | --- | --- |
 | Voxel Rotation (degrees) | `r as.numeric(xangle_stats[1,1, drop=T])` ± `r as.numeric(xangle_stats[1,2, drop=T])` |
@@ -564,14 +589,15 @@ The work presented in this paper was supported in part from funding from the Bri
 | WM Tissue Fraction | `r as.numeric(Tissue_stats[2,2, drop=T])` ± `r as.numeric(Tissue_stats[2,3, drop=T])` |
 | CSF Tissue Fraction | `r as.numeric(Tissue_stats[3,2, drop=T])` ± `r as.numeric(Tissue_stats[3,3, drop=T])` |
 
-: **Summary of spectroscopy voxel placement values** GM = grey matter; WM = white matter; CSF = cerebrospinal fluid. {#tbl-singlevoxel}
+**Summary of spectroscopy voxel placement values** GM = grey matter; WM = white matter; CSF = cerebrospinal fluid.
+:::
 
 ## Linear-mixed effects model diagnostics {.unnumbered}
 
+Linear-mixed effects model diagnostics are provided in @suppfig-lmemdiag.
 
+::: {#suppfig-lmemdiag}
 ```{r}
-#| label: fig-lmemdiag
-#| fig-cap: "**Linear-mixed effects model tests for normality.** Model diagnostics for the linear mixed effects model predicting Hurst exponent from the EI ratio. A) Residuals vs. fitted values showing homoscedasticity. B) Histogram of residuals. C) Q-Q plot indicating normally distributed residuals."
 #| fig-width: 5
 #| fig-height: 5
 layout <- "
@@ -582,31 +608,65 @@ layout <- "
 
 modelresiduals_plot + modelhistresiduals_plot + modelqqnorm_plot + plot_layout(design = layout) + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
+**Linear-mixed effects model tests for normality.** Model diagnostics for the linear mixed effects model predicting Hurst exponent from the EI ratio. A) Residuals vs. fitted values showing homoscedasticity. B) Histogram of residuals. C) Q-Q plot indicating normally distributed residuals.
+:::
+
+We report Spearman correlations between E:I and H within each condition (@supptbl-spearmanresults). Spearman rho values were modest and negative (Movie: $\rho$ = `r round(spearman_results$spearman_ei_hurst[1],2)`, p = `r round(spearman_results$p_value[1],2)`; Rest: $\rho$ = `r round(spearman_results$spearman_ei_hurst[2],2)`, p = `r round(spearman_results$p_value[2],2)`), and consistent with the primary analyses in direction but not statistically significant.
+
+::: {#supptbl-spearmanresults}
+```{r}
+knitr::kable(spearman_results, digits = 3)
+```
+Spearman correlation between EI and Hurst by condition.
+:::
+
+We also refit the linear mixed-effects model after removing the top/bottom 10% of observations in E:I, in H, and in the intersection of both (@supptbl-robusteffects). Across these trimmed datasets, the E:I fixed-effect estimate remained small and its 95% confidence interval continued to include zero, indicating that the primary conclusion is not driven by extreme values in either E:I or H. Trimming was performed on the pooled long-format dataset (rest and movie rows) to match the model specification.
+
+Taken together with the non-parametric Spearman correlations (@supptbl-spearmanresults), these analyses indicate that the E:I–H association is weak in this pilot dataset and that our primary inference (a small effect with confidence intervals spanning zero) is unchanged under non-parametric estimation and reasonable exclusion of potential outliers.
+
+::: {#supptbl-robusteffects}
+
+```{r}
+knitr::kable(robust_effects, digits = 3)
+```
+EI fixed-effect estimates (Estimate ± 95% CI) for the full sample and each trimmed sample.
+:::
+
 ## Metabolites {.unnumbered}
 
 ### sLASER {.unnumbered}
+
+All metabolite concentrations and Cramer-Rao lower bounds from semi-LASER are reported in @supptbl-metabolites.
+
+::: {#supptbl-metabolites}
 ```{r}
-#| label: tbl-metabolites
-#| tbl-cap: "**All metabolite concentrations and Cramer-Rao lower bounds from semi-LASER.** Concentration values are in millimoles; Cramer-Rao lower bounds are in percentages. Conc = concentration; CRLB = Cramer-Rao lower bounds."
 
 slaserfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
 ```
+**All metabolite concentrations and Cramer-Rao lower bounds from semi-LASER.** Concentration values are in millimoles; Cramer-Rao lower bounds are in percentages. Conc = concentration; CRLB = Cramer-Rao lower bounds.
+:::
 
 ### MEGA-PRESS {.unnumbered}
 
+All metabolite concentrations and Cramer-Rao lower bounds from J-edited MEGA-PRESS are reported in @supptbl-megapressmetabs.
+
+::: {#supptbl-megapressmetabs}
 ```{r}
-#| label: tbl-megapressmetabs
-#| tbl-cap: "**All metabolite concentrations and Cramer-Rao lower bounds from J-edited MEGA-PRESS.** Concentration values are in millimoles; Cramer-Rao lower bounds are in percentages. Conc = concentration; CRLB = Cramer-Rao lower bounds."
+#| tbl-cap: ""
 
 megapressfullresults %>% select(Mean_SD, restcrlb, Movie, moviecrlb) %>% rename("Rest Conc" = Mean_SD, "Rest CRLB" = restcrlb, "Movie Conc" = Movie, "Movie CRLB" = moviecrlb) %>% kable()
 ```
+**All metabolite concentrations and Cramer-Rao lower bounds from J-edited MEGA-PRESS.** Concentration values are in millimoles; Cramer-Rao lower bounds are in percentages. Conc = concentration; CRLB = Cramer-Rao lower bounds.
+::: 
 
+\newpage
 
 ## Data quality {.unnumbered}
 
+Data quality correlations for Hurst with mean framewise displacement, Glx and GABA+ with FWHM, and Glx and GABA+ with frequency shift are shown in @suppfig-dataquality.
+
+::: {#suppfig-dataquality}
 ```{r}
-#| label: fig-dataquality
-#| fig-cap: "**Data quality correlations.** A) Correlation plots of H vs. mean FD (mm) for rest (green) and movie (orange). B) and C) Correlation plots of Glx (B) and GABA+ (C) vs. water FWHM (Hz) for rest (green) and movie (orange). D) and E) Correlation plots of Glx (B) and GABA+ (C) vs. frequency shift (ppm) for rest (green) and movie (orange)."
 #| fig-width: 6
 #| fig-height: 8
 
@@ -622,10 +682,54 @@ free(meanfd_hurst_plot)+ free(glxandgabaplus_FWHM_plot) + free(glxandgabaplus_fr
   plot_layout(design = layout) +
   plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
+**Data quality correlations.** A) Correlation plots of H vs. mean FD (mm) for rest (green) and movie (orange). B) and C) Correlation plots of Glx (B) and GABA+ (C) vs. water FWHM (Hz) for rest (green) and movie (orange). D) and E) Correlation plots of Glx (B) and GABA+ (C) vs. frequency shift (ppm) for rest (green) and movie (orange).
+:::
 
+Rest vs movie FWHM comparisons (paired t-tests) are provided in @supptbl-FWHMprepost.
+
+::: {#supptbl-FWHMprepost}
 ```{r}
-#| label: fig-frequencyshift
-#| fig-cap: "**Frequency shift between rest and movie.** Overlay of all participants' frequency drift (ppm) plots during rest (blue) and movie (red) for A) semi-LASER and B) MEGA-PRESS. Note, the GE semi-LASER sequence averaged all transients (128) into groups of 4, each with 32 transients, before being saved as raw P-file."
+names(fwhm_tests) <- c("Seq", "m. rest", "m. movie", "m. diff", "sd diff", "t", "p", "CIlow", "CIhigh")
+knitr::kable(fwhm_tests, digits = 2)
+```
+Rest vs. movie FWHM comparison (paired t-tests) for each spectroscopy sequence. Seq = sequence; m. = mean; sd = standard deviation; t = t-value; p = p-value; CIlow = lower confidence interval; CIhigh = higher confidence interval.
+:::
+
+Rest vs movie FWHM comparisons (paired t-tests) are provided in @supptbl-CRSNR.
+
+::: {#supptbl-CRSNR}
+```{r}
+names(snr_tests) <- c("Seq", "m. rest", "m. movie", "m. diff", "sd diff", "t", "p", "CIlow", "CIhigh")
+knitr::kable(snr_tests, digits = 2)
+```
+Rest vs. movie CR-SNR comparison (paired t-tests) for each spectroscopy sequence. Seq = sequence; m. = mean; sd = standard deviation; t = t-value; p = p-value; CIlow = lower confidence interval; CIhigh = higher confidence interval.
+:::
+
+Subject-level FWHM and CR-SNR values for each sequence (Rest, Movie, and Movie–Rest difference) are provided in @supptbl-FWHMCRSNR.
+
+::: {#supptbl-FWHMCRSNR}
+```{r}
+names(drift_table) <- c("Sub", "Seq", "R FWHM", "M FWHM", "Diff FWHM", "R SNR", "M SNR", "Diff SNR")
+knitr::kable(drift_table, digits = 2)
+```
+Subject-level FWHM and CR-SNR values for each sequence (Rest, Movie, and Movie–Rest difference). Sub = Subject; Seq = Sequence; R = Rest; M = Movie; Diff = Difference.
+:::
+
+Plots of individual water FWHM changes between rest and movie-watching conditions for both MEGA-PRESS and sLASER are shown in @suppfig-fwhmdriftplot.
+
+::: {#suppfig-fwhmdriftplot}
+```{r}
+#| fig-width: 5
+#| fig-height: 5
+fwhm_drift_plot
+```
+Plots of individual water full-width half-maximum changes between rest and movie-watching conditions for both MEGA-PRESS and sLASER
+:::
+
+Frequency shift between rest and movie are shown in @suppfig-frequencyshift.
+
+::: {#suppfig-frequencyshift}
+```{r}
 #| fig-width: 5
 #| fig-height: 7
 
@@ -646,12 +750,16 @@ p1 <- free(freqshiftslaser_plot) + free(freqshiftmegapress_plot) +
 
 p1 + plot_annotation(tag_levels = "A") + theme(plot.tag = element_text(size = 11))
 ```
+**Frequency shift between rest and movie.** Overlay of all participants' frequency drift (ppm) plots during rest (blue) and movie (red) for A) semi-LASER and B) MEGA-PRESS. Note, the GE semi-LASER sequence averaged all transients (128) into groups of 4, each with 32 transients, before being saved as raw P-file.
+:::
+
+\newpage
 
 ## Gannet Results {.unnumbered}
 
-An example fit result from Gannet of a subject at rest is shown in @fig-gannet.
+An example fit result from Gannet of a subject at rest is shown in @suppfig-gannet.
 
-![**Gannet Fit.** Sample Gannet fit result from a subject a rest. Glx (3.75ppm) and GABA (3) data (blue) and model fit (red) are shown top left. Water and creatine reference signals are shown bottom left. Table on right shows GABA+ and Glx values before tissue-correction.](./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png){#fig-gannet}
+![**Gannet Fit.** Sample Gannet fit result from a subject a rest. Glx (3.75ppm) and GABA (3) data (blue) and model fit (red) are shown top left. Water and creatine reference signals are shown bottom left. Table on right shows GABA+ and Glx values before tissue-correction.](./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png){#suppfig-gannet}
 
 To examine the relationship between H and E:I, we ran a linear mixed-effects model. 
 The model's total explanatory power was substantial (conditional r^2^ = `r round(gannetr2_values$R2_conditional,2)`), with fixed effects (marginal r^2^) equal to `r round(gannetr2_values$R2_marginal,2)`. The model's intercept, corresponding to EI = 0, Condition = Movie, FWHM~MEGA-PRESS~ = 0, FreqShift~MEGA-PRESS~ = 0, and meanFD = 0, was `r round(gannetmodel_summary$coefficients[1,1],2)` (95%
@@ -663,19 +771,20 @@ FreqShift~MEGA-PRESS~ (beta = `r round(gannetmodel_summary$coefficients["FreqShi
 and meanFD (beta = `r round(gannetmodel_summary$coefficients["MeanFD","Estimate"],2)`, 95% CI [`r round(gannetconfint_values["MeanFD", "2.5 %"],2)`, `r round(gannetconfint_values["MeanFD", "97.5 %"],2)`], t(26) = `r round(gannetmodel_summary$coefficients["MeanFD","t value"],2)`, p = `r format_p(gannetmodel_summary$coefficients["MeanFD","Pr(>|t|)"],2)`).
 
 
-Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest and movie, are reported in @tbl-gannetresults. Boxplots between rest and movie can be seen in @fig-gannetresults. Neither Glx nor GABA+ were different between movie and rest conditions. E:I ratio did not change between conditions either.
+Mean ± sd of metabolites and E:I when analyzed using Gannet, during rest and movie, are reported in @supptbl-gannetresults. Boxplots between rest and movie can be seen in @suppfig-gannetresults. Neither Glx nor GABA+ were different between movie and rest conditions. E:I ratio did not change between conditions either.
 
+::: {#supptbl-gannetresults}
 |                  | Rest | Movie | p-value |
 | ---------------- | ---- | ----- | ------- |
 | **Glx**    | `r as.numeric(gannetglx_stats[1,2, drop = T])` ± `r as.numeric(gannetglx_stats[1,3, drop = T])` | `r as.numeric(gannetglx_stats[2,2, drop = T])` ± `r as.numeric(gannetglx_stats[2,3, drop = T])`  | `r format_p(ttest_gannetglx$p.value)` |
 | **GABA+**  | `r as.numeric(gannetgaba_stats[1,2, drop = T])` ± `r as.numeric(gannetgaba_stats[1,3, drop = T])` | `r as.numeric(gannetgaba_stats[2,2, drop = T])` ± `r as.numeric(gannetgaba_stats[2,3, drop = T])`  | `r format_p(ttest_gannetgaba$p.value)` |
 | **E:I Ratio**    | `r as.numeric(ei_stats[1,2, drop = T])` ± `r as.numeric(ei_stats[1,3, drop = T])` | `r as.numeric(ei_stats[2,2, drop = T])` ± `r as.numeric(ei_stats[2,3, drop = T])`  | `r format_p(ttest_ei$p.value)` |
 
-: **Summary of main metabolite results using Gannet** {#tbl-gannetresults}
+**Summary of main metabolite results using Gannet** 
+:::
 
+::: {#suppfig-gannetresults}
 ```{r}
-#| label: fig-gannetresults
-#| fig-cap: "**Paired comparison of metabolite values analyzed using Gannet during rest (green) and movie (orange) conditions.** A) Glx (mM); B) GABA+ (mM); and C) E:I. Paired dots represent the same participant across conditions. Mean difference with 95% confidence intervals, and as Cohen's D are reported at the top of each plot."
 #| fig-width: 10
 #| fig-height: 8
 layout <- "
@@ -685,12 +794,13 @@ layout <- "
 
 gannetglx_boxplot + gannetgaba_boxplot + gannetei_boxplot + hurst_boxplot + plot_layout(design = layout) + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
+**Paired comparison of metabolite values analyzed using Gannet during rest (green) and movie (orange) conditions.** A) Glx (mM); B) GABA+ (mM); and C) E:I. Paired dots represent the same participant across conditions. Mean difference with 95% confidence intervals, and as Cohen's D are reported at the top of each plot."
+:::
 
-H was not found to correlate with Glx (Rest: r = `r round(gh_rest_pearson$estimate,2)`, p = `r round(gh_rest_pearson$p.value,2)`; Movie: r = `r round(gh_movie_pearson$estimate,2)`, p = `r round(gh_movie_pearson$p.value,2)`), GABA+ (Rest: r = `r round(gabaplush_rest_pearson$estimate,2)`, p = `r round(gabaplush_rest_pearson$p.value,2)`; Movie: r = `r round(gabaplush_movie_pearson$estimate,2)`, p = `r round(gabaplush_movie_pearson$p.value,2)`), or E:I (Rest: r = `r round(eih_rest_pearson$estimate,2)`, p = `r round(eih_rest_pearson$p.value,2)`; Movie: r = `r round(eih_movie_pearson$estimate,2)`, p = `r round(eih_movie_pearson$p.value,2)`) (@fig-gannetcorrelations).
+H was not found to correlate with Glx (Rest: r = `r round(gh_rest_pearson$estimate,2)`, p = `r round(gh_rest_pearson$p.value,2)`; Movie: r = `r round(gh_movie_pearson$estimate,2)`, p = `r round(gh_movie_pearson$p.value,2)`), GABA+ (Rest: r = `r round(gabaplush_rest_pearson$estimate,2)`, p = `r round(gabaplush_rest_pearson$p.value,2)`; Movie: r = `r round(gabaplush_movie_pearson$estimate,2)`, p = `r round(gabaplush_movie_pearson$p.value,2)`), or E:I (Rest: r = `r round(eih_rest_pearson$estimate,2)`, p = `r round(eih_rest_pearson$p.value,2)`; Movie: r = `r round(eih_movie_pearson$estimate,2)`, p = `r round(eih_movie_pearson$p.value,2)`) (@suppfig-gannetcorrelations).
 
+::: {#suppfig-gannetcorrelations}
 ```{r}
-#| label: fig-gannetcorrelations
-#| fig-cap: "**Scatter plots of H vs. metabolites when analyzed using Gannet.** A) Glx (mM); B) GABA+ (mM); and C) E:I. Rest is in green, while movie is in orange. P-values are reported at the top of each plot."
 #| fig-width: 7
 #| fig-height: 6
 layout <- "
@@ -699,3 +809,25 @@ AABB
 "
 gannetglx_hurst_plot + gannetgaba_hurst_plot + gannetei_hurst_plot + plot_layout(design=layout, guides = 'collect', axes = 'collect', axis_titles = 'collect') + plot_annotation(tag_levels = 'A') & theme(plot.tag = element_text(size = 11))
 ```
+**Scatter plots of H vs. metabolites when analyzed using Gannet.** A) Glx (mM); B) GABA+ (mM); and C) E:I. Rest is in green, while movie is in orange. P-values are reported at the top of each plot.
+:::
+
+Glx estimates were not strongly correlated between sLASER and MEGA-PRESS (Rest $r = `r round(glx_agreement_table$pearson_r[glx_agreement_table$Condition == "Rest"], 2)`$, Movie $r = `r round(glx_agreement_table$pearson_r[glx_agreement_table$Condition == "Movie"], 2)`$), while mean absolute differences remained under `r round(max(abs(glx_agreement_table$mean_difference)),2)` institutional units. @supptbl-glxagreement reports the paired summary statistics, and @suppfig-glxagreementplot visualises the subject-level agreement.
+
+This finding is consistent with several studies that have directly compared Glx measured from MEGA-PRESS "OFF" spectra, with 'gold standard' short-TE sequences (PRESS and sLASER), which have consistently reported poor agreement [@vanveenendaalGlutamateQuantificationPRESS2018; @bellVivoGlxGlu2021; @thomsonVivoGlxMeasurements2026]. Reasons for this include the fact that MEGA-PRESS uses a longer TE time (68 ms compared to sLASER's 35 ms) [@maddockEstimatingGlutamateGlx2018]; chemical shift displacement error differences between the two sequences [@archibaldTestretestReliabilityMultimetabolite2025]; and scanner drift due to MEGA-PRESS being acquired on average `r round(avg_rest/60,2)` ± `r round(sd_rest/60,2)` (Rest) and `r round(avg_movie/60,2)` ± `r round(sd_movie/60,2)` minutes (Movie) after sLASER.
+
+::: {#supptbl-glxagreement}
+```{r}
+names(glx_agreement_table) <- c("Cond", "n", "m. sLASER", "m. MEGA", "m. diff", "sd diff", "m.a. diff", "r", "p", "CIlow", "CIhigh")
+knitr::kable(glx_agreement_table, digits = 2)
+```
+Agreement between sLASER- and MEGA-PRESS-derived Glx within each condition. Cond = condition; n = number of subjects; m. = mean; m.a. = mean absolute; r = Pearson correlation; p = p-value; CIlow = lower confidence interval; CIhigh = higher confidence interval.
+:::
+
+::: {#suppfig-glxagreementplot}
+
+```{r}
+glx_agreement_plot
+```
+Glx from MEGA-PRESS plotted against Glx from sLASER, during both rest (green) and movie-watching (orange). Dashed line represents perfect agreement.
+:::
