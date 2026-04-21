@@ -17,3 +17,5 @@
 /notes.md
 /eLife
 /ImagingNeuroscience
+
+**/*.quarto_ipynb

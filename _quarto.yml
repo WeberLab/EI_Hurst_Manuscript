@@ -19,16 +19,6 @@ execute:
   cache: false
 
 format:
-  html:
-    embed-resources: true
-    notebook-links: true
-    toc: true
-    comments:
-      hypothesis: true
-  docx:
-    reference-doc: custom-reference.docx
-    line-numbers: false
-  # jats: default
   # pdf:
   #   colorlinks: true
   #   keep-tex: true
@@ -42,7 +32,18 @@ format:
       colorlinks: true
       link-citations: true
       pdf-engine: xelatex
-  #   cite-method: natbib
+    cite-method: natbib
+  docx:
+    reference-doc: custom-reference.docx
+    line-numbers: false
+  html:
+    embed-resources: false
+    notebook-links: true
+    toc: true
+    comments:
+      hypothesis: true
+  # jats: default
 
 filters:
   - parse-latex
+
