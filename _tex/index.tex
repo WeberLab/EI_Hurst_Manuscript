@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -6,21 +7,22 @@
 \documentclass[
 true
 ]{sn-jnl}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -38,9 +40,6 @@ true
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -66,8 +65,8 @@ true
 \makeatother
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -79,17 +78,35 @@ true
 \makesavenoteenv{longtable}
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+\usepackage[]{natbib}
+\bibliographystyle{plainnat}
+
 
 %%%% Standard Packages
 
@@ -175,15 +192,9 @@ true
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\usepackage[]{natbib}
-\bibliographystyle{plainnat}
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Does the Brain's E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI},
   pdfauthor={, , and },
@@ -197,6 +208,7 @@ resonance spectroscopy, functional magnetic resonance spectroscopy},
   citecolor={Blue},
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
+
 
 \title[Does the Brain's E:I Balance Really Shape Long-Range Temporal
 Correlations? Lessons Learned from 3T MRI]{Does the Brain's E:I Balance
@@ -226,6 +238,7 @@ spectroscopy,  functional magnetic resonance spectroscopy}
 
 \begin{document}
 \maketitle
+
 
 \textsuperscript{1} School of Biomedical Engineering, The University of
 British Columbia, Vancouver, BC, Canada\\
@@ -499,12 +512,12 @@ removed from the scanner). All participants followed the same order of
 conditions: rest then movie; all participants saw the same movie
 segment, beginning at the same time during the scan.
 
-\phantomsection\label{cell-fig-method}
+\protect\phantomsection\label{cell-fig-method}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-method-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-method-1.pdf}}
 
 }
 
@@ -541,15 +554,15 @@ VAPOR (VAriable Power and Optimized Relaxations) water suppression.
 Details are listed in Table~\ref{tbl-mriacq}.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1844}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0838}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0670}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0670}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0894}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1229}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1564}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.2067}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0223}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1844}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0838}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0670}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0670}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0894}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1229}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1564}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.2067}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0223}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Sequence
@@ -595,6 +608,15 @@ Time (mins)
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
+= repetition time; FOV = field of view; FSPGD = fast spoiled
+gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
+functional magnetic resonance imaging; sLASER = semi localization by
+adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
+point-resolved spectroscopy. *Note, the GE semi-LASER sequence averaged
+the 128 transients into groups of 4, each with 32 transients, before
+being saved as raw P-file.}\label{tbl-mriacq}\tabularnewline
 \endlastfoot
 3D T1-weighted FSPGR & 2.176 & 7.216 & 12 & 256 × 256 & 0.9 & 0.9375 ×
 0.9375 & - & 5 \\
@@ -606,14 +628,6 @@ sLASER & 35 & 2,000 & 90 & - & 28.0 & 28.0 x 28.0 & Transients = 128*;
 Spectral width = 5,000 Hz; Data points = 4,096 & 4 \\
 MEGA-PRESS & 68 & 1,800 & 90 & - & 28.0 & 28.0 x 28.0 & Transients = 128
 ON, 128 OFF; Spectral width = 5,000 Hz; Data points = 4,096 & 8 \\
-\caption{\textbf{Summary of MRI acquisition details} TE = echo time; TR
-= repetition time; FOV = field of view; FSPGD = fast spoiled
-gradient-echo; CUBE = a GE acronym; EPI = echo-planar imaging; fMRI =
-functional magnetic resonance imaging; sLASER = semi localization by
-adiabatic selective refocusing; MEGA-PRESS = Mescher-Garwood
-point-resolved spectroscopy. *Note, the GE semi-LASER sequence averaged
-the 128 transients into groups of 4, each with 32 transients, before
-being saved as raw P-file.}\label{tbl-mriacq}\tabularnewline
 \end{longtable}
 
 For both MRS sequences, the voxel size was set to 2.8 x 2.8 x 2.8
@@ -895,7 +909,7 @@ See Figure~\ref{fig-partflow}.
 
 \centering{
 
-\includegraphics{./images/ParticipantFlow.png}
+\pandocbounded{\includegraphics[keepaspectratio]{./images/ParticipantFlow.png}}
 
 }
 
@@ -919,12 +933,12 @@ Figure~\ref{fig-mrsquality} B and C, respectively. The mean
 consensus-based inter-subject Dice score for MRS voxel placements was
 0.77 \(\pm\) 0.14 (range: {[}0.35, 0.95{]}).
 
-\phantomsection\label{cell-fig-mrsquality}
+\protect\phantomsection\label{cell-fig-mrsquality}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-mrsquality-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-mrsquality-1.pdf}}
 
 }
 
@@ -954,12 +968,12 @@ H values, along with a sample Hurst exponent map, and sample fits for H
 calculation during rest can be found in Figure~\ref{fig-hurstsamp} A, B,
 and C, respectively.
 
-\phantomsection\label{cell-fig-hurstsamp}
+\protect\phantomsection\label{cell-fig-hurstsamp}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-hurstsamp-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-hurstsamp-1.pdf}}
 
 }
 
@@ -985,7 +999,7 @@ and movie watching.
 
 \centering{
 
-\includegraphics[width=0.8\textwidth,height=\textheight]{./images/RestMovieHurstAverage.png}
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{./images/RestMovieHurstAverage.png}
 
 }
 
@@ -1066,21 +1080,22 @@ greater during movie watching than rest.
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of main measures} Glx and GABA+ values are in
+millimoles.}\label{tbl-results}\tabularnewline
 \endlastfoot
 \textbf{Glx} & 9.84 ± 1.06 & 10.04 ± 0.79 & 0.26 \\
 \textbf{GABA+} & 5.48 ± 0.77 & 5.23 ± 0.71 & 0.17 \\
 \textbf{E:I Ratio} & 1.82 ± 0.25 & 1.94 ± 0.25 & 0.08 \\
 \textbf{H} & 0.98 ± 0.98 & 1.05 ± 1.05 & \textless{} 0.01 \\
-\caption{\textbf{Summary of main measures} Glx and GABA+ values are in
-millimoles.}\label{tbl-results}\tabularnewline
 \end{longtable}
 
-\phantomsection\label{cell-fig-results}
+\protect\phantomsection\label{cell-fig-results}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-results-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-results-1.pdf}}
 
 }
 
@@ -1095,12 +1110,12 @@ as Cohen's D are reported at the top of each plot.}
 H was not found to correlate with Glx, GABA+, or E:I, during rest or
 movie (Figure~\ref{fig-correlations}).
 
-\phantomsection\label{cell-fig-correlations}
+\protect\phantomsection\label{cell-fig-correlations}
 \begin{figure}[H]
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/fig-correlations-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-correlations-1.pdf}}
 
 }
 
@@ -1269,12 +1284,12 @@ to clarify the true nature of this relationship and the conditions under
 which it might emerge.
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1585}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1585}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1707}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1585}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1585}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1707}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Citation
@@ -1308,6 +1323,9 @@ E:I-Hurst Relationship
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
+\tabularnewline
+\caption{\textbf{Summary of methods for existing E:I-Hurst
+studies}}\label{tbl-lit}\tabularnewline
 \endlastfoot
 Poil et al.~(2012)\citet{poilCriticalStateDynamicsAvalanches2012} &
 Computational with in-house simulated model & Neuronal avalanche size &
@@ -1329,8 +1347,6 @@ al.~(2020)\citet{trakoshisIntrinsicExcitationinhibitionImbalance} &
 Computational with simulated data; in vivo in mice & fMRI BOLD signal &
 Wavelet-based maximum likelihood method & E-to-I synaptic conductance &
 Negative linear \\
-\caption{\textbf{Summary of methods for existing E:I-Hurst
-studies}}\label{tbl-lit}\tabularnewline
 \end{longtable}
 
 Our findings specifically show an absence of a robust association
@@ -1576,12 +1592,13 @@ shift are provided in \quartosupptblref{supptbl-quality}.
 
 \centering{
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Measure
@@ -1603,7 +1620,8 @@ water FWHM (Hz) & 8.47 ± 0.66 & 7.86 ± 0.8 & 8.32 ± 0.72 & 7.95 ±
 Cr SNR & 147.61 ± 20.46 & 101.05 ± 21.42 & 140.6 ± 26 & 98.75 ± 20.01 \\
 Frequency Shift (ppm) & -3.08 ± 0.81 & -3.98 ± 0.94 & -3.12 ± 0.76 &
 -3.85 ± 1.05 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1620,7 +1638,8 @@ A summary of voxel placement statistics are provided in
 
 \centering{
 
-\begin{longtable}[]{@{}ll@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}ll@{}}
 \toprule\noalign{}
 Measure & Amount \\
 \midrule\noalign{}
@@ -1631,7 +1650,8 @@ Voxel Rotation (degrees) & -39 ± 8.13 \\
 GM Tissue Fraction & 0.64 ± 0.04 \\
 WM Tissue Fraction & 0.24 ± 0.04 \\
 CSF Tissue Fraction & 0.12 ± 0.03 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1653,7 +1673,7 @@ Linear-mixed effects model diagnostics are provided in
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-10-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-10-1.pdf}}
 
 }
 
@@ -1675,7 +1695,8 @@ but not statistically significant.
 
 \centering{
 
-\begin{longtable}[]{@{}lrr@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}lrr@{}}
 \toprule\noalign{}
 Condition & spearman\_ei\_hurst & p\_value \\
 \midrule\noalign{}
@@ -1684,7 +1705,8 @@ Condition & spearman\_ei\_hurst & p\_value \\
 \endlastfoot
 Movie & -0.300 & 0.225 \\
 Rest & -0.125 & 0.621 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1713,7 +1735,8 @@ exclusion of potential outliers.
 
 \centering{
 
-\begin{longtable}[]{@{}lrrrr@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}lrrrr@{}}
 \toprule\noalign{}
 Model & Estimate & SE & CI\_low & CI\_high \\
 \midrule\noalign{}
@@ -1724,7 +1747,8 @@ Full sample & 0.068 & 0.061 & -0.052 & 0.188 \\
 Trimmed EI (10--90\%) & 0.010 & 0.125 & -0.236 & 0.256 \\
 Trimmed Hurst (10--90\%) & 0.018 & 0.045 & -0.070 & 0.107 \\
 Trimmed EI \& Hurst (intersection) & 0.081 & 0.112 & -0.139 & 0.300 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1746,7 +1770,8 @@ semi-LASER are reported in \quartosupptblref{supptbl-metabolites}.
 
 \centering{
 
-\begin{longtable}[]{@{}lllll@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}lllll@{}}
 \toprule\noalign{}
 & Rest Conc & Rest CRLB & Movie Conc & Movie CRLB \\
 \midrule\noalign{}
@@ -1784,7 +1809,8 @@ MM20 & 3.88 ± 3.43 & 242.11 ± 383.63 & 3.41 ± 2.16 & 143 ± 262.51 \\
 MM12 & 0.95 ± 0.93 & 316.28 ± 389.01 & 0.99 ± 0.97 & 333.78 ± 425.72 \\
 MM14 & 4.45 ± 2.14 & 34.39 ± 21.5 & 5.11 ± 2.63 & 35.67 ± 25.59 \\
 MM17 & 2.56 ± 1.84 & 246.39 ± 414.02 & 2.69 ± 1.1 & 39.89 ± 31.22 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1805,7 +1831,8 @@ MEGA-PRESS are reported in \quartosupptblref{supptbl-megapressmetabs}.
 
 \centering{
 
-\begin{longtable}[]{@{}lllll@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}lllll@{}}
 \toprule\noalign{}
 & Rest Conc & Rest CRLB & Movie Conc & Movie CRLB \\
 \midrule\noalign{}
@@ -1822,7 +1849,8 @@ tNAA & 18.27 ± 1.41 & 4.72 ± 0.57 & 18.31 ± 1.65 & 5.06 ± 0.94 \\
 Glx & 15 ± 1.51 & 74.56 ± 230.78 & 14.51 ± 1.57 & 24.11 ± 9.54 \\
 MM09 & 3.84 ± 0.77 & 4.06 ± 0.64 & 3.69 ± 0.49 & 4.33 ± 0.77 \\
 GABAplus & 5.48 ± 0.77 & 9.94 ± 2.21 & 5.23 ± 0.71 & 10.39 ± 1.5 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1846,7 +1874,7 @@ shown in \quartosuppfigref{suppfig-dataquality}.
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-15-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-15-1.pdf}}
 
 }
 
@@ -1866,16 +1894,17 @@ Rest vs movie FWHM comparisons (paired t-tests) are provided in
 
 \centering{
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1094}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1406}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1250}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0938}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0781}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0938}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1094}}@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1094}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1406}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1250}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0938}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0781}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0938}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1094}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Seq
@@ -1902,7 +1931,8 @@ CIhigh
 \endlastfoot
 MEGA & 7.86 & 7.95 & 0.09 & 0.51 & 0.75 & 0.46 & -0.16 & 0.34 \\
 sLASER & 8.47 & 8.32 & -0.15 & 0.49 & -1.28 & 0.22 & -0.39 & 0.10 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1920,16 +1950,17 @@ Rest vs movie FWHM comparisons (paired t-tests) are provided in
 
 \centering{
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1077}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1231}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1385}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1231}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1231}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0923}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.0769}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1077}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 16\tabcolsep) * \real{0.1077}}@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1077}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1231}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1385}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1231}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1231}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0923}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0769}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1077}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1077}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Seq
@@ -1957,7 +1988,8 @@ CIhigh
 MEGA & 101.05 & 98.75 & -2.30 & 9.39 & -1.04 & 0.31 & -6.97 & 2.36 \\
 sLASER & 147.61 & 140.60 & -7.01 & 22.84 & -1.30 & 0.21 & -18.37 &
 4.34 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -1976,7 +2008,8 @@ Movie--Rest difference) are provided in
 
 \centering{
 
-\begin{longtable}[]{@{}rlrrrrrr@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}rlrrrrrr@{}}
 \toprule\noalign{}
 Sub & Seq & R FWHM & M FWHM & Diff FWHM & R SNR & M SNR & Diff SNR \\
 \midrule\noalign{}
@@ -2019,7 +2052,8 @@ Sub & Seq & R FWHM & M FWHM & Diff FWHM & R SNR & M SNR & Diff SNR \\
 24 & MEGA & 6.73 & 6.44 & -0.29 & 85.78 & 83.25 & -2.53 \\
 26 & sLASER & 8.12 & 8.42 & 0.31 & 140.13 & 148.61 & 8.48 \\
 26 & MEGA & 8.76 & 9.03 & 0.27 & 93.80 & 88.04 & -5.76 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -2037,7 +2071,7 @@ conditions for both MEGA-PRESS and sLASER are shown in
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-19-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-19-1.pdf}}
 
 }
 
@@ -2054,7 +2088,7 @@ Frequency shift between rest and movie are shown in
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-20-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-20-1.pdf}}
 
 }
 
@@ -2079,7 +2113,7 @@ An example fit result from Gannet of a subject at rest is shown in
 
 \centering{
 
-\includegraphics{./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png}
+\pandocbounded{\includegraphics[keepaspectratio]{./Data/megapress/sub-Pilot01/rest_gannet/GannetFit_output/P38912_vox1_fit.png}}
 
 }
 
@@ -2119,7 +2153,8 @@ between conditions either.
 
 \centering{
 
-\begin{longtable}[]{@{}llll@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}llll@{}}
 \toprule\noalign{}
 & Rest & Movie & p-value \\
 \midrule\noalign{}
@@ -2129,7 +2164,8 @@ between conditions either.
 \textbf{Glx} & 10.84 ± 1.06 & 10.72 ± 0.68 & 0.43 \\
 \textbf{GABA+} & 3.59 ± 0.38 & 3.53 ± 0.36 & 0.33 \\
 \textbf{E:I Ratio} & 1.82 ± 0.25 & 1.94 ± 0.25 & 0.08 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -2142,7 +2178,7 @@ results using Gannet}}
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-21-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-21-1.pdf}}
 
 }
 
@@ -2164,7 +2200,7 @@ H was not found to correlate with Glx (Rest: r = 0, p = 0.99; Movie: r =
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-22-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-22-1.pdf}}
 
 }
 
@@ -2199,18 +2235,19 @@ drift due to MEGA-PRESS being acquired on average 6.43 ± 1.67 (Rest) and
 
 \centering{
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0789}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0395}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1316}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1053}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1053}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1053}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.1316}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0658}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0658}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0789}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 20\tabcolsep) * \real{0.0921}}@{}}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable*}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0789}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0395}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1316}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1053}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1053}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1053}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.1316}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0658}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0658}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0789}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 20\tabcolsep) * \real{0.0921}}@{}}
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 Cond
@@ -2243,7 +2280,8 @@ Movie & 18 & 10.04 & 10.72 & -0.67 & 0.90 & 0.91 & 0.25 & 0.31 & -0.24 &
 0.64 \\
 Rest & 18 & 9.84 & 10.84 & -1.00 & 1.45 & 1.28 & 0.06 & 0.80 & -0.42 &
 0.51 \\
-\end{longtable}
+\end{longtable*}
+}
 
 }
 
@@ -2259,7 +2297,7 @@ higher confidence interval.}
 
 \centering{
 
-\includegraphics{index_files/figure-pdf/unnamed-chunk-24-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-24-1.pdf}}
 
 }
 
@@ -2268,6 +2306,7 @@ against Glx from sLASER, during both rest (green) and movie-watching
 (orange). Dashed line represents perfect agreement.}
 
 \end{suppfig}%
+
 
 
 
