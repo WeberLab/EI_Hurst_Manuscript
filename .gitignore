@@ -4,6 +4,13 @@
 /.quarto/
 /_manuscript
 
+/rv
+/rv.lock
+.Rprofile
+/notebooks/rv
+/notebooks/.Rprofile
+/notebooks/rv.lock
+
 /.venv/
 
 /agujournal2019.cls

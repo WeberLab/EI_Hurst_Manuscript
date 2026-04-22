@@ -1,6 +1,7 @@
 project:
   type: manuscript
   render:
+    - "!rv/"
     - "!notes.md"
     - "!ImagingNeuroscience/"
     - "*.qmd"
@@ -37,7 +38,7 @@ format:
     reference-doc: custom-reference.docx
     line-numbers: false
   html:
-    # embed-resources: true
+    embed-resources: true
     notebook-links: true
     toc: true
     comments:
