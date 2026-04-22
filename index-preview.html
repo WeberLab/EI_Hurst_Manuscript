@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
     <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.10.3">
+    <meta name="generator" content="quarto-99.9.9">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
     <meta name="author" content="Lydia Sochan1, Jessica Archibald4, and Alexander Mark Weber1,2,3,✉">
-    <meta name="dcterms.date" content="2026-04-21">
+    <meta name="dcterms.date" content="2026-04-10">
     <meta name="keywords" content="Hurst exponent, long range temporal correlation, excitatory / inhibitory balance, criticality, complex systems, visual task, functional magnetic resnonance imaging, magnetic resonance spectroscopy, functional magnetic resonance spectroscopy">
 
     <title>Does the Brain’s E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI</title>
     <style>
-      /* Default styles provided by pandoc.
-      ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-      */
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
       div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -26,9 +23,8 @@
         vertical-align: middle;
       }
       /* CSS for syntax highlighting */
-      html { -webkit-text-size-adjust: 100%; }
       pre > code.sourceCode { white-space: pre; position: relative; }
-      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span { line-height: 1.25; }
       pre > code.sourceCode > span:empty { height: 1.2em; }
       .sourceCode { overflow: visible; }
       code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -39,7 +35,7 @@
       }
       @media print {
       pre > code.sourceCode { white-space: pre-wrap; }
-      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
       }
       pre.numberSource code
         { counter-reset: source-line 0; }
@@ -174,16 +170,15 @@
     
 <script src="site_libs/manuscript-notebook/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e44360b8a8db1e130c7792fece1c8032.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-3b1896eddc8589bc6244f4e1c31347fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -192,16 +187,16 @@
   window.document.addEventListener("DOMContentLoaded", function (_event) {
     document.body.classList.add('hypothesis-enabled');
   });
-</script>   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script> 
+</script>   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script> 
       <meta name="citation_title" content="Does the Brain’s E:I Balance Really Shape Long-Range Temporal Correlations? Lessons Learned from 3T MRI">
 <meta name="citation_keywords" content="Hurst exponent,long range temporal correlation,excitatory / inhibitory balance,criticality,complex systems,visual task,functional magnetic resnonance imaging,magnetic resonance spectroscopy,functional magnetic resonance spectroscopy">
 <meta name="citation_author" content="Lydia Sochan">
 <meta name="citation_author" content="Jessica Archibald">
 <meta name="citation_author" content="Alexander Mark Weber">
-<meta name="citation_publication_date" content="2026-04-21">
-<meta name="citation_cover_date" content="2026-04-21">
+<meta name="citation_publication_date" content="2026-04-10">
+<meta name="citation_cover_date" content="2026-04-10">
 <meta name="citation_year" content="2026">
-<meta name="citation_online_date" content="2026-04-21">
+<meta name="citation_online_date" content="2026-04-10">
 <meta name="citation_language" content="en">
 <meta name="citation_journal_title" content="Unpublished">
 <meta name="citation_reference" content="citation_title=The contribution of [1H] magnetic resonance spectroscopy to the study of excitation-inhibition in autism;,citation_abstract=Autism spectrum disorder (ASD) affects over 1:100 of the population and costs the UK more than £32bn and the USA more than $175bn (£104bn) annually. Its core symptoms are social and communication difficulties, repetitive behaviours and sensory hyper- or hypo-sensitivities. A highly diverse phenotypic presentation likely reflects its etiological heterogeneity and makes finding treatment targets for ASD challenging. In addition, there are no means to identify biologically responsive individuals who may benefit from specific interventions. There is hope however, and in this review we consolidate how findings from magnetic resonance spectroscopy (MRS) add to the evidence that differences in the brain’s excitatory glutamate and inhibitory $\gamma$-aminobutyric acid (GABA) balance may be both a key biomarker and a tractable treatment target in ASD.;,citation_author=Laura A. Ajram;,citation_author=Andreia C. Pereira;,citation_author=Alice M. S. Durieux;,citation_author=Hester E. Velthius;,citation_author=Marija M. Petrinovic;,citation_author=Grainne M. McAlonan;,citation_publication_date=2019-03;,citation_cover_date=2019-03;,citation_year=2019;,citation_doi=10.1016/j.pnpbp.2018.09.010;,citation_issn=0278-5846;,citation_volume=89;,citation_language=en-US;,citation_journal_title=Progress in Neuro-Psychopharmacology and Biological Psychiatry;">
@@ -312,7 +307,7 @@
 <meta name="citation_reference" content="citation_title=Magnetic resonance imaging of blood vessels at high fields: In vivo and in vitro measurements and image simulation;,citation_abstract=Unusually high image contrast in vivo magnetic resonance imaging of the brain becomes observable at high magnetic fields when the blood oxygenation level is lowered. The cause of the contrast has been attributed to a magnetic susceptibility effect induced by paramagnetic deoxyhemoglobin in red cells. When the cylinder axis of a blood vessel is not parallel to the main magnetic field, the susceptibility difference produces varying local fields around the blood vessel. In gradient-echo images, not in spin-echo images, these local fields cause intravoxel dephasing of the water signal of the surrounding tissue. This description of the contrast enhancement has been confirmed by a series of in vitro blood sample experiments and image simulations. A predicted contrast change has been demonstrated in brain images of a mouse placed at two different orientations in the magnet. From the simulated images, the dependence of the contrast on the field strength has been estimated. © 1990 Academic Press, Inc.;,citation_author=Seiji Ogawa;,citation_author=Tso-Ming Lee;,citation_publication_date=1990;,citation_cover_date=1990;,citation_year=1990;,citation_issue=1;,citation_doi=10.1002/mrm.1910160103;,citation_issn=1522-2594;,citation_volume=16;,citation_language=en-US;,citation_journal_title=Magnetic Resonance in Medicine;">
 <meta name="citation_reference" content="citation_title=Short-echo, single-shot, full-intensity proton magnetic resonance spectroscopy for neurochemical profiling at 4 T: Validation in the cerebellum and brainstem;,citation_abstract=A short echo time (TE = 24 ms) semiadiabatic localization by adiabatic selective refocusing (LASER) sequence was designed and optimized for full-intensity proton magnetic resonance spectroscopy ((1) H MRS) at 4 T. The sequence was combined with VAPOR water suppression and three-dimensional outer volume suppression for improved localization and suppression of unwanted coherences. Artifact-free, single-shot spectra were obtained from the human brain with a spectral pattern almost identical to that obtained with an ultra-short TE (TE = 5 ms) stimulated-echo acquisition mode (STEAM) sequence as a result of the train of adiabatic refocusing pulses in semi-LASER that reduce the apparent TE. Approximately 2-fold higher signal intensity relative to STEAM was demonstrated in phantoms and the human brain. To test the performance of the sequence in clinically relevant brain regions with a volume coil, semi-LASER spectra were acquired from three cerebellar and brainstem volumes of interest (VOIs) in 23 healthy subjects. Ultra-short echo STEAM spectra were acquired from the same VOIs to compare neurochemical profiles obtained with semi-LASER with those obtained with STEAM. Neurochemical profiles of the cerebellum and brainstem acquired by these two techniques were nearly identical, validating the accuracy of the metabolite concentrations obtained with semi-LASER at the longer TE relative to STEAM. A high correlation between metabolite concentrations obtained by these two proton (1) H MRS techniques indicated the sensitivity to detect intersubject variation in metabolite levels.;,citation_author=Gülin Oz;,citation_author=Ivan Tkáč;,citation_publication_date=2011-04;,citation_cover_date=2011-04;,citation_year=2011;,citation_issue=4;,citation_doi=10.1002/mrm.22708;,citation_issn=1522-2594;,citation_pmid=21413056;,citation_volume=65;,citation_language=en-US;,citation_journal_title=Magnetic Resonance in Medicine;">
 <meta name="citation_reference" content="citation_title=Prefrontal excitatory/inhibitory balance in stress and emotional disorders: Evidence for over-inhibition;,citation_author=Chloe E. Page;,citation_author=Laurence Coutellier;,citation_publication_date=2019-10;,citation_cover_date=2019-10;,citation_year=2019;,citation_doi=10.1016/j.neubiorev.2019.07.024;,citation_issn=01497634;,citation_volume=105;,citation_language=en-US;,citation_journal_title=Neuroscience &amp;amp;amp; Biobehavioral Reviews;">
-<meta name="citation_reference" content="citation_title=Functional MRS studies of GABA and glutamate/Glx – A systematic review and meta-analysis;,citation_abstract=Functional magnetic resonance spectroscopy (fMRS) can be used to investigate neurometabolic responses to external stimuli in-vivo, but findings are inconsistent. We performed a systematic review and meta-analysis on fMRS studies of the primary neurotransmitters Glutamate (Glu), Glx (Glutamate + Glutamine), and GABA. Data were extracted, grouped by metabolite, stimulus domain, and brain region, and analysed by determining stan­ dardized effect sizes. The quality of individual studies was rated. When results were analysed by metabolite type small to moderate effect sizes of 0.29–0.47 (p $&amp;amp;amp;lt;$ 0.05) were observed for changes in Glu and Glx regardless of stimulus domain and brain region, but no significant effects were observed for GABA. Further analysis suggests that Glu, Glx and GABA responses differ by stimulus domain or task and vary depending on the time course of stimulation and data acquisition. Here, we establish effect sizes and directionality of GABA, Glu and Glx response in fMRS. This work highlights the importance of standardised reporting and minimal best practice for fMRS research.;,citation_author=Duanghathai Pasanta;,citation_author=Jason L. He;,citation_author=Talitha Ford;,citation_author=Georg Oeltzschner;,citation_author=David J. Lythgoe;,citation_author=Nicolaas A. Puts;,citation_publication_date=2023-01;,citation_cover_date=2023-01;,citation_year=2023;,citation_doi=10.1016/j.neubiorev.2022.104940;,citation_issn=01497634;,citation_volume=144;,citation_language=en-US;,citation_journal_title=Neuroscience &amp;amp; Biobehavioral Reviews;">
+<meta name="citation_reference" content="citation_title=Functional MRS studies of GABA and glutamate/Glx – A systematic review and meta-analysis;,citation_abstract=Functional magnetic resonance spectroscopy (fMRS) can be used to investigate neurometabolic responses to external stimuli in-vivo, but findings are inconsistent. We performed a systematic review and meta-analysis on fMRS studies of the primary neurotransmitters Glutamate (Glu), Glx (Glutamate + Glutamine), and GABA. Data were extracted, grouped by metabolite, stimulus domain, and brain region, and analysed by determining stan dardized effect sizes. The quality of individual studies was rated. When results were analysed by metabolite type small to moderate effect sizes of 0.29–0.47 (p $&amp;amp;amp;lt;$ 0.05) were observed for changes in Glu and Glx regardless of stimulus domain and brain region, but no significant effects were observed for GABA. Further analysis suggests that Glu, Glx and GABA responses differ by stimulus domain or task and vary depending on the time course of stimulation and data acquisition. Here, we establish effect sizes and directionality of GABA, Glu and Glx response in fMRS. This work highlights the importance of standardised reporting and minimal best practice for fMRS research.;,citation_author=Duanghathai Pasanta;,citation_author=Jason L. He;,citation_author=Talitha Ford;,citation_author=Georg Oeltzschner;,citation_author=David J. Lythgoe;,citation_author=Nicolaas A. Puts;,citation_publication_date=2023-01;,citation_cover_date=2023-01;,citation_year=2023;,citation_doi=10.1016/j.neubiorev.2022.104940;,citation_issn=01497634;,citation_volume=144;,citation_language=en-US;,citation_journal_title=Neuroscience &amp;amp; Biobehavioral Reviews;">
 <meta name="citation_reference" content="citation_title=Brain GABA and glutamate levels across pain conditions: A systematic literature review and meta-analysis of 1H-MRS studies using the MRS-Q quality assessment tool;,citation_abstract=BACKGROUND: A proposed mechanism of chronic pain is dysregulation between the main inhibitory (GABA) and excitatory (glutamate) neurometabolites of the central nervous system. The level of these neurometabolites appears to differ in individual studies of people with pain compared to pain-free controls across different pain conditions. However, this has yet to be systematically investigated. AIMS: To establish whether GABA, glutamate, glutamine and Glx levels differ across pain conditions when compared to pain-free controls. METHODS: Five databases were searched. Studies were included if they investigated: 1) A pain condition compared to control. 2) Reported GABA, glutamate, glutamine or glutamate/glutamine level. 3) Used 1H-Magnetic Resonance Spectroscopy (Prospero Project ID CRD42018092170). Data extracted included neurometabolite level, pain diagnosis, and spectroscopy parameters. Meta-analyses were conducted to establish the difference in neurometabolite level between participants with pain and pain-free controls for different pain conditions. The MRS-Q was developed from existing clinical consensus to allow for the assessment of quality in the included studies. RESULTS: Thirty-five studies were included investigating combinations of migraine (n = 11), musculoskeletal pain (n = 8), chronic pain syndromes (n = 9) and miscellaneous pain (n = 10). Higher GABA levels were found in participants with migraine compared to controls (Hedge’s G 0.499, 95%CI: 0.2 to 0.798). In contrast, GABA levels in musculoskeletal pain conditions (Hedge’s G -0.189, 95%CI: 0.530 to 0.153) and chronic pain syndromes (Hedge’s G 0.077, 95%CI: 1.612 to 1.459) did not differ from controls. Results for other brain neurometabolites revealed significantly higher levels for glutamate in participants with migraine and Glx in chronic pain syndromes compared to controls. CONCLUSION: These results support the theory that underlying neurometabolite levels may be unique in different pain conditions and therefore representative of biomarkers for specific pain conditions.;,citation_author=Aimie Laura Peek;,citation_author=Trudy Rebbeck;,citation_author=Nicolaas Aj Puts;,citation_author=Julia Watson;,citation_author=Maria-Eliza R. Aguila;,citation_author=Andrew M. Leaver;,citation_publication_date=2020-04;,citation_cover_date=2020-04;,citation_year=2020;,citation_doi=10.1016/j.neuroimage.2020.116532;,citation_issn=1095-9572;,citation_pmid=31958584;,citation_volume=210;,citation_language=en-US;,citation_journal_title=NeuroImage;">
 <meta name="citation_reference" content="citation_title=A comprehensive guide to MEGA-PRESS for GABA measurement;,citation_abstract=The aim of this guideline is to provide a series of evidence-based recommendations that allow those new to using MEGA-PRESS to produce high-quality data for the measurement of GABA levels using edited magnetic resonance spectroscopy with the MEGA-PRESS sequence at 3T. GABA is the main inhibitory neurotransmitter of the central nervous system and has been increasingly studied due to its relevance in many clinical disorders of the central nervous system. MEGA-PRESS is the most widely used method for quantification of GABA at 3T, but is technically challenging and operates at a low signal-to-noise ratio. Therefore, the acquisition of high-quality MRS data relies on avoiding numerous pitfalls and observing important caveats., The guideline was developed by a working party that consisted of experts in MRS and experts in guideline development and implementation, together with key stakeholders. Strictly following a translational framework, we first identified evidence using a systematically conducted scoping literature review, then synthesized and graded the quality of evidence that formed recommendations. These recommendations were then sent to a panel of 21 world leaders in MRS for feedback and approval using a modified-Delphi process across two rounds., The final guideline consists of 23 recommendations across six domains essential for GABA MRS acquisition (Parameters, Practicalities, Data acquisition, Confounders, Quality/reporting, Post-processing). Overall, 78% of recommendations were formed from high-quality evidence, and 91% received agreement from over 80% of the expert panel., These 23 expert-reviewed recommendations and accompanying extended documentation form a readily useable guideline to allow those new to using MEGA-PRESS to design appropriate MEGA-PRESS study protocols and generate high-quality data., Image 1, $\bullet$Evidence-based, translational guideline for measuring GABA using MEGA-PRESS.$\bullet$Developed using translational framework by end-users, MRS and implementation experts.$\bullet$Contains 23 recommendations across six domains essential for GABA MRS.$\bullet$Each recommendation was graded for quality of evidence and approval of 21 experts.$\bullet$The package includes this manuscript, infographic and stylised extended guideline.;,citation_author=A. L. Peek;,citation_author=T. J. Rebbeck;,citation_author=A. M. Leaver;,citation_author=S. L. Foster;,citation_author=K. M. Refshauge;,citation_author=N. A. Puts;,citation_author=G. Oeltzschner;,citation_publication_date=2023-05;,citation_cover_date=2023-05;,citation_year=2023;,citation_doi=10.1016/j.ab.2023.115113;,citation_issn=0003-2697;,citation_pmid=36958511;,citation_volume=669;,citation_journal_title=Analytical Biochemistry;">
 <meta name="citation_reference" content="citation_title=Self-Organized Criticality in the Brain;,citation_abstract=Self-organized criticality (SOC) refers to the ability of complex systems to evolve toward a second-order phase transition at which interactions between system components lead to scale-invariant events that are beneficial for system performance. For the last two decades, considerable experimental evidence has accumulated that the mammalian cortex with its diversity in cell types, interconnectivity, and plasticity might exhibit SOC. Here, we review the experimental findings of isolated, layered cortex preparations to self-organize toward four dynamical motifs presently identified in the intact cortex in vivo : up-states, oscillations, neuronal avalanches, and coherence potentials. During up-states, the synchronization observed for nested theta/gamma oscillations embeds scale-invariant neuronal avalanches, which can be identified by robust power law scaling in avalanche sizes with a slope of -3/2 and a critical branching parameter of 1. This precise dynamical coordination, tracked in the negative transients of the local field potential (nLFP) and spiking activity of pyramidal neurons using two-photon imaging, emerges autonomously in superficial layers of organotypic cortex cultures and acute cortex slices, is homeostatically regulated, exhibits separation of time scales, and reveals unique size vs. quiet time dependencies. A subclass of avalanches, the coherence potentials, exhibits precise maintenance of the time course in propagated local synchrony. Avalanches emerge in superficial layers of the cortex under conditions of strong external drive. The balance of excitation and inhibition (E/I), as well as neuromodulators such as dopamine, establishes powerful control parameters for avalanche dynamics. This rich dynamical repertoire is not observed in dissociated cortex cultures, which lack the differentiation into cortical layers and exhibit a dynamical phenotype expected for a first-order phase transition. The precise interactions between up-states, nested oscillations, and avalanches in superficial layers of the cortex provide compelling evidence for SOC in the brain.;,citation_author=Dietmar Plenz;,citation_author=Tiago L. Ribeiro;,citation_author=Stephanie R. Miller;,citation_author=Patrick A. Kells;,citation_author=Ali Vakili;,citation_author=Elliott L. Capek;,citation_publication_date=2021-07;,citation_cover_date=2021-07;,citation_year=2021;,citation_doi=10.3389/fphy.2021.639389;,citation_issn=2296-424X;,citation_volume=9;,citation_journal_title=Frontiers in Physics;">
@@ -367,7 +362,7 @@
 <meta name="citation_reference" content="citation_title=Comparison of linear combination modeling strategies for edited magnetic resonance spectroscopy at 3&nbsp;T;,citation_abstract=J-difference-edited spectroscopy is a valuable approach for the in vivo detection of $\gamma$-aminobutyric-acid (GABA) with magnetic resonance spectroscopy (MRS). A recent expert consensus article recommends linear combination modeling (LCM) of edited MRS but does not give specific details regarding implementation. This study explores different modeling strategies to adapt LCM for GABA-edited MRS. Sixty-one medial parietal lobe GABA-edited MEGA-PRESS spectra from a recent 3-T multisite study were modeled using 102 different strategies combining six different approaches to account for co-edited macromolecules (MMs), three modeling ranges, three baseline knot spacings, and the use of basis sets with or without homocarnosine. The resulting GABA and GABA+ estimates (quantified relative to total creatine), the residuals at different ranges, standard deviations and coefficients of variation (CVs), and Akaike information criteria, were used to evaluate the models’ performance. Significantly different GABA+ and GABA estimates were found when a well-parameterized MM3co basis function was included in the model. The mean GABA estimates were significantly lower when modeling MM3co , while the CVs were similar. A sparser spline knot spacing led to lower variation in the GABA and GABA+ estimates, and a narrower modeling range-only including the signals of interest-did not substantially improve or degrade modeling performance. Additionally, the results suggest that LCM can separate GABA and the underlying co-edited MM3co . Incorporating homocarnosine into the modeling did not significantly improve variance in GABA+ estimates. In conclusion, GABA-edited MRS is most appropriately quantified by LCM with a well-parameterized co-edited MM3co basis function with a constraint to the nonoverlapped MM0.93 , in combination with a sparse spline knot spacing (0.55 ppm) and a modeling range of 0.5-4&nbsp;ppm.;,citation_author=Helge J. Zöllner;,citation_author=Sofie Tapper;,citation_author=Steve C. N. Hui;,citation_author=Peter B. Barker;,citation_author=Richard A. E. Edden;,citation_author=Georg Oeltzschner;,citation_publication_date=2022-01;,citation_cover_date=2022-01;,citation_year=2022;,citation_issue=1;,citation_doi=10.1002/nbm.4618;,citation_issn=1099-1492;,citation_pmid=34558129;,citation_volume=35;,citation_language=en-US;,citation_journal_title=NMR in biomedicine;">
 </head>
 
-  <body class="quarto-notebook quarto-light">
+  <body class="quarto-notebook">
     <div id="quarto-embed-header" class="headroom fixed-top bg-primary">
       
       <a onclick="window.quartoBackToArticle(); return false;" class="btn btn-primary quarto-back-link" href=""><i class="bi bi-caret-left"></i> Back to Article</a>
@@ -427,7 +422,7 @@
                 <div>
             <div class="quarto-title-meta-heading">Published</div>
             <div class="quarto-title-meta-contents">
-              <p class="date">April 21, 2026</p>
+              <p class="date">April 10, 2026</p>
             </div>
           </div>
           
@@ -521,7 +516,7 @@
 <sup>4</sup> Department of Radiology, Weill Cornell Medicine, New York, New York, USA</p>
 <p><sup>✉</sup> Correspondence: <a href="mailto:aweber@bcchr.ca">Alexander Mark Weber &lt;aweber@bcchr.ca&gt;</a></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [1]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># options</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># options</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># fig.width=8, fig.height=5,</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># out.width="50%",</span></span>
@@ -533,11 +528,11 @@
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>) <span class="co"># reproducible</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">knitr.kable.NA =</span> <span class="st">''</span>) <span class="co"># how kable handles NA</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">reticulate.repl.quiet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">reticulate.repl.quiet =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#libraries</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#libraries</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># ggplot2, dplyr, tidyr, readr, purrr, tibble, stringr, forcats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
@@ -550,22 +545,22 @@
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(english) <span class="co"># numbers to words</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(english) <span class="co"># numbers to words</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tools) <span class="co"># title-case</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork) <span class="co"># figure manipulation</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick) <span class="co"># load images</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick) <span class="co"># load images</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Linking to ImageMagick 6.9.12.98
 Enabled features: fontconfig, freetype, fftw, heic, lcms, pango, raw, webp, x11
 Disabled features: cairo, ghostscript, rsvg
 Using 32 threads</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(kableExtra)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#library(kableExtra)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"notebooks/results.RData"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"notebooks/results.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Registered S3 method overwritten by 'lme4':
   method           from
@@ -573,7 +568,7 @@ Using 32 threads</code></pre>
 </div>
 </div></div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>format_p <span class="ot">&lt;-</span> <span class="cf">function</span>(p, <span class="at">digits =</span> <span class="dv">2</span>) {</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>format_p <span class="ot">&lt;-</span> <span class="cf">function</span>(p, <span class="at">digits =</span> <span class="dv">2</span>) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (p <span class="sc">&lt;</span> <span class="fl">0.01</span>) {</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&lt; 0.01"</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
@@ -582,7 +577,7 @@ Using 32 threads</code></pre>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>capitalize_first <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="fu">toupper</span>(<span class="fu">substr</span>(x, <span class="dv">1</span>, <span class="dv">1</span>)), <span class="fu">substr</span>(x, <span class="dv">2</span>, <span class="fu">nchar</span>(x)))</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>} <span class="co"># capitalize first letter</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>} <span class="co"># capitalize first letter</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
 <section id="abstract" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="abstract">Abstract</h2>
@@ -612,7 +607,7 @@ Using 32 threads</code></pre>
 <h2 data-number="2.3" class="anchored" data-anchor-id="scanning-procedure"><span class="header-section-number">2.3</span> Scanning Procedure</h2>
 <p>After two anatomical sequences were acquired, participants were instructed to visually fixate on a cross-hair for 24 minutes (see <a href="#tbl-mriacq" class="quarto-xref">Table&nbsp;1</a> and below for more details). During this period, an fMRI, single-voxel semi Localization by Adiabatic SElective Refocusing (sLASER)<span class="citation" data-cites="ozShortechoSingleshotFullintensity2011"><sup><a href="#ref-ozShortechoSingleshotFullintensity2011" role="doc-biblioref">74</a></sup></span>, and single-voxel MEscher-Garwood Point-REsolved SpectroScopy (MEGA-PRESS)<span class="citation" data-cites="mescherSimultaneousVivoSpectral1998"><sup><a href="#ref-mescherSimultaneousVivoSpectral1998" role="doc-biblioref">75</a></sup></span> sequences were acquired (see <a href="#fig-method" class="quarto-xref">Figure&nbsp;1</a> A and <a href="#sec-mriacq" class="quarto-xref">Section&nbsp;2.4</a>). Next, participants were instructed to watch a nature documentary (Our Planet (2019), Episode 3, “Jungles”<span class="citation" data-cites="cordeyJungles2019"><sup><a href="#ref-cordeyJungles2019" role="doc-biblioref">76</a></sup></span>) for 24 minutes. During this period, another set of fMRI, sLASER, and MEGA-PRESS sequences were acquired. See <a href="#fig-method" class="quarto-xref">Figure&nbsp;1</a> B for a visual representation of the scanning protocol. Total scan duration was approximately 1 hour of uninterrupted scanning (i.e.&nbsp;subjects were not removed from the scanner). All participants followed the same order of conditions: rest then movie; all participants saw the same movie segment, beginning at the same time during the scan.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="cell-fig-method" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>layout<span class="ot">=</span><span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>layout<span class="ot">=</span><span class="st">"</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">  #AA#</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">  BBBB</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span></span>
@@ -626,7 +621,7 @@ Using 32 threads</code></pre>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># p &lt;- (fmrimrs + plot_spacer()) / studydesign</span></span>
 <span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> fmrimrs <span class="sc">+</span> studydesign <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span>
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># p + plot_annotation(tag_levels = 'A') &amp; theme(plot.tag = element_text(size = 11))</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: annotation$theme is not a valid theme.
 Please use `theme()` to construct themes.</code></pre>
@@ -814,7 +809,7 @@ H = \frac{1 + \beta}{2}
 <h2 data-number="3.2" class="anchored" data-anchor-id="data-summary"><span class="header-section-number">3.2</span> Data Summary</h2>
 <p>An average of all MRS voxel placements can be seen in <a href="#fig-mrsquality" class="quarto-xref">Figure&nbsp;3</a> A, and a sample of the <code>Osprey</code> sLASER and MEGA-PRESS spectrum fits at rest can be seen in <a href="#fig-mrsquality" class="quarto-xref">Figure&nbsp;3</a> B and C, respectively. The mean consensus-based inter-subject Dice score for MRS voxel placements was 0.77 <span class="math inline">\(\pm\)</span> 0.14 (range: [0.35, 0.95]).</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="cell-fig-mrsquality" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AAAA</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="st">  AAAA</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="st">  BBCC</span></span>
@@ -835,7 +830,7 @@ H = \frac{1 + \beta}{2}
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co"># p1 &lt;- free(mrsvoxel) + ospreyslaser + ospreymegapress + glu_FWHM_plot</span></span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">free</span>(mrsvoxel) <span class="sc">+</span> <span class="fu">free</span>(ospreyslaser) <span class="sc">+</span> <span class="fu">free</span>(ospreymegapress) <span class="sc">+</span> </span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="fig-mrsquality" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -853,7 +848,7 @@ H = \frac{1 + \beta}{2}
 <p>Average voxel rotation along the x-axis, along with average tissue fractions are reported in Supplementary Material <a href="#supptbl-singlevoxel" class="quarto-xref">Table S2</a>.</p>
 <p>A sample of the combined grey-matter and MRS voxel mask used to average H values, along with a sample Hurst exponent map, and sample fits for H calculation during rest can be found in <a href="#fig-hurstsamp" class="quarto-xref">Figure&nbsp;4</a> A, B, and C, respectively.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [7]:</pre></div><div id="cell-fig-hurstsamp" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AAA</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">  BBB</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="st">  #C#</span></span>
@@ -875,7 +870,7 @@ H = \frac{1 + \beta}{2}
 <span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>fmrimask <span class="sc">+</span> hurstsamp <span class="sc">+</span> psdplot <span class="sc">+</span> </span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: annotation$theme is not a valid theme.
 Please use `theme()` to construct themes.</code></pre>
@@ -962,12 +957,12 @@ Please use `theme()` to construct themes.</code></pre>
 </figure>
 </div>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div id="cell-fig-results" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AABB</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="st">  CCDD</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>glx_boxplot <span class="sc">+</span> gabaplus_boxplot <span class="sc">+</span> ei_boxplot <span class="sc">+</span> hurst_boxplot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>glx_boxplot <span class="sc">+</span> gabaplus_boxplot <span class="sc">+</span> ei_boxplot <span class="sc">+</span> hurst_boxplot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: annotation$theme is not a valid theme.
 Please use `theme()` to construct themes.</code></pre>
@@ -987,11 +982,11 @@ Please use `theme()` to construct themes.</code></pre>
 </div></div>
 <p>H was not found to correlate with Glx, GABA+, or E:I, during rest or movie (<a href="#fig-correlations" class="quarto-xref">Figure&nbsp;7</a>). <!-- TODO: add r to the above sentence --></p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="cell-fig-correlations" class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">AABB</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">#CC#</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>glx_hurst_plot <span class="sc">+</span> gabaplus_hurst_plot <span class="sc">+</span> ei_hurst_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design=</span>layout, <span class="at">guides =</span> <span class="st">'collect'</span>, <span class="at">axes =</span> <span class="st">'collect'</span>, <span class="at">axis_titles =</span> <span class="st">'collect'</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>glx_hurst_plot <span class="sc">+</span> gabaplus_hurst_plot <span class="sc">+</span> ei_hurst_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design=</span>layout, <span class="at">guides =</span> <span class="st">'collect'</span>, <span class="at">axes =</span> <span class="st">'collect'</span>, <span class="at">axis_titles =</span> <span class="st">'collect'</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
 `geom_smooth()` using formula = 'y ~ x'
@@ -1177,7 +1172,7 @@ Please use `theme()` to construct themes.</code></pre>
 <div class="csl-left-margin">7. </div><div class="csl-right-inline">Poil, S.-S., Hardstone, R., Mansvelder, H. D. &amp; Linkenkaer-Hansen, K. <a href="https://doi.org/10.1523/JNEUROSCI.5990-11.2012">Critical-<span>State Dynamics</span> of <span>Avalanches</span> and <span>Oscillations Jointly Emerge</span> from <span>Balanced Excitation</span>/<span>Inhibition</span> in <span>Neuronal Networks</span></a>. <em>Journal of Neuroscience</em> <strong>32</strong>, 9817–9823 (2012).</div>
 </div>
 <div id="ref-lombardiBalanceExcitationInhibition2017" class="csl-entry" role="listitem">
-<div class="csl-left-margin">8. </div><div class="csl-right-inline"><span class="nocase">Lombardi, F., Herrmann, H. J. &amp; de Arcangelis, L.</span> <a href="https://doi.org/10.1063/1.4979043">Balance of excitation and inhibition determines 1/f power spectrum in neuronal networks</a>. <em>Chaos: An Interdisciplinary Journal of Nonlinear Science</em> <strong>27</strong>, 047402 (2017).</div>
+<div class="csl-left-margin">8. </div><div class="csl-right-inline">Lombardi, F., Herrmann, H. J. &amp; de Arcangelis, L. <a href="https://doi.org/10.1063/1.4979043">Balance of excitation and inhibition determines 1/f power spectrum in neuronal networks</a>. <em>Chaos: An Interdisciplinary Journal of Nonlinear Science</em> <strong>27</strong>, 047402 (2017).</div>
 </div>
 <div id="ref-baumgartenCriticalExcitationinhibitionBalance2019" class="csl-entry" role="listitem">
 <div class="csl-left-margin">9. </div><div class="csl-right-inline">Baumgarten, L. &amp; Bornholdt, S. <a href="https://doi.org/10.1103/PhysRevE.100.010301">Critical excitation-inhibition balance in dense neural networks</a>. <em>Physical Review E</em> <strong>100</strong>, 010301 (2019).</div>
@@ -1495,7 +1490,7 @@ Please use `theme()` to construct themes.</code></pre>
 <div class="csl-left-margin">113. </div><div class="csl-right-inline">Welch, P. <a href="https://doi.org/10.1109/TAU.1967.1161901">The use of fast <span>Fourier</span> transform for the estimation of power spectra: <span>A</span> method based on time averaging over short, modified periodograms</a>. <em>IEEE Transactions on Audio and Electroacoustics</em> <strong>15</strong>, 70–73 (1967).</div>
 </div>
 <div id="ref-virtanenSciPy10Fundamental2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">114. </div><div class="csl-right-inline"><span class="nocase">Virtanen, P. <em>et al.</em></span> <a href="https://doi.org/10.1038/s41592-019-0686-2"><span>SciPy</span> 1.0: Fundamental algorithms for scientific computing in <span>Python</span></a>. <em>Nature Methods</em> <strong>17</strong>, 261–272 (2020).</div>
+<div class="csl-left-margin">114. </div><div class="csl-right-inline">Virtanen, P. <em>et al.</em> <a href="https://doi.org/10.1038/s41592-019-0686-2"><span>SciPy</span> 1.0: Fundamental algorithms for scientific computing in <span>Python</span></a>. <em>Nature Methods</em> <strong>17</strong>, 261–272 (2020).</div>
 </div>
 <div id="ref-rubinOptimizingComplexityMeasures2013" class="csl-entry" role="listitem">
 <div class="csl-left-margin">115. </div><div class="csl-right-inline">Rubin, D., Fekete, T. &amp; Mujica-Parodi, L. R. <a href="https://doi.org/10.1371/journal.pone.0063448">Optimizing <span>Complexity Measures</span> for <span class="nocase">fMRI Data</span>: <span>Algorithm</span>, <span>Artifact</span>, and <span>Sensitivity</span></a>. <em>PLoS ONE</em> <strong>8</strong>, e63448 (2013).</div>
@@ -1561,7 +1556,7 @@ Please use `theme()` to construct themes.</code></pre>
 <div class="csl-left-margin">135. </div><div class="csl-right-inline">Peek, A. L. <em>et al.</em> <a href="https://doi.org/10.1016/j.neuroimage.2020.116532">Brain <span>GABA</span> and glutamate levels across pain conditions: <span>A</span> systematic literature review and meta-analysis of <span>1H-MRS</span> studies using the <span>MRS-Q</span> quality assessment tool</a>. <em>NeuroImage</em> <strong>210</strong>, 116532 (2020).</div>
 </div>
 <div id="ref-choiSpectralEditing1H2021" class="csl-entry" role="listitem">
-<div class="csl-left-margin">136. </div><div class="csl-right-inline"><span class="nocase">Choi, I.-Y. <em>et al.</em></span> <a href="https://doi.org/10.1002/nbm.4411">Spectral editing in <span>1H</span> magnetic resonance spectroscopy: <span>Experts</span>’ consensus recommendations</a>. <em>NMR in Biomedicine</em> <strong>34</strong>, e4411 (2021).</div>
+<div class="csl-left-margin">136. </div><div class="csl-right-inline">Choi, I.-Y. <em>et al.</em> <a href="https://doi.org/10.1002/nbm.4411">Spectral editing in <span>1H</span> magnetic resonance spectroscopy: <span>Experts</span>’ consensus recommendations</a>. <em>NMR in Biomedicine</em> <strong>34</strong>, e4411 (2021).</div>
 </div>
 <div id="ref-linMinimumReportingStandards2021" class="csl-entry" role="listitem">
 <div class="csl-left-margin">137. </div><div class="csl-right-inline">Lin, A. <em>et al.</em> <a href="https://doi.org/10.1002/nbm.4484">Minimum <span>Reporting Standards</span> for in vivo <span>Magnetic Resonance Spectroscopy</span> (<span>MRSinMRS</span>): <span>Experts</span>’ consensus recommendations</a>. <em>NMR in biomedicine</em> <strong>34</strong>, e4484 (2021).</div>
@@ -1579,7 +1574,7 @@ Please use `theme()` to construct themes.</code></pre>
 <div class="csl-left-margin">141. </div><div class="csl-right-inline">Gussew, A. <em>et al.</em> <a href="https://doi.org/10.1016/j.neuroimage.2009.09.007">Time-resolved functional <span>1H MR</span> spectroscopic detection of glutamate concentration changes in the brain during acute heat pain stimulation</a>. <em>NeuroImage</em> <strong>49</strong>, 1895–1902 (2010).</div>
 </div>
 <div id="ref-gutzeitInsulaspecificResponsesInduced2011" class="csl-entry" role="listitem">
-<div class="csl-left-margin">142. </div><div class="csl-right-inline"><span class="nocase">Gutzeit, A. <em>et al.</em></span> <a href="https://doi.org/10.1007/s00330-010-1971-8">Insula-specific responses induced by dental pain. <span>A</span> proton magnetic resonance spectroscopy study</a>. <em>European Radiology</em> <strong>21</strong>, 807–815 (2011).</div>
+<div class="csl-left-margin">142. </div><div class="csl-right-inline">Gutzeit, A. <em>et al.</em> <a href="https://doi.org/10.1007/s00330-010-1971-8">Insula-specific responses induced by dental pain. <span>A</span> proton magnetic resonance spectroscopy study</a>. <em>European Radiology</em> <strong>21</strong>, 807–815 (2011).</div>
 </div>
 <div id="ref-mullinsTheoryFunctionalMagnetic2018" class="csl-entry" role="listitem">
 <div class="csl-left-margin">143. </div><div class="csl-right-inline">Mullins, P. G. <a href="https://doi.org/10.1111/sjop.12411">Towards a theory of functional magnetic resonance spectroscopy (<span class="nocase">fMRS</span>): <span>A</span> meta-analysis and discussion of using <span>MRS</span> to measure changes in neurotransmitters in real time</a>. <em>Scandinavian Journal of Psychology</em> <strong>59</strong>, 91–103 (2018).</div>
@@ -1700,13 +1695,13 @@ Table S2<strong>.</strong> <strong>Summary of spectroscopy voxel placement value
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-lmemdiag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AAA</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="st">  BBB</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="st">  CCC</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span></span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>modelresiduals_plot <span class="sc">+</span> modelhistresiduals_plot <span class="sc">+</span> modelqqnorm_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>modelresiduals_plot <span class="sc">+</span> modelhistresiduals_plot <span class="sc">+</span> modelqqnorm_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: annotation$theme is not a valid theme.
 Please use `theme()` to construct themes.</code></pre>
@@ -1730,7 +1725,7 @@ Figure S1<strong>.</strong> <strong>Linear-mixed effects model tests for normali
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-spearmanresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(spearman_results, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(spearman_results, <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -1767,7 +1762,7 @@ Table S3<strong>.</strong> Spearman correlation between EI and Hurst by conditio
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-robusteffects-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [12]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(robust_effects, <span class="at">digits =</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(robust_effects, <span class="at">digits =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -1828,7 +1823,7 @@ Table S4<strong>.</strong> EI fixed-effect estimates (Estimate ± 95% CI) for th
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-metabolites-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [13]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>slaserfullresults <span class="sc">%&gt;%</span> <span class="fu">select</span>(Mean_SD, restcrlb, Movie, moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Rest Conc"</span> <span class="ot">=</span> Mean_SD, <span class="st">"Rest CRLB"</span> <span class="ot">=</span> restcrlb, <span class="st">"Movie Conc"</span> <span class="ot">=</span> Movie, <span class="st">"Movie CRLB"</span> <span class="ot">=</span> moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>slaserfullresults <span class="sc">%&gt;%</span> <span class="fu">select</span>(Mean_SD, restcrlb, Movie, moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Rest Conc"</span> <span class="ot">=</span> Mean_SD, <span class="st">"Rest CRLB"</span> <span class="ot">=</span> restcrlb, <span class="st">"Movie Conc"</span> <span class="ot">=</span> Movie, <span class="st">"Movie CRLB"</span> <span class="ot">=</span> moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -2075,8 +2070,8 @@ Table S5<strong>.</strong> <strong>All metabolite concentrations and Cramer-Rao 
 <div id="supptbl-megapressmetabs" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-megapressmetabs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
-<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell" data-tbl-cap="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>megapressfullresults <span class="sc">%&gt;%</span> <span class="fu">select</span>(Mean_SD, restcrlb, Movie, moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Rest Conc"</span> <span class="ot">=</span> Mean_SD, <span class="st">"Rest CRLB"</span> <span class="ot">=</span> restcrlb, <span class="st">"Movie Conc"</span> <span class="ot">=</span> Movie, <span class="st">"Movie CRLB"</span> <span class="ot">=</span> moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>megapressfullresults <span class="sc">%&gt;%</span> <span class="fu">select</span>(Mean_SD, restcrlb, Movie, moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"Rest Conc"</span> <span class="ot">=</span> Mean_SD, <span class="st">"Rest CRLB"</span> <span class="ot">=</span> restcrlb, <span class="st">"Movie Conc"</span> <span class="ot">=</span> Movie, <span class="st">"Movie CRLB"</span> <span class="ot">=</span> moviecrlb) <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -2178,7 +2173,7 @@ Table S6<strong>.</strong> <strong>All metabolite concentrations and Cramer-Rao 
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-dataquality-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [15]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AAA</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="st">  BBB</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="st">  BBB</span></span>
@@ -2188,7 +2183,7 @@ Table S6<strong>.</strong> <strong>All metabolite concentrations and Cramer-Rao 
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">free</span>(meanfd_hurst_plot)<span class="sc">+</span> <span class="fu">free</span>(glxandgabaplus_FWHM_plot) <span class="sc">+</span> <span class="fu">free</span>(glxandgabaplus_freqshift_plot) <span class="sc">+</span></span>
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span></span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
 `geom_smooth()` using formula = 'y ~ x'
@@ -2219,8 +2214,8 @@ Figure S2<strong>.</strong> <strong>Data quality correlations.</strong> A) Corre
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-FWHMprepost-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [16]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fwhm_tests) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Seq"</span>, <span class="st">"m. rest"</span>, <span class="st">"m. movie"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"t"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(fwhm_tests, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fwhm_tests) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Seq"</span>, <span class="st">"m. rest"</span>, <span class="st">"m. movie"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"t"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(fwhm_tests, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -2285,8 +2280,8 @@ Table S7<strong>.</strong> Rest vs.&nbsp;movie FWHM comparison (paired t-tests) 
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-CRSNR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [17]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(snr_tests) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Seq"</span>, <span class="st">"m. rest"</span>, <span class="st">"m. movie"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"t"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(snr_tests, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(snr_tests) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Seq"</span>, <span class="st">"m. rest"</span>, <span class="st">"m. movie"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"t"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(snr_tests, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -2351,8 +2346,8 @@ Table S8<strong>.</strong> Rest vs.&nbsp;movie CR-SNR comparison (paired t-tests
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-FWHMCRSNR-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [18]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(drift_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sub"</span>, <span class="st">"Seq"</span>, <span class="st">"R FWHM"</span>, <span class="st">"M FWHM"</span>, <span class="st">"Diff FWHM"</span>, <span class="st">"R SNR"</span>, <span class="st">"M SNR"</span>, <span class="st">"Diff SNR"</span>)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(drift_table, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(drift_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Sub"</span>, <span class="st">"Seq"</span>, <span class="st">"R FWHM"</span>, <span class="st">"M FWHM"</span>, <span class="st">"Diff FWHM"</span>, <span class="st">"R SNR"</span>, <span class="st">"M SNR"</span>, <span class="st">"Diff SNR"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(drift_table, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <thead>
@@ -2743,7 +2738,7 @@ Table S9<strong>.</strong> Subject-level FWHM and CR-SNR values for each sequenc
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-fwhmdriftplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [19]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fwhm_drift_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fwhm_drift_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="">
 <figure class="figure">
@@ -2763,7 +2758,7 @@ Figure S3<strong>.</strong> Plots of individual water full-width half-maximum ch
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-frequencyshift-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [20]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">=</span> <span class="st">"</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="st">  A</span></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="st">  B</span></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span></span>
@@ -2778,7 +2773,7 @@ Figure S3<strong>.</strong> Plots of individual water full-width half-maximum ch
 <span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">free</span>(freqshiftslaser_plot) <span class="sc">+</span> <span class="fu">free</span>(freqshiftmegapress_plot) <span class="sc">+</span></span>
 <span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span>
 <span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">"A"</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="">
 <figure class="figure">
@@ -2852,12 +2847,12 @@ Table S10<strong>.</strong> <strong>Summary of main metabolite results using Gan
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-gannetresults-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [21]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="st">  AABB</span></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="st">  #CC#</span></span>
 <span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="st">  "</span></span>
 <span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>gannetglx_boxplot <span class="sc">+</span> gannetgaba_boxplot <span class="sc">+</span> gannetei_boxplot <span class="sc">+</span> hurst_boxplot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>gannetglx_boxplot <span class="sc">+</span> gannetgaba_boxplot <span class="sc">+</span> gannetei_boxplot <span class="sc">+</span> hurst_boxplot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Too few patch areas to hold all plots. Dropping plots</code></pre>
 </div>
@@ -2884,11 +2879,11 @@ Figure S6<strong>.</strong> <strong>Paired comparison of metabolite values analy
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-gannetcorrelations-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [22]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>layout <span class="ot">&lt;-</span> <span class="st">"</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="st">AABB</span></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="st">#CC#</span></span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>gannetglx_hurst_plot <span class="sc">+</span> gannetgaba_hurst_plot <span class="sc">+</span> gannetei_hurst_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design=</span>layout, <span class="at">guides =</span> <span class="st">'collect'</span>, <span class="at">axes =</span> <span class="st">'collect'</span>, <span class="at">axis_titles =</span> <span class="st">'collect'</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>gannetglx_hurst_plot <span class="sc">+</span> gannetgaba_hurst_plot <span class="sc">+</span> gannetei_hurst_plot <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design=</span>layout, <span class="at">guides =</span> <span class="st">'collect'</span>, <span class="at">axes =</span> <span class="st">'collect'</span>, <span class="at">axis_titles =</span> <span class="st">'collect'</span>) <span class="sc">+</span> <span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">'A'</span>) <span class="sc">&amp;</span> <span class="fu">theme</span>(<span class="at">plot.tag =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using formula = 'y ~ x'
 `geom_smooth()` using formula = 'y ~ x'
@@ -2918,8 +2913,8 @@ Figure S7<strong>.</strong> <strong>Scatter plots of H vs.&nbsp;metabolites when
 <figure class="quarto-float quarto-float-supptbl figure">
 <div aria-describedby="supptbl-glxagreement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [23]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(glx_agreement_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cond"</span>, <span class="st">"n"</span>, <span class="st">"m. sLASER"</span>, <span class="st">"m. MEGA"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"m.a. diff"</span>, <span class="st">"r"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(glx_agreement_table, <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(glx_agreement_table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Cond"</span>, <span class="st">"n"</span>, <span class="st">"m. sLASER"</span>, <span class="st">"m. MEGA"</span>, <span class="st">"m. diff"</span>, <span class="st">"sd diff"</span>, <span class="st">"m.a. diff"</span>, <span class="st">"r"</span>, <span class="st">"p"</span>, <span class="st">"CIlow"</span>, <span class="st">"CIhigh"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(glx_agreement_table, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -2991,7 +2986,7 @@ Table S11<strong>.</strong> Agreement between sLASER- and MEGA-PRESS-derived Glx
 <figure class="quarto-float quarto-float-suppfig figure">
 <div aria-describedby="suppfig-glxagreementplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="">
 <div class="cell-container"><div class="cell-decorator"><pre>In [24]:</pre></div><div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>glx_agreement_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>glx_agreement_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="">
 <figure class="figure">
@@ -3010,243 +3005,239 @@ Figure S8<strong>.</strong> Glx from MEGA-PRESS plotted against Glx from sLASER,
 </section>
      </main>
 <!-- /main column -->  <script id="quarto-html-after-body" type="application/javascript">
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
-    const isCodeAnnotation = (el) => {
-      for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
-          return true;
-        }
-      }
-      return false;
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
     }
-    const onCopySuccess = function(e) {
-      // button target
-      const button = e.trigger;
-      // don't keep focus
-      button.blur();
-      // flash "checked"
-      button.classList.add('code-copy-button-checked');
-      var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
-      let tooltip;
-      if (window.bootstrap) {
-        button.setAttribute("data-bs-toggle", "tooltip");
-        button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
-            customClass: "code-copy-button-tooltip",
-            offset: [0, -8]});
-        tooltip.show();    
-      }
-      setTimeout(function() {
-        if (tooltip) {
-          tooltip.hide();
-          button.removeAttribute("data-bs-title");
-          button.removeAttribute("data-bs-toggle");
-          button.removeAttribute("data-bs-placement");
-        }
-        button.setAttribute("title", currentTitle);
-        button.classList.remove('code-copy-button-checked');
-      }, 1000);
-      // clear code selection
-      e.clearSelection();
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
     }
-    const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
         }
       }
       return codeEl.innerText;
-    }
-    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-      text: getTextToCopy
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
     });
-    clipboard.on('success', onCopySuccess);
-    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-        text: getTextToCopy,
-        container: window.document.getElementById('quarto-embedded-source-code-modal')
-      });
-      clipboardModal.on('success', onCopySuccess);
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
-      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
-      var isInternal = (href) => {
-          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-      }
-      // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-      for (var i=0; i<links.length; i++) {
-        const link = links[i];
-        if (!isInternal(link.href)) {
-          // undo the damage that might have been done by quarto-nav.js in the case of
-          // links that we want to consider external
-          if (link.dataset.originalHref !== undefined) {
-            link.href = link.dataset.originalHref;
-          }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
         }
       }
-    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-      const config = {
-        allowHTML: true,
-        maxWidth: 500,
-        delay: 100,
-        arrow: false,
-        appendTo: function(el) {
-            return el.parentElement;
-        },
-        interactive: true,
-        interactiveBorder: 10,
-        theme: 'quarto',
-        placement: 'bottom-start',
-      };
-      if (contentFn) {
-        config.content = contentFn;
-      }
-      if (onTriggerFn) {
-        config.onTrigger = onTriggerFn;
-      }
-      if (onUntriggerFn) {
-        config.onUntrigger = onUntriggerFn;
-      }
-      window.tippy(el, config); 
     }
-    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-    for (var i=0; i<noterefs.length; i++) {
-      const ref = noterefs[i];
-      tippyHover(ref, function() {
-        // use id or data attribute instead here
-        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-        try { href = new URL(href).hash; } catch {}
-        const id = href.replace(/^#\/?/, "");
-        const note = window.document.getElementById(id);
-        if (note) {
-          return note.innerHTML;
-        } else {
-          return "";
-        }
-      });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
     }
-    const xrefs = window.document.querySelectorAll('a.quarto-xref');
-    const processXRef = (id, note) => {
-      // Strip column container classes
-      const stripColumnClz = (el) => {
-        el.classList.remove("page-full", "page-columns");
-        if (el.children) {
-          for (const child of el.children) {
-            stripColumnClz(child);
-          }
-        }
-      }
-      stripColumnClz(note)
-      if (id === null || id.startsWith('sec-')) {
-        // Special case sections, only their first couple elements
-        const container = document.createElement("div");
-        if (note.children && note.children.length > 2) {
-          container.appendChild(note.children[0].cloneNode(true));
-          for (let i = 1; i < note.children.length; i++) {
-            const child = note.children[i];
-            if (child.tagName === "P" && child.innerText === "") {
-              continue;
-            } else {
-              container.appendChild(child.cloneNode(true));
-              break;
-            }
-          }
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(container);
-          }
-          return container.innerHTML
-        } else {
-          if (window.Quarto?.typesetMath) {
-            window.Quarto.typesetMath(note);
-          }
-          return note.innerHTML;
-        }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
       } else {
-        // Remove any anchor links if they are present
-        const anchorLink = note.querySelector('a.anchorjs-link');
-        if (anchorLink) {
-          anchorLink.remove();
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
         }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
         if (window.Quarto?.typesetMath) {
           window.Quarto.typesetMath(note);
         }
-        if (note.classList.contains("callout")) {
-          return note.outerHTML;
-        } else {
-          return note.innerHTML;
-        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
       }
     }
-    for (var i=0; i<xrefs.length; i++) {
-      const xref = xrefs[i];
-      tippyHover(xref, undefined, function(instance) {
-        instance.disable();
-        let url = xref.getAttribute('href');
-        let hash = undefined; 
-        if (url.startsWith('#')) {
-          hash = url;
-        } else {
-          try { hash = new URL(url).hash; } catch {}
-        }
-        if (hash) {
-          const id = hash.replace(/^#\/?/, "");
-          const note = window.document.getElementById(id);
-          if (note !== null) {
-            try {
-              const html = processXRef(id, note.cloneNode(true));
-              instance.setContent(html);
-            } finally {
-              instance.enable();
-              instance.show();
-            }
-          } else {
-            // See if we can fetch this
-            fetch(url.split('#')[0])
-            .then(res => res.text())
-            .then(html => {
-              const parser = new DOMParser();
-              const htmlDoc = parser.parseFromString(html, "text/html");
-              const note = htmlDoc.getElementById(id);
-              if (note !== null) {
-                const html = processXRef(id, note);
-                instance.setContent(html);
-              } 
-            }).finally(() => {
-              instance.enable();
-              instance.show();
-            });
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
           }
         } else {
-          // See if we can fetch a full url (with no hash to target)
-          // This is a special case and we should probably do some content thinning / targeting
-          fetch(url)
+          // See if we can fetch this
+          fetch(url.split('#')[0])
           .then(res => res.text())
           .then(html => {
             const parser = new DOMParser();
             const htmlDoc = parser.parseFromString(html, "text/html");
-            const note = htmlDoc.querySelector('main.content');
+            const note = htmlDoc.getElementById(id);
             if (note !== null) {
-              // This should only happen for chapter cross references
-              // (since there is no id in the URL)
-              // remove the first header
-              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
-                note.children[0].remove();
-              }
-              const html = processXRef(null, note);
+              const html = processXRef(id, note);
               instance.setContent(html);
             } 
           }).finally(() => {
@@ -3254,161 +3245,185 @@ Figure S8<strong>.</strong> Glx from MEGA-PRESS plotted against Glx from sLASER,
             instance.show();
           });
         }
-      }, function(instance) {
-      });
-    }
-        let selectedAnnoteEl;
-        const selectorForAnnotation = ( cell, annotation) => {
-          let cellAttr = 'data-code-cell="' + cell + '"';
-          let lineAttr = 'data-code-annotation="' +  annotation + '"';
-          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-          return selector;
-        }
-        const selectCodeLines = (annoteEl) => {
-          const doc = window.document;
-          const targetCell = annoteEl.getAttribute("data-target-cell");
-          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-          const lineIds = lines.map((line) => {
-            return targetCell + "-" + line;
-          })
-          let top = null;
-          let height = null;
-          let parent = null;
-          if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
-            }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
-            }
-            selectedAnnoteEl = annoteEl;
-          }
-        };
-        const unselectCodeLines = () => {
-          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-          elementsIds.forEach((elId) => {
-            const div = window.document.getElementById(elId);
-            if (div) {
-              div.remove();
-            }
-          });
-          selectedAnnoteEl = undefined;
-        };
-          // Handle positioning of the toggle
-      window.addEventListener(
-        "resize",
-        throttle(() => {
-          elRect = undefined;
-          if (selectedAnnoteEl) {
-            selectCodeLines(selectedAnnoteEl);
-          }
-        }, 10)
-      );
-      function throttle(fn, ms) {
-      let throttle = false;
-      let timer;
-        return (...args) => {
-          if(!throttle) { // first call gets through
-              fn.apply(this, args);
-              throttle = true;
-          } else { // all the others get throttled
-              if(timer) clearTimeout(timer); // cancel #2
-              timer = setTimeout(() => {
-                fn.apply(this, args);
-                timer = throttle = false;
-              }, ms);
-          }
-        };
-      }
-        // Attach click handler to the DT
-        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-        for (const annoteDlNode of annoteDls) {
-          annoteDlNode.addEventListener('click', (event) => {
-            const clickedEl = event.target;
-            if (clickedEl !== selectedAnnoteEl) {
-              unselectCodeLines();
-              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-              if (activeEl) {
-                activeEl.classList.remove('code-annotation-active');
-              }
-              selectCodeLines(clickedEl);
-              clickedEl.classList.add('code-annotation-active');
-            } else {
-              // Unselect the line
-              unselectCodeLines();
-              clickedEl.classList.remove('code-annotation-active');
-            }
-          });
-        }
-    const findCites = (el) => {
-      const parentEl = el.parentElement;
-      if (parentEl) {
-        const cites = parentEl.dataset.cites;
-        if (cites) {
-          return {
-            el,
-            cites: cites.split(' ')
-          };
-        } else {
-          return findCites(el.parentElement)
-        }
       } else {
-        return undefined;
-      }
-    };
-    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-    for (var i=0; i<bibliorefs.length; i++) {
-      const ref = bibliorefs[i];
-      const citeInfo = findCites(ref);
-      if (citeInfo) {
-        tippyHover(citeInfo.el, function() {
-          var popup = window.document.createElement('div');
-          citeInfo.cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
             }
-            popup.appendChild(citeDiv);
-          });
-          return popup.innerHTML;
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
         });
       }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
     }
-  });
-  </script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
