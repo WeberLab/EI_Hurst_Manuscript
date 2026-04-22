@@ -16,7 +16,7 @@ code-links:
 
 execute:
   freeze: auto
-  cache: false
+  # cache: false
 
 format:
   # pdf:
@@ -37,7 +37,7 @@ format:
     reference-doc: custom-reference.docx
     line-numbers: false
   html:
-    embed-resources: false
+    # embed-resources: true
     notebook-links: true
     toc: true
     comments:
